@@ -28,18 +28,30 @@ public class Trie {
     * @return a List containing String objects containing the words in
     *         the Trie with the given prefix.
     */
-   public List getWords(String prefix) {
+   public List<String> getWords(String prefix) {
       //Find the node which represents the last letter of the prefix
       TrieNode lastNode = root;
-      for (int i=0; i<prefix.length(); i++) {
+      for (int i = 0; i < prefix.length(); i++) {
     	  lastNode = lastNode.getNode(prefix.charAt(i));
 	 
 		 //If no node matches, then no words exist, return empty list
 		 if (lastNode == null) 
-			 return new ArrayList();	 
+			 return new ArrayList<String>();	 
       }
       
-      //Return the words which eminate from the last node
+      //Return the words which emanate from the last node
       return lastNode.getWords();
+   }
+   
+   public static void main(String[] args) {
+	   Trie trie = new Trie();
+	   trie.addWord("A");
+	   trie.addWord("to");
+	   trie.addWord("tea");
+	   trie.addWord("ted");
+	   trie.addWord("inn");
+	   ArrayList<String> l = (ArrayList<String>)trie.getWords("t");
+	   for (Object s : l)
+		   System.out.println(s);
    }
 }

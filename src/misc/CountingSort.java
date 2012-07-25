@@ -13,28 +13,27 @@ public class CountingSort {
     /**
      * Returns a new String sorted based on the ASCII table ordering.
      */
-    public static String sort( String input ) {
+    public static String sort(String input) {
  
-        char[ ] counts = new char[ ARRAY_SIZE ];
-        char[ ] result = new char[ input.length( ) ];
+        char[] counts = new char[ARRAY_SIZE];		// counts of each individual ASCII char from 'SPACE' (32) through '~' (126)
+        char[] result = new char[input.length()];	// where ordered String is put
  
         // Initialize the counts
-        for( int i = 0; i < input.length( ); i++ ) {
-            counts[ input.charAt( i ) - MIN_RANGE ]++;
-        }
+        for(int i = 0; i < input.length(); i++)
+            counts[input.charAt(i) - MIN_RANGE]++;
  
         // Generate the result array
-        for( int i = 0, resultIndex = 0; i < counts.length; i++ ) {
-            if( counts[ i ] > 0 ) {
-                for( int j = 0; j < counts[ i ]; j++ ) {
-                    result[ resultIndex ] = ( char )( i + MIN_RANGE );
+        for (int i = 0, resultIndex = 0; i < counts.length; i++) {
+            if(counts[i] > 0) {
+                for (int j = 0; j < counts[i]; j++) {
+                    result[resultIndex] = (char)(i + MIN_RANGE);
                     resultIndex++;
                 }
             }
         }
  
         // Return the result array as a String
-        return new String( result );
+        return new String(result);
     }
  
     /**
@@ -43,6 +42,6 @@ public class CountingSort {
     public static void main( String[ ] args ) {
  
         System.out.println( CountingSort.sort( 
-            "*mS1H9EGNWJ!2h!zyFfkU4J;c2b\"FNxqjYv4DDi!cTfvEZq<DPF^)5\"b)a`!+.4") );
+            "*mS1H9EGNWJ!2h!zyFfkU4J;c2b\"FNx    qjYv4DDi!cTfvEZq<DPF^)5\"b)a`!+.4") );
     }
 }

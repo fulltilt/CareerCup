@@ -14,7 +14,7 @@ public class TrieNode {
     * Constructor for top level root node.
     */
    public TrieNode() {
-      children = new TrieNode[26];
+      children = new TrieNode[26];	// 26 represents the letters of the alphabet
       isLeaf = true;
       isWord = false;
    }
@@ -35,7 +35,7 @@ public class TrieNode {
     */
    protected void addWord(String word) {
       isLeaf = false;
-      int charPos = word.charAt(0) - 'a';
+      int charPos = word.charAt(0) - 'a';	// convert ascii value to a value from 0 through 25
       
       if (children[charPos] == null) {
     	  children[charPos] = new TrieNode(word.charAt(0));
@@ -43,7 +43,7 @@ public class TrieNode {
       }
       
       if (word.length() > 1)
-    	  children[charPos].addWord(word.substring(1));
+    	  children[charPos].addWord(word.substring(1));	// recursively add the rest of the word
       else
     	  children[charPos].isWord = true;
    }
@@ -63,9 +63,9 @@ public class TrieNode {
     * hierarchy that this node.
     * @return
     */
-   protected List getWords() {
+   protected List<String> getWords() {
       //Create a list to return
-      List list = new ArrayList();
+      List<String> list = new ArrayList<String>();
       
       //If this node represents a word, add it
       if (isWord)
@@ -74,7 +74,7 @@ public class TrieNode {
       //If any children
       if (!isLeaf) {
 		 //Add any words belonging to any children
-		 for (int i=0; i<children.length; i++) {
+		 for (int i = 0; i < children.length; i++) {
 			 if (children[i] != null)
 				 list.addAll(children[i].getWords());
 		 }
@@ -85,7 +85,7 @@ public class TrieNode {
    /**
     * Gets the String that this node represents.
     * For example, if this node represents the character t, whose parent
-    * represents the charater a, whose parent represents the character
+    * represents the character a, whose parent represents the character
     * c, then the String would be "cat".
     * @return
     */
