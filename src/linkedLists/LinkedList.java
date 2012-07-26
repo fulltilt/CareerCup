@@ -439,6 +439,13 @@ public class LinkedList {
 		}
 	}
 
+	public static void mergeAlternating(Node head1, Node head2, LinkedList list3) {
+		Node L1CurrentNode = head1;
+		Node L2CurrentNode = head2;
+		//Node temp = ;
+
+	}
+
 	public void evensBeforeOdds() {
 		Node currentNode = head;
 		Node currentEven, currentOdd;
@@ -449,7 +456,7 @@ public class LinkedList {
 			if (currentNode.value % 2 == 0/* && currentEven == null*/)
 				currentEven = currentNode;
 			else if (currentNode.value % 2 == 1 && currentOdd == null)
-			    currentOdd = currentNode;	
+			    currentOdd = currentNode;
 
 			if (currentEven != null && currentOdd != null) {
 				int temp = currentOdd.value;
@@ -458,10 +465,10 @@ public class LinkedList {
 
 				currentNode = currentEven;	// after a swap, even Node always before odd Node
 				currentEven = currentOdd = null;
-System.out.print("currentNode value: " + currentNode.value);				
+System.out.print("currentNode value: " + currentNode.value);
 				continue;
 			}
-			
+
 			currentNode = currentNode.next;
 //System.out.print("\niteration: " + count++ + " currentOdd value: " + currentOdd.value
 //		 + " currentEven value: " + currentEven.value);
@@ -469,12 +476,6 @@ displayList();
 		}
 	}
 
-	public static void mergeAlternating(Node head1, Node head2, LinkedList list3) {
-		Node L1CurrentNode = head1;
-		Node L2CurrentNode = head2;
-		//Node temp = ;
-		
-	}
 /****
 	public void convertToDoublyLinkedList() {
 	}
