@@ -1,8 +1,14 @@
 package trees;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import trees.BinarySearchTree.Node;
 
 public class BinarySearchTreeTestCase {
     private BinarySearchTree tree;
@@ -91,4 +97,78 @@ public class BinarySearchTreeTestCase {
         
         assertTrue(tree.isTreeEqual(tree2.getRoot()));
 	}	
+	
+	@Test
+	public void testPrintNodesInRange() {
+		System.out.println("\nBegin testPrintNodesInRange()");
+		tree.printNodesInRange(3, 8);
+		System.out.println("\nEnd testPrintNodesInRange()");
+	}
+	
+	@Test
+	public void testTrimTreeInRange() {
+		System.out.println("\nBegin testTrimTreeInRange()");
+		Node newNode = tree.trimTreeInRange(3, 8);
+		tree.print(newNode);
+		System.out.println("\nEnd testTrimTreeInRange()");
+	}	
+
+	@Test
+	public void testConvertToLinkedList() {
+		linkedLists.LinkedList newList = tree.convertToLinkedList();
+
+		assertSame(1, newList.getNodeByIndex(0).value);
+		assertSame(2, newList.getNodeByIndex(1).value);
+		assertSame(3, newList.getNodeByIndex(2).value);
+		assertSame(4, newList.getNodeByIndex(3).value);
+		assertSame(5, newList.getNodeByIndex(4).value);
+		assertSame(7, newList.getNodeByIndex(5).value);
+		assertSame(8, newList.getNodeByIndex(6).value);
+		assertSame(9, newList.getNodeByIndex(7).value);
+		assertSame(10, newList.getNodeByIndex(8).value);
+	}
+	
+	@Test
+	public void testConvertToDoublyLinkedList() {
+		linkedLists.DoublyLinkedList newList = tree.convertToDoublyLinkedList();
+
+		linkedLists.DoublyLinkedList.Node currentNode = newList.getTail();
+		assertSame(10, currentNode.value); currentNode = currentNode.previous;
+		assertSame(9, currentNode.value); currentNode = currentNode.previous;
+		assertSame(8, currentNode.value); currentNode = currentNode.previous;
+		assertSame(7, currentNode.value); currentNode = currentNode.previous;
+		assertSame(5, currentNode.value); currentNode = currentNode.previous;
+		assertSame(4, currentNode.value); currentNode = currentNode.previous;
+		assertSame(3, currentNode.value); currentNode = currentNode.previous;
+		assertSame(2, currentNode.value); currentNode = currentNode.previous;
+		assertSame(1, currentNode.value); currentNode = currentNode.previous;
+		assertSame(null, currentNode); 
+	}	
+	
+	@Test
+	public void testValueToSumOfChildrenValues() {
+		System.out.println("\nBegin testValueToSumOfChildrenValues()");
+		tree.valueToSumOfChildrenValues();
+		tree.print();
+		System.out.println("End testValueToSumOfChildrenValues()");		
+	}
+	
+	@Test
+	public void testIsTreeSymmetric() {
+		assertFalse(tree.isTreeSymmetric());
+		
+		BinarySearchTree tree2 = new BinarySearchTree();
+		tree2.insert(5);
+		tree2.insert(3);
+		tree2.insert(4);
+		tree2.insert(9);
+		tree2.insert(8);
+		assertTrue(tree2.isTreeSymmetric());
+	}
+	
+	@Test
+	public void testAddColumns() {
+		Collection<Integer> al = tree.addColumns();
+		
+	}
 }

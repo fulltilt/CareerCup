@@ -141,7 +141,7 @@ public class LinkedListTestCase {
 	}
 
 	@Test
-	public void testGetNodeByPosition() {
+	public void testgetNodeByIndex() {
 		list.insertAtHead(5);
 		list.insertAtHead(8);
 		list.insertAtHead(8);
@@ -152,9 +152,9 @@ public class LinkedListTestCase {
 		list.insertAtHead(2);
 		list.insertAtHead(9);
 
-		assertEquals(null, list.getNodeByPosition(12));
-		assertSame(1, list.getNodeByPosition(3).value);
-		assertSame(6, list.getNodeByPosition(5).value);
+		assertEquals(null, list.getNodeByIndex(12));
+		assertSame(1, list.getNodeByIndex(3).value);
+		assertSame(6, list.getNodeByIndex(5).value);
 	}
 /*************************************************************/
 		public void setUpList1() {
@@ -172,9 +172,12 @@ public class LinkedListTestCase {
 	@Test
 	public void testReversePrint() {
 		setUpList1();
+		
+		System.out.print("\nReverse Print");
 		list.displayList();
 		System.out.println();
 		list.recursiveReversePrint();
+		System.out.println("\nEnd Reverse Print");
 	}
 
 	@Test
@@ -199,8 +202,8 @@ public class LinkedListTestCase {
 		setUpList1();
 
 		list.swapKthElements(3);
-		assertSame(6, list.getNodeByPosition(3).value);
-		assertSame(1, list.getNodeByPosition(5).value);
+		assertSame(6, list.getNodeByIndex(3).value);
+		assertSame(1, list.getNodeByIndex(5).value);
 	}
 
 	@Test
@@ -215,15 +218,15 @@ public class LinkedListTestCase {
 		setUpList1();
 
 		list.reverseList();
-		assertSame(5, list.getNodeByPosition(0).value);
-		assertSame(8, list.getNodeByPosition(1).value);
-		assertSame(8, list.getNodeByPosition(2).value);
-		assertSame(6, list.getNodeByPosition(3).value);
-		assertSame(3, list.getNodeByPosition(4).value);
-		assertSame(1, list.getNodeByPosition(5).value);
-		assertSame(2, list.getNodeByPosition(6).value);
-		assertSame(2, list.getNodeByPosition(7).value);
-		assertSame(9, list.getNodeByPosition(8).value);
+		assertSame(5, list.getNodeByIndex(0).value);
+		assertSame(8, list.getNodeByIndex(1).value);
+		assertSame(8, list.getNodeByIndex(2).value);
+		assertSame(6, list.getNodeByIndex(3).value);
+		assertSame(3, list.getNodeByIndex(4).value);
+		assertSame(1, list.getNodeByIndex(5).value);
+		assertSame(2, list.getNodeByIndex(6).value);
+		assertSame(2, list.getNodeByIndex(7).value);
+		assertSame(9, list.getNodeByIndex(8).value);
 	}
 
 	@Test
@@ -231,15 +234,15 @@ public class LinkedListTestCase {
 		setUpList1();
 
 		list.recursiveReverseList();
-		assertSame(5, list.getNodeByPosition(0).value);
-		assertSame(8, list.getNodeByPosition(1).value);
-		assertSame(8, list.getNodeByPosition(2).value);
-		assertSame(6, list.getNodeByPosition(3).value);
-		assertSame(3, list.getNodeByPosition(4).value);
-		assertSame(1, list.getNodeByPosition(5).value);
-		assertSame(2, list.getNodeByPosition(6).value);
-		assertSame(2, list.getNodeByPosition(7).value);
-		assertSame(9, list.getNodeByPosition(8).value);
+		assertSame(5, list.getNodeByIndex(0).value);
+		assertSame(8, list.getNodeByIndex(1).value);
+		assertSame(8, list.getNodeByIndex(2).value);
+		assertSame(6, list.getNodeByIndex(3).value);
+		assertSame(3, list.getNodeByIndex(4).value);
+		assertSame(1, list.getNodeByIndex(5).value);
+		assertSame(2, list.getNodeByIndex(6).value);
+		assertSame(2, list.getNodeByIndex(7).value);
+		assertSame(9, list.getNodeByIndex(8).value);
 	}
 
 	@Test
@@ -260,10 +263,12 @@ public class LinkedListTestCase {
 	@Test
 	public void testFindConvergenceOfTwoLists() {
 		setUpList1();
+		
 		LinkedList list2 = new LinkedList();
 		list2.insertAtHead(1);
-		list2.getNodeByPosition(0).next = list.getNodeByPosition(5);
-// faulty because even though we link the 2nd list to the first, the size variable of the 2nd list isn't changed
+		list2.getNodeByIndex(0).next = list.getNodeByIndex(5);
+		list2.setSize();	// need to update the size of list2
+		
 		Node node = list.findConvergenceOfTwoLists(list2);
 
 		assertSame(6, node.value);
@@ -275,15 +280,15 @@ public class LinkedListTestCase {
 
 		Node newHead = list.mergeSort();
 		list.setHead(newHead);
-		assertSame(1, list.getNodeByPosition(0).value);
-		assertSame(2, list.getNodeByPosition(1).value);
-		assertSame(2, list.getNodeByPosition(2).value);
-		assertSame(3, list.getNodeByPosition(3).value);
-		assertSame(5, list.getNodeByPosition(4).value);
-		assertSame(6, list.getNodeByPosition(5).value);
-		assertSame(8, list.getNodeByPosition(6).value);
-		assertSame(8, list.getNodeByPosition(7).value);
-		assertSame(9, list.getNodeByPosition(8).value);
+		assertSame(1, list.getNodeByIndex(0).value);
+		assertSame(2, list.getNodeByIndex(1).value);
+		assertSame(2, list.getNodeByIndex(2).value);
+		assertSame(3, list.getNodeByIndex(3).value);
+		assertSame(5, list.getNodeByIndex(4).value);
+		assertSame(6, list.getNodeByIndex(5).value);
+		assertSame(8, list.getNodeByIndex(6).value);
+		assertSame(8, list.getNodeByIndex(7).value);
+		assertSame(9, list.getNodeByIndex(8).value);
 	}
 
 	@Test
@@ -291,15 +296,15 @@ public class LinkedListTestCase {
 		setUpList1();
 
 		list.bubbleSort();
-		assertSame(1, list.getNodeByPosition(0).value);
-		assertSame(2, list.getNodeByPosition(1).value);
-		assertSame(2, list.getNodeByPosition(2).value);
-		assertSame(3, list.getNodeByPosition(3).value);
-		assertSame(5, list.getNodeByPosition(4).value);
-		assertSame(6, list.getNodeByPosition(5).value);
-		assertSame(8, list.getNodeByPosition(6).value);
-		assertSame(8, list.getNodeByPosition(7).value);
-		assertSame(9, list.getNodeByPosition(8).value);
+		assertSame(1, list.getNodeByIndex(0).value);
+		assertSame(2, list.getNodeByIndex(1).value);
+		assertSame(2, list.getNodeByIndex(2).value);
+		assertSame(3, list.getNodeByIndex(3).value);
+		assertSame(5, list.getNodeByIndex(4).value);
+		assertSame(6, list.getNodeByIndex(5).value);
+		assertSame(8, list.getNodeByIndex(6).value);
+		assertSame(8, list.getNodeByIndex(7).value);
+		assertSame(9, list.getNodeByIndex(8).value);
 
 	}
 
@@ -308,22 +313,13 @@ public class LinkedListTestCase {
 		setUpList1();
 
 		list.eliminateDuplicates();
-		assertSame(1, list.getNodeByPosition(0).value);
-		assertSame(2, list.getNodeByPosition(1).value);
-		assertSame(3, list.getNodeByPosition(2).value);
-		assertSame(5, list.getNodeByPosition(3).value);
-		assertSame(6, list.getNodeByPosition(4).value);
-		assertSame(8, list.getNodeByPosition(5).value);
-		assertSame(9, list.getNodeByPosition(6).value);
-	}
-
-	@Test
-	public void testEvensBeforeOdds() {
-		setUpList1();
-
-System.out.println("\nEvensBeforeOdds");
-		list.evensBeforeOdds();
-		list.displayList();
+		assertSame(1, list.getNodeByIndex(0).value);
+		assertSame(2, list.getNodeByIndex(1).value);
+		assertSame(3, list.getNodeByIndex(2).value);
+		assertSame(5, list.getNodeByIndex(3).value);
+		assertSame(6, list.getNodeByIndex(4).value);
+		assertSame(8, list.getNodeByIndex(5).value);
+		assertSame(9, list.getNodeByIndex(6).value);
 	}
 	
 	@Test
@@ -341,20 +337,98 @@ System.out.println("\nEvensBeforeOdds");
 		list2.insertAtHead(4);
 		list2.insertAtHead(2);
 		
-		LinkedList list3 = new LinkedList();
-		LinkedList.mergeAlternating(list.getHead(), list2.getHead(), list3);
+		LinkedList.mergeAlternating(list1.getHead(), list2.getHead());
 		
-		assertSame(0, list3.getNodeByPosition(1).value);
-		assertSame(1, list3.getNodeByPosition(2).value);
-		assertSame(2, list3.getNodeByPosition(3).value);
-		assertSame(3, list3.getNodeByPosition(4).value);
-		assertSame(4, list3.getNodeByPosition(5).value);
-		assertSame(5, list3.getNodeByPosition(6).value);
-		assertSame(6, list3.getNodeByPosition(7).value);
-		assertSame(7, list3.getNodeByPosition(8).value);
-		assertSame(8, list3.getNodeByPosition(9).value);
+		assertSame(1, list1.getNodeByIndex(0).value);
+		assertSame(2, list1.getNodeByIndex(1).value);
+		assertSame(3, list1.getNodeByIndex(2).value);
+		assertSame(4, list1.getNodeByIndex(3).value);
+		assertSame(5, list1.getNodeByIndex(4).value);
+		assertSame(6, list1.getNodeByIndex(5).value);
+		assertSame(7, list1.getNodeByIndex(6).value);
+		assertSame(8, list1.getNodeByIndex(7).value);
+		assertSame(9, list1.getNodeByIndex(8).value);
 	}
 
+	@Test
+	public void testIsPalindrome() {
+		LinkedList list1 = new LinkedList();
+		list1.insertAtHead(1);
+		list1.insertAtHead(2);
+		list1.insertAtHead(3);
+		list1.insertAtHead(3);
+		list1.insertAtHead(2);
+		list1.insertAtHead(1);
+		assertTrue(list1.isPalindrome());
+			
+		LinkedList list2 = new LinkedList();
+		list2.insertAtHead(1);
+		list2.insertAtHead(2);
+		list2.insertAtHead(3);
+		list2.insertAtHead(3);
+		list2.insertAtHead(2);
+		list2.insertAtHead(1);
+		assertTrue(list2.isPalindrome());
+		
+		LinkedList list3 = new LinkedList();
+		list3.insertAtHead(1);
+		list3.insertAtHead(2);
+		list3.insertAtHead(3);
+		list3.insertAtHead(1);
+		list3.insertAtHead(2);
+		assertFalse(list3.isPalindrome());
+		
+		LinkedList list4 = new LinkedList();
+		list4.insertAtHead(1);
+		list4.insertAtHead(2);
+		list4.insertAtHead(3);
+		list4.insertAtHead(1);
+		list4.insertAtHead(1);
+		list4.insertAtHead(3);
+		assertFalse(list3.isPalindrome());
+	}
+	
+	@Test
+	public void testFindThirds() {
+		setUpList1();
+		
+		System.out.println("\nFind Thirds");
+		System.out.println("Output should be: 1/3: 2 2/3: 6");
+		list.findThirds();
+		System.out.println("End Find Thirds");
+	}
+
+	@Test 
+	public void testSwapEveryTwoElements() {
+		LinkedList list1 = new LinkedList();
+		list1.insertAtHead(7);
+		list1.insertAtHead(6);
+		list1.insertAtHead(5);
+		list1.insertAtHead(4);
+		list1.insertAtHead(3);
+		list1.insertAtHead(2);
+		list1.insertAtHead(1);
+		
+		list1.swapEveryTwoElements();
+		assertSame(2, list1.getNodeByIndex(0).value);
+		assertSame(1, list1.getNodeByIndex(1).value);
+		assertSame(4, list1.getNodeByIndex(2).value);
+		assertSame(3, list1.getNodeByIndex(3).value);
+		assertSame(6, list1.getNodeByIndex(4).value);
+		assertSame(5, list1.getNodeByIndex(5).value);		
+		assertSame(7, list1.getNodeByIndex(6).value);
+	}
+	
+	@Test
+	public void testEvensBeforeOdds() {
+
+		
+
+//System.out.println("\nEvensBeforeOdds");
+//		list.evensBeforeOdds();
+//		list.displayList();
+	}
+	
 /****
 	@Test
 	public void testConvertToDoublyLinkedList() {

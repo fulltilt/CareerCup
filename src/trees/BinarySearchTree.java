@@ -2,70 +2,69 @@ package trees;
 
 import java.util.*;
 
+import linkedLists.DoublyLinkedList;
+
 public class BinarySearchTree {
 	private Node root = null;	// Root node pointer. Will be null for an empty tree.
-
-  	private static class Node {
+    
+  	public static class Node {
 		Node leftChild = null;
 		Node rightChild = null;
-		int data;
+		int value;
 
-    	Node(int newData) { data = newData; }
+    	Node(int newValue) { value = newValue; }
 	}
 
 	/**
 	    Returns true if the given target is in the binary tree.
 	    Uses a recursive helper.
 	*/
-  	public boolean find(int data) {
-    	return(find(root, data));
+  	public boolean find(int value) {
+    	return(find(root, value));
   	}
 
-  	private boolean find(Node node, int data) {
+  	private boolean find(Node node, int value) {
     	if (node == null)
       		return(false);
 
-    	if (data == node.data)
+    	if (value == node.value)
       		return(true);
-    	else if (data < node.data)
-      		return(find(node.leftChild, data));
+    	else if (value < node.value)
+      		return(find(node.leftChild, value));
     	else
-      		return(find(node.rightChild, data));
+      		return(find(node.rightChild, value));
   	}
 
 
 	/**
-   		Inserts the given data into the binary tree.
+   		Inserts the given value into the binary tree.
    		Uses a recursive helper.
   	*/
-  	public void insert(int data) {
-    	root = insert(root, data);
+  	public void insert(int value) {
+    	root = insert(root, value);
   	}
 
-  	private Node insert(Node node, int data) {
+  	private Node insert(Node node, int value) {
     	if (node == null)
-      		node = new Node(data);
+      		node = new Node(value);
     	else {
-      		if (data <= node.data)
-        		node.leftChild = insert(node.leftChild, data);
+      		if (value <= node.value)
+        		node.leftChild = insert(node.leftChild, value);
       		else
-        		node.rightChild = insert(node.rightChild, data);
+        		node.rightChild = insert(node.rightChild, value);
     	}
 
     	return node; // in any case, return the new pointer to the caller
   	}
 	/******************************/
 
-	public void print() {
-		print(root);
-	}
-
-	private void print(Node node) {
+	public void print() { print(root); System.out.println(); }
+	public void print(Node node) {
 		if (node == null)
 			return;
 
 		print(node.leftChild);
-		System.out.println(node.data);
+		System.out.print(node.value + " ");
 		print(node.rightChild);
 	}
 	/******************************/
@@ -101,7 +100,7 @@ public class BinarySearchTree {
 		if (node == null)
 			return (sum == 0);
 
-		return hasPathSum(node.leftChild, sum - node.data) || hasPathSum(node.rightChild, sum - node.data);
+		return hasPathSum(node.leftChild, sum - node.value) || hasPathSum(node.rightChild, sum - node.value);
 	}
 	/******************************/
 
@@ -114,7 +113,7 @@ public class BinarySearchTree {
 		if (node == null)
 			return;
 
-		path[pathLength] = node.data;
+		path[pathLength] = node.value;
 		++pathLength;
 
 		// check if node is a leaf
@@ -143,7 +142,7 @@ public class BinarySearchTree {
 		if (node == null)
 			return null;
 
-		Node newNode = new Node(node.data);
+		Node newNode = new Node(node.value);
 		newNode.leftChild = mirror(node.rightChild);
 		newNode.rightChild = mirror(node.leftChild);
 
@@ -166,7 +165,7 @@ public class BinarySearchTree {
 		while (!currentLevel.isEmpty()) {
 			// print out the values of the current level
 			for (Node n : currentLevel) {
-				System.out.print(n.data + " ");
+				System.out.print(n.value + " ");
 
 				if (n.leftChild != null)
 					children.add(n.leftChild);
@@ -217,8 +216,9 @@ public class BinarySearchTree {
 			if (tempNode == null)
 				System.out.println();
 			else
-				System.out.print(tempNode.data + " ");
+				System.out.print(tempNode.value + " ");
 		}
+		System.out.println();
 	}
 	/******************************/
 
@@ -230,7 +230,7 @@ public class BinarySearchTree {
 		if (node == null)
 			return;
 
-		Node newNode = new Node(node.data);
+		Node newNode = new Node(node.value);
 		newNode.leftChild = node.leftChild;
 		node.leftChild = newNode;
 
@@ -247,7 +247,7 @@ public class BinarySearchTree {
 		if (node == null && otherNode == null)
 			return true;
 		else if (node != null && otherNode != null) {
-			return node.data == otherNode.data &&
+			return node.value == otherNode.value &&
 			       isTreeEqual(node.leftChild, otherNode.leftChild) &&
 			       isTreeEqual(node.rightChild, otherNode.rightChild);
 		}
@@ -261,13 +261,13 @@ public class BinarySearchTree {
 	}
 	/******************************/
 
-	Node lca(Node node1, Node node2) { return lca(root, node1, node2); }
-	Node lca(Node root, Node one, Node two) {
+	public Node lca(Node node1, Node node2) { return lca(root, node1, node2); }
+	private Node lca(Node root, Node one, Node two) {
 	    // Check if one and two are in the root tree.
 	    while (root != null) {
-	        if (root.data < one.data && root.data < two.data)
+	        if (root.value < one.value && root.value < two.value)
 	            root = root.rightChild;
-	        else if (root.data > one.data && root.data > two.data)
+	        else if (root.value > one.value && root.value > two.value)
 	            root = root.leftChild;
 	        else
 	            return root;
@@ -276,4 +276,148 @@ public class BinarySearchTree {
 	    return null;
 	}
 	/******************************/
+	
+	public void printNodesInRange(int min, int max) { printNodesInRange(root, min, max); }
+	private void printNodesInRange(Node node, int min, int max) {
+		if (node == null)
+			return;
+		
+		printNodesInRange(node.leftChild, min, max);
+		if (node.value >= min && node.value <= max)
+			System.out.print(node.value + " ");
+		printNodesInRange(node.rightChild, min, max);
+	}
+	/******************************/
+	
+	public Node trimTreeInRange(int min, int max) { 
+		return trimTreeInRange(root, min, max); 
+	}
+	private Node trimTreeInRange(Node node, int min, int max) {
+		if (node == null)
+			return null;
+		
+		if (node.value > max) 
+			return trimTreeInRange(node.leftChild, min, max);
+		else if (node.value < min) 
+			return trimTreeInRange(node.rightChild, min, max);
+		else {
+			   node.leftChild = trimTreeInRange(node.leftChild, min, max);
+			   node.rightChild = trimTreeInRange(node.rightChild, min, max);
+		} 
+		  
+		return node;
+	}	
+	/******************************/
+	
+	public linkedLists.LinkedList convertToLinkedList() { 
+		linkedLists.LinkedList newList = new linkedLists.LinkedList();
+		convertToLinkedList(root, newList);
+
+		return newList;
+	}
+	private void convertToLinkedList(Node node, linkedLists.LinkedList newList) {  
+		if (node == null)
+			return; 
+		
+		convertToLinkedList(node.rightChild, newList);	// by switching the order, we don't have to reverse the List
+		newList.insertAtHead(node.value);
+		convertToLinkedList(node.leftChild, newList);
+	}	
+	/******************************/
+
+	public DoublyLinkedList convertToDoublyLinkedList() { 
+		DoublyLinkedList newList = new DoublyLinkedList();
+		convertToDoublyLinkedList(root, null, newList);
+		
+		return newList;
+	}
+	private void convertToDoublyLinkedList(Node node, DoublyLinkedList.Node previousNode, DoublyLinkedList newList) {  
+		if (node == null)
+			return; 
+		
+		convertToDoublyLinkedList(node.rightChild, previousNode, newList);
+		
+		newList.insertAtHead(node.value);
+		newList.getHead().previous = previousNode;
+		if (previousNode != null)
+			previousNode.next = newList.getHead();
+		
+		convertToDoublyLinkedList(node.leftChild, previousNode, newList);
+	}	
+	/******************************/
+	
+	public void reversePointers() { reversePointers(root, null); }
+	private void reversePointers(Node currentNode, Node parent) {
+		if (currentNode == null)
+			return;
+		
+		// must save these values as these will be modified
+		Node leftNode = currentNode.leftChild;
+		Node rightNode = currentNode.rightChild;
+		
+		currentNode.leftChild = parent;
+		currentNode.rightChild = parent;
+		reversePointers(leftNode, currentNode);
+		reversePointers(rightNode, currentNode);
+	}
+	
+	/******************************/
+	
+	public void valueToSumOfChildrenValues() { valueToSumOfChildrenValues(root); }
+	private int valueToSumOfChildrenValues(Node node) {
+		if (node == null)
+			return 0;
+		
+		int currentValue = node.value;
+		node.value = valueToSumOfChildrenValues(node.leftChild) + valueToSumOfChildrenValues(node.rightChild);
+		
+		return node.value + currentValue;
+	}
+	
+	/******************************/
+	
+	public boolean isTreeSymmetric() {return isTreeSymmetric (root.leftChild, root.rightChild); }
+	private boolean isTreeSymmetric(Node left, Node right) {
+		if (left == null && right == null)
+			return true;
+		else if (left == null || right == null)
+			return false;
+
+		return isTreeSymmetric(left.leftChild, right.rightChild) && 
+			   isTreeSymmetric(left.rightChild, right.leftChild);
+	}
+	/******************************/
+	
+	public Collection<Integer> addColumns() { 
+		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+		addColumns(root, 0, hm); 
+		System.out.print(hm.get(-3) + " ");
+		System.out.print(hm.get(-2) + " ");
+		System.out.print(hm.get(-1) + " ");
+		System.out.print(hm.get(0) + " ");
+		System.out.print(hm.get(1) + " ");
+		System.out.print(hm.get(2) + " ");
+		System.out.print(hm.get(3) + " ");
+		return hm.values();
+	}
+	private void addColumns(Node node, int column, HashMap<Integer, Integer> hashMap) {
+		if (node == null)
+			return;
+		
+		if (!hashMap.containsKey(column))
+			hashMap.put(column, node.value);
+		else {
+			int tempValue = (int) hashMap.get(column);
+			hashMap.put(column, tempValue + node.value);
+		}
+		// one turn to the left corresponds to n-1 and one turn to the right corresponds to n+1
+		addColumns(node.leftChild, column - 1, hashMap);
+		addColumns(node.rightChild, column + 1, hashMap);	
+	}
+	/******************************/
+	
+	public static void main(String[] args) {
+		//BinarySearchTree bt = new BinarySearchTree();
+		//System.out.println(bt.printNodesInRange());
+	}	
 }

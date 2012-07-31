@@ -147,7 +147,8 @@ public class SuffixTree {
             return endIndex;
         }
 
-        public void setEndIndex(int endIndex) {
+        @SuppressWarnings("unused")
+		public void setEndIndex(int endIndex) {
             this.endIndex = endIndex;
         }
 
@@ -155,7 +156,8 @@ public class SuffixTree {
             return startNode;
         }
 
-        public void setStartNode(Node startNode) {
+        @SuppressWarnings("unused")
+		public void setStartNode(Node startNode) {
             this.startNode = startNode;
         }
 
@@ -185,7 +187,8 @@ public class SuffixTree {
             return beginIndex > endIndex;
         }
 
-        public boolean isImplicit() {
+        @SuppressWarnings("unused")
+		public boolean isImplicit() {
             return endIndex >= beginIndex;
         }
 
@@ -225,7 +228,8 @@ public class SuffixTree {
             originNode = originNode.getSuffixNode();
         }
 
-        public int getEndIndex() {
+        @SuppressWarnings("unused")
+		public int getEndIndex() {
             return endIndex;
         }
 

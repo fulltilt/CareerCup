@@ -4,7 +4,8 @@ import java.util.*;
 
 public class BinaryTree {
 	private Node root = null;	// Root node pointer. Will be null for an empty tree.
-
+	private int balanceFactor;
+	
   	public static class Node {
 		Node leftChild = null;
 		Node rightChild = null;
@@ -33,6 +34,15 @@ public class BinaryTree {
 		root.rightChild.rightChild.rightChild.rightChild.rightChild = new Node(10);
 	}
 
+	public int getHeight(Node node) {
+		if (node == null)
+			return 0;
+
+		return 1 + Math.max(getHeight(node.leftChild), getHeight(node.rightChild));
+	}
+
+	public Node getRoot() { return root; }
+	
 	/******************************/
 	public boolean find(int data) { return find(root, data); }
 	private boolean find(Node node, int data) {
@@ -111,6 +121,23 @@ public class BinaryTree {
 	}
 	/******************************/
 
+	public double getBalanceFactor() {
+		balanceFactor = 0;
+		getBalanceFactor(root, 1);
+		
+		return balanceFactor;
+	}
+	private int getBalanceFactor(Node node, int level) {
+		if (node == null)
+			return 0;
+		
+		int desc = getBalanceFactor(node.leftChild, level + 1) + 
+				   getBalanceFactor(node.rightChild, level + 1);
+		balanceFactor += desc * 1.0 / level;
+		   
+		return desc + 1;
+	}
+	
 	public int getDiameter(Node node) {
 		if (node == null)
 			return 0;
@@ -121,13 +148,9 @@ public class BinaryTree {
 
 		return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
 	}
-
-	public int getHeight(Node node) {
-		if (node == null)
-			return 0;
-
-		return 1 + Math.max(getHeight(node.leftChild), getHeight(node.rightChild));
+	
+	public static void main(String[] args) {
+		BinaryTree bt = new BinaryTree();
+		System.out.println(bt.getBalanceFactor());
 	}
-
-	public Node getRoot() { return root; }
 }

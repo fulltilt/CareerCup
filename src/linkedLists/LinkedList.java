@@ -8,7 +8,7 @@ public class LinkedList {
 
 	public static class Node {
 		Node(int item) { value = item; }
-		int value;
+		public int value;
 		Node next = null;
 	}
 	/*
@@ -69,7 +69,7 @@ public class LinkedList {
 		head = head.next;
 
 		--size;
-		return false;
+		return true;
 	}
 
 	/*
@@ -129,13 +129,17 @@ public class LinkedList {
 		return null;
 	}
 
-	public Node getNodeByPosition(int position) {
-		if (position >= size)
-			return null;
+	public Node getNodeByIndex(int index) {
+		//if (position >= size)	// commented this line out due to mergeAlternating which doesn't update the size of the list
+		//	return null;
 
 		Node currentNode = head;
-		for (int i = 0; i < position; i++)
+		for (int i = 0; i < index; i++) {
 			currentNode = currentNode.next;
+
+			if (currentNode == null)
+				break;
+		}
 
 		return currentNode;
 	}
@@ -149,6 +153,18 @@ public class LinkedList {
 
 			currentNode = currentNode.next;
 		}
+	}
+
+	// special getSize fxn for findConvergenceOfTwoLists
+	public void setSize() {
+		Node currentNode = head;
+		int tempSize = 0;
+
+		while (currentNode != null) {
+			currentNode = currentNode.next;
+			++tempSize;
+		}
+		this.size = tempSize;
 	}
 
 	public int size() { return size; }
@@ -211,7 +227,7 @@ public class LinkedList {
 
 		Node startOfCycle = slow;
 		Node currentNode = slow.next;
-		int lengthOfCycle = 0;
+		int lengthOfCycle = 0;	// should this be 1?
 		while (currentNode != startOfCycle) {
 			currentNode = currentNode.next;
 			++lengthOfCycle;
@@ -242,6 +258,7 @@ public class LinkedList {
 			++distanceFromNode1ToEnd;
 		}
 		--distanceFromNode1ToEnd;	// this accounts for when the loop goes one extra step for the null value
+									// note: might be able to take this line out by making the while conditional: (helper.next != null)
 
 		// iterate node2 to the position that is 'position' elements from end
 		for (int i = 0; i < distanceFromNode1ToEnd; i++)
@@ -267,6 +284,9 @@ public class LinkedList {
 		return NthElementFromLast;
 	}
 
+	/*
+	 * used for reversing a List; manipulates the head pointer
+	 */
 	public void reverseList() {
 		Node previousNode = null;
 		Node currentNode = head;
@@ -283,8 +303,30 @@ public class LinkedList {
 		}
 
 		head = currentNode;		// make sure head points to the correct element
+		// ** because of the above line, it probably explains the weirdness that is happening
 	}
 
+	/*
+	 * used for reversing a List passed to it but doesn't modify the head pointer
+	 */
+	public static Node reverseList(Node node) {
+		Node previousNode = null;
+		Node currentNode = node;
+		Node nextNode = currentNode.next;
+
+		while (nextNode != null) {
+			currentNode.next = previousNode;
+			previousNode = currentNode;
+			currentNode = nextNode;
+			nextNode = nextNode.next;
+
+			if (nextNode == null)		// this step needed on the very last iteration
+				currentNode.next = previousNode;
+		}
+
+		return currentNode;
+	}
+	
 	public void recursiveReversePrint() { recursiveReversePrint(head); }
 	private void recursiveReversePrint(Node node) {
 		if (node != null) {
@@ -381,15 +423,15 @@ public class LinkedList {
 		// find how many positions to iterate the longer List to match up to the shorter List
 		if (list1Length >= list2Length) {
 			longerListNode = head;
-			shorterListNode = otherList.getNodeByPosition(0);
+			shorterListNode = otherList.getNodeByIndex(0);
 			positionsToIterate = list1Length - list2Length;
 		} else {
-			longerListNode = otherList.getNodeByPosition(0);
+			longerListNode = otherList.getNodeByIndex(0);
 			shorterListNode = head;
 			positionsToIterate = list2Length - list1Length;
 		}
 
-		for (int i = 0; i < positionsToIterate; i++)	// position longer List to match sohrter List
+		for (int i = 0; i < positionsToIterate; i++)	// position longer List to match shorter List
 			longerListNode = longerListNode.next;
 
 		while (longerListNode != null) {
@@ -439,13 +481,82 @@ public class LinkedList {
 		}
 	}
 
-	public static void mergeAlternating(Node head1, Node head2, LinkedList list3) {
-		Node L1CurrentNode = head1;
-		Node L2CurrentNode = head2;
-		//Node temp = ;
+	public static Node mergeAlternating(Node head1, Node head2) {
+		Node head3 = head1;
 
+		while (head1 != null && head2 != null) {
+			Node temp = head1.next;
+			Node temp2 = head2.next;
+			head1.next = head2;
+			head2.next = temp;
+
+			if (head1.next == null)
+				head1 = head2;
+			else
+				head1 = temp;
+			head2 = temp2;
+		}
+
+		if (head2 != null)	// called when the 2nd list is longer than the 1st one
+			head1.next = head2;
+
+		return head3;
 	}
 
+	public boolean isPalindrome() {
+		Node midNode = this.getMidpoint(head);
+		Node secondHalfNode = midNode.next;
+		midNode.next = null;		// split List into 2 halves a la MergeSort
+
+		Node secondHalfCurrent = reverseList(secondHalfNode);	// reverse 2nd half of the List
+		
+		// compare the 1st half of the List to the reverse of the 2nd half of the List
+		Node currentNode = head;
+		while (secondHalfCurrent != null)	{ // for odds, middle node will always be in 1st half. By doing this conditional, we don't have to worry about the middle element
+			if (currentNode.value != secondHalfCurrent.value)
+				return false;
+
+			currentNode = currentNode.next;
+			secondHalfCurrent = secondHalfCurrent.next;
+		}
+
+		return true;
+	}
+
+	public void findThirds() {
+		if (size == 1) {
+			System.out.println("1/3: " + head.value + " 2/3: " + head.value);
+			return;
+		} 
+		
+		Node pointer1 = head, pointer2 = head.next, pointer3 = head.next.next;
+		while (pointer3 != null && pointer3.next != null && pointer3.next.next != null) {
+			pointer1 = pointer1.next;
+			pointer2 = pointer2.next.next;
+			pointer3 = pointer3.next.next.next;
+		}
+		
+		System.out.println("1/3: " + pointer1.value + " 2/3: " + pointer2.value);
+	}
+
+	public void swapEveryTwoElements() {
+		Node pointer1 = head;
+		Node pointer2 = head.next;
+		
+		while (pointer1 != null && pointer2 != null) {
+			int temp = pointer2.value;
+			pointer2.value = pointer1.value;
+			pointer1.value = temp;
+			
+			pointer1 = pointer1.next.next;
+			
+			if (pointer2.next == null)
+				break;
+			else
+				pointer2 = pointer2.next.next;
+		}
+	}
+	
 	public void evensBeforeOdds() {
 		Node currentNode = head;
 		Node currentEven, currentOdd;
@@ -465,14 +576,14 @@ public class LinkedList {
 
 				currentNode = currentEven;	// after a swap, even Node always before odd Node
 				currentEven = currentOdd = null;
-System.out.print("currentNode value: " + currentNode.value);
+//System.out.print("currentNode value: " + currentNode.value);
 				continue;
 			}
 
 			currentNode = currentNode.next;
 //System.out.print("\niteration: " + count++ + " currentOdd value: " + currentOdd.value
 //		 + " currentEven value: " + currentEven.value);
-displayList();
+//displayList();
 		}
 	}
 
@@ -480,4 +591,16 @@ displayList();
 	public void convertToDoublyLinkedList() {
 	}
 ****/
+	public static void main(String[] args) {
+		LinkedList list1 = new LinkedList();
+		list1.insertAtHead(1);
+		list1.insertAtHead(2);
+		//list1.insertAtHead(3);
+		//list1.insertAtHead(4);
+		//list1.insertAtHead(5);
+		//list1.insertAtHead(6);
+
+		list1.findThirds();
+
+	}
 }
