@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 
+import trees.BinaryTree.Node;
+
 public class BinaryTreeTestCase {
     private BinaryTree tree;
 
@@ -57,5 +59,12 @@ public class BinaryTreeTestCase {
 	public void testGetDiameter() {
 		assertSame(9, tree.getDiameter(tree.getRoot()));
 		assertSame(7, tree.getDiameter(tree.getRoot().rightChild.rightChild));
+	}
+	
+	@Test
+	public void testGetMaxElement() {
+		assertSame(10, tree.getMaxElement());
+		tree.getRoot().leftChild.leftChild.leftChild = new Node(40);
+		assertSame(40, tree.getMaxElement());
 	}
 }

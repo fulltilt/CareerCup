@@ -1,5 +1,7 @@
 package arrays;
 
+import java.util.HashMap;
+
 public class ArrayManipulations {
 	public int[] dutchNationalFlag(int[] a) {
 		int lo = 0;
@@ -172,7 +174,7 @@ public class ArrayManipulations {
 
 	/* assumes square matrix
 	*/
-	boolean search2DArray(int a[][], int key) {
+	boolean search2DArray(int[][] a, int key) {
         int m = a.length;		// get row count
         int n = a[0].length;	// get column count
         int k = 0;
@@ -188,18 +190,221 @@ public class ArrayManipulations {
         return false;
 	}
 
+	public int countNegativeElemsIn2DArray(int[][] a) {
+		int columnLength = a[0].length;
+		int row = 0;
+		int count = 0;
+		
+		// find the first row that should have at least 1 positive # (assumption is that array is sorted)
+		while (a[row][columnLength - 1] < 0) {
+			++row;
+			count += columnLength; 
+		}
+		
+		// iterate through the first row that has at least 1 positive #
+		for (int i = 0; i < columnLength - 1; i++) {
+			if (a[row][i] < 0)
+				++count;
+		}
+		
+		return count;
+	}
+	
+	// Given an n X n array with rows sorted and cols sorted, find the number of negative elements in most efficient way
+	public void findNegativeBits() {
+		int v = -1;      // we want to find the sign of v
+		int sign;   // the result goes here
+		int result;
+
+		// convert true and false values to 1 and 0 respectively
+		boolean temp = (v < 0);
+		if (temp)
+			result = 1;
+		else
+			result = 0;
+
+		sign = -result;  // if v < 0 then -1, else 0.
+
+		if (sign == -1)
+			System.out.println("negative");
+		else
+			System.out.println("positive");
+	}
+	
+	// An array of integers, only one integer appears odd times, all others appear even times, find it
+	public int FindOddCountInteger(int[] array) {
+		int oddNumber = 0;
+
+		for (int i : array)
+			oddNumber ^= i;
+
+		return oddNumber; 
+	}
+	
+	public void generateThirdArray(int[] input, int[] index, int[] result) {
+		int product = 1;
+		for (int i = 0; i < input.length; i++)
+			product *= input[i];
+
+		for (int i = 0; i < result.length; i++)
+			result[i] = product / input[index[i]];	
+	}
+
+	public boolean areArraysEqual(int[] arr1, int[] arr2) {
+		// check to see if the # of elements are the same
+		if (arr1.length != arr2.length)
+			return false;
+
+		// check if the sums are equal
+		if (getArraySum(arr1) != getArraySum(arr2))
+			return false;
+
+		// check to see if the products are equal
+		if (getArrayProduct(arr1) != getArrayProduct(arr2))
+			return false;
+
+		// XOR both arrays and check that the result is zero
+		int XORResult = 0;
+		for (int i : arr1)
+			XORResult ^= i;
+		for (int i : arr2)
+			XORResult ^= i;
+		if (XORResult != 0)
+			return false;
+
+		return true;
+	}
+	private int getArraySum(int[] arr) {
+		int sum = 0;
+
+		for (int i = 0; i < arr.length; i++)
+			sum += arr[i];
+
+		return sum;
+	}
+	private int getArrayProduct(int[] arr) {
+		int product = 1;
+
+		for (int i = 0; i < arr.length; i++)
+			product *= arr[i];
+
+		return product;
+	}
+	
+	public void arraysIntersections(int[] arr1, int[] arr2) {
+		// setup HashMap for the first array. Create a running count for each value
+		HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
+		for (int i = 0; i < arr1.length; i++) {
+			if (!hashMap.containsKey(arr1[i]))
+				hashMap.put(arr1[i], 1);
+			else {
+				int total = hashMap.get(arr1[i]);
+				hashMap.put(arr1[i], ++total);
+			}
+		}
+		
+		// check for intersection
+		System.out.println("Checking for interesecting elements...");
+		for (int i = 0; i < arr2.length; i++) {
+			if (hashMap.containsKey(arr2[i])) {
+				int total = hashMap.get(arr2[i]) - 1; // subtract 1 from the value of the key
+				System.out.print(arr2[i] + " ");
+
+				if (total == 0)
+					hashMap.remove(arr2[i]);
+				else
+					hashMap.put(arr2[i], total);
+			}
+		}		
+		System.out.println();
+	}
+	
+	public boolean doesArraySumExists(int[] arr, int sum) {
+		HashMap<Integer, Integer> ht = new HashMap<Integer, Integer>();
+		int tmp = 0, num1 = 0;
+		boolean exists = false;
+
+		for (int i = 0; i < arr.length; i++) {
+			ht.put(arr[i], arr[i]);
+		}
+
+		for (int i = 0; i < arr.length; i++) {
+			num1 = arr[i];
+			tmp = sum - num1;
+			if((ht.get(tmp) != null) && (num1 != tmp)) {
+				exists = true;
+				break;
+			}
+		}		
+		
+		return exists;
+	}
+
+	public int findBeginningOfRotatedArray(int[] arr, int start, int end) {
+		int index = (start + end) / 2; // split the array into 2 halves
+
+		if (((end - start) < 5) && (arr[start] > arr[index]) && (arr[index] < arr[end]))
+			return index;
+		else if(arr[start] > arr[index]) // if the rotation is in the left half
+			return findBeginningOfRotatedArray(arr, start, index);
+		else if(arr[index] > arr[end])	// if the rotation is in the right half
+			return findBeginningOfRotatedArray(arr, index, end);
+
+		return 0;		
+	}
+	
+	//doesn't work for duplicate values in array2 since I use a HashSet
+	public void findConsecutiveIndex(int[] arr1, int[] arr2) {
+		int array2Length = arr2.length;
+		int startIndex = -1, endIndex = -1;
+		int XORValue = 0;
+
+		// put arr2 into a HashSet (because of this, duplicates in array2 wouldn't work for this algorithm) and find the XOR'd value
+		java.util.HashSet<Integer> hashSet = new java.util.HashSet<Integer>();
+		for (int i : arr2) {
+			hashSet.add(i);
+			XORValue ^= i;
+		}
+
+//note: it seems I may have hardcoded array indices. Will have to change that if that is the case
+		for (int i = 0; i < arr1.length; i++) {
+			if (hashSet.contains(arr1[i])) {
+				if (i + array2Length < arr1.length) {
+					if (((arr1[i] ^ arr1[i + 1] ^ arr1[i + 2] ^ arr1[i + 3] ^ arr1[i + 4]) ^ XORValue) == 0) {
+						startIndex = i;
+						endIndex = i + 4;
+						break;
+					}
+				}
+			}
+		}
+
+		System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);		
+	}
+	
+	// maybe cleaner and more efficient to use a Comparable fxn
+	public String createLargestInt(int[] arr) {
+		String tempStr1, tempStr2, biggestInt = "";
+		
+		for (int i = 0; i < arr.length - 1; i++) {
+			int tempInt1 = arr[i], tempInt2 = arr[i + 1];
+			tempStr1 = Integer.toString(tempInt1) + Integer.toString(tempInt2);
+			tempStr2 = Integer.toString(tempInt2) + Integer.toString(tempInt1);
+
+			if (Integer.parseInt(tempStr1) > Integer.parseInt(tempStr2)) {
+				biggestInt = tempStr1;
+				arr[i + 1] = Integer.parseInt(tempStr1);
+			} else {
+				biggestInt = tempStr2;
+				arr[i + 1] = Integer.parseInt(tempStr2);
+			}
+		}
+		
+		return biggestInt;
+	}
+	
 	public static void main(String[] args) {
-		ArrayManipulations arrManip = new ArrayManipulations();
-		int[] a1 = new int[]{0, 0, 1, 2, 0, 4, 0, 0 ,8 ,9};
-		int[] result = arrManip.pushZeroesToBeginning(a1);
+		//ArrayManipulations arrManip = new ArrayManipulations();
 
-		//int[] a2 = new int[]{5,6,7,8};
-
-
-		//for (int i = 0; i < result.length; i++)
-			//System.out.print(result[i] + " ");
-
-		for (int i : result)
-			System.out.print(i + " ");
 	}
 }

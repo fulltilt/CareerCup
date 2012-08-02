@@ -10,9 +10,9 @@ public class BinaryTree {
 		Node leftChild = null;
 		Node rightChild = null;
 
-		int data;
+		int value;
 
-    	Node(int newData) { data = newData; }
+    	Node(int newValue) { value = newValue; }
 	}
 
 	public BinaryTree() {
@@ -44,8 +44,8 @@ public class BinaryTree {
 	public Node getRoot() { return root; }
 	
 	/******************************/
-	public boolean find(int data) { return find(root, data); }
-	private boolean find(Node node, int data) {
+	public boolean find(int value) { return find(root, value); }
+	private boolean find(Node node, int value) {
 		if (node == null)
 			return false;
 
@@ -56,8 +56,8 @@ public class BinaryTree {
 
 		while (!currentLevel.isEmpty()) {
 			for (Node n : currentLevel) {
-				if (n.data == data) {
-					System.out.println("Data " + data + " has been found on level " + level);
+				if (n.value == value) {
+					System.out.println("Value " + value + " has been found on level " + level);
 					return true;
 				}
 
@@ -72,7 +72,7 @@ public class BinaryTree {
 			++level;
 		}
 
-		System.out.println("Data " + data + " was unable to be found");
+		System.out.println("Value " + value + " was unable to be found");
 		return false;
 	}
 	/******************************/
@@ -88,7 +88,7 @@ public class BinaryTree {
 
 		while (!currentLevel.isEmpty()) {
 			for (Node n : currentLevel) {
-				System.out.print(n.data + " ");
+				System.out.print(n.value + " ");
 
 				if (n.leftChild != null)
 					children.add(n.leftChild);
@@ -110,14 +110,14 @@ public class BinaryTree {
 			return true;
 
 		// if the Node's data falls outside the range, return false
-		if (node.data < min || node.data > max)
+		if (node.value < min || node.value > max)
 			return false;
 
 		// check if the left child is within range (min...node.data) else return false
-		return isBST(node.leftChild, min, node.data) &&
+		return isBST(node.leftChild, min, node.value) &&
 
 			   // check if right child should be in range (node.data + 1...max) else return false
-		 	   isBST(node.rightChild, node.data + 1, max);
+		 	   isBST(node.rightChild, node.value + 1, max);
 	}
 	/******************************/
 
@@ -149,6 +149,14 @@ public class BinaryTree {
 		return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
 	}
 	
+	public int getMaxElement() { return getMaxElement(root); }
+	private int getMaxElement(Node node) {
+		  if (node == null) 
+			  return Integer.MIN_VALUE;
+		  
+		  return Math.max(node.value, Math.max(getMaxElement(node.leftChild), getMaxElement(node.rightChild)));
+	}
+				  
 	public static void main(String[] args) {
 		BinaryTree bt = new BinaryTree();
 		System.out.println(bt.getBalanceFactor());

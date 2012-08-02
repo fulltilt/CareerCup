@@ -1,14 +1,10 @@
 package trees;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import trees.BinarySearchTree.Node;
+import java.util.HashMap;
 
 public class BinarySearchTreeTestCase {
     private BinarySearchTree tree;
@@ -147,7 +143,7 @@ public class BinarySearchTreeTestCase {
 	
 	@Test
 	public void testValueToSumOfChildrenValues() {
-		System.out.println("\nBegin testValueToSumOfChildrenValues()");
+		
 		tree.valueToSumOfChildrenValues();
 		tree.print();
 		System.out.println("End testValueToSumOfChildrenValues()");		
@@ -168,7 +164,49 @@ public class BinarySearchTreeTestCase {
 	
 	@Test
 	public void testAddColumns() {
-		Collection<Integer> al = tree.addColumns();
+		HashMap<Integer, Integer> hm = tree.addColumns();
+		// need to hard code the indexes since calling [HashMap].values() doesn't return the values in sorted order 
+		assertSame(1, hm.get(-3));
+		assertSame(2, hm.get(-2));
+		assertSame(7, hm.get(-1));
+		assertSame(12, hm.get(0));
+		assertSame(8, hm.get(1));
+		assertSame(9, hm.get(2));
+		assertSame(10, hm.get(3));		
+	}
+	
+	@Test
+	public void testFindKthLargest() {
+		System.out.println("\nBegin findKthLargest(): Output should be: 10 7 1");
+		tree.findKthLargest(1);
+		tree.findKthLargest(4);
+		tree.findKthLargest(9);
+		System.out.println("\nEnd findKthLargest()");
+	}
+	
+	@Test 
+	public void testSumOfAllGreaterAndEqualTo() {
+		System.out.println("\nBegin testSumOfAllGreaterAndEqualTo(): Output should be: 49 48 46 43 39 34 27 19 10");
+		tree.sumOfAllGreaterAndEqualTo();
+		tree.print();
+		System.out.println("End testSumOfAllGreaterAndEqualTo()");
+	}
+	
+	@Test
+	public void testIsBalanced() {
+		assertFalse(tree.isBalanced());
 		
+		BinarySearchTree bst2 = new BinarySearchTree();
+		bst2.insert(1);
+		bst2.insert(0);
+		bst2.insert(2);
+		assertTrue(bst2.isBalanced());
+	}
+	
+	@Test
+	public void testCreateLinkedListByLevel() {
+		System.out.println("\nBegin testCreateLinkedListByLevel()");
+		tree.createLinkedListByLevel();
+		System.out.println("End testCreateLinkedListByLevel()");
 	}
 }

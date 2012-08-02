@@ -86,6 +86,14 @@ public class BitManipulations {
 		return ( ((x & 0xAAAAAAAA) >> 1) | ((x & 0x55555555) << 1) );
 	}
 
+	public boolean isPositive(int x) {
+		if ((x & 0x8000000) == 0)	// with no shifting
+		//if (((x >> 31) & 1) == 0) // same but with shifting
+			return true;
+		else
+			return false;
+	}
+	
 	public int bitSwapsRequired(int a, int b) {
 		int count = 0;
 		for(int c = a ^ b; c != 0; c = c & c - 1)

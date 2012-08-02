@@ -68,5 +68,12 @@ public class BitManipulationsTestCase {
 	public void testSwapWithoutTemp() {
 		assertSame(9, bm.swapWithoutTemp(5, 9));
 	}
+	
+	@Test
+	public void testIsPositive() {
+		assertTrue(bm.isPositive(9));
+		assertFalse(bm.isPositive(-9));
+		assertTrue(bm.isPositive(0));
+	}
 }
 

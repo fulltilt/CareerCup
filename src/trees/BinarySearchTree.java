@@ -222,6 +222,53 @@ public class BinarySearchTree {
 	}
 	/******************************/
 
+	// after creating this, found this can be used to print level by level but requires storage
+	public void createLinkedListByLevel() { createLinkedListByLevel(root); }
+	private void createLinkedListByLevel(Node node) {
+		if (node == null)
+			return;
+		
+		LinkedList<Node> currentLevel = new LinkedList<Node>();
+		LinkedList<Node> children = new LinkedList<Node>();
+		Stack<LinkedList<Node>> tree = new Stack<LinkedList<Node>>();
+		currentLevel.addFirst(node);
+		tree.push(currentLevel);
+		
+		while (!currentLevel.isEmpty()) {
+			for (Node n : currentLevel) {
+				if (n.leftChild != null)
+					children.add(n.leftChild);				
+				if (n.rightChild != null)
+					children.add(n.rightChild);
+			}
+			currentLevel = children;
+			tree.push(currentLevel);
+			children = new LinkedList<Node>();
+		}
+		
+		for (LinkedList<Node> ll : tree) {
+			for (Node n : ll)
+				System.out.print(n.value + " ");
+			System.out.println();
+		}
+	}
+	/******************************/
+	
+	public boolean isBalanced() { return (maxDepth(root) - minDepth(root)) <= 1; }
+	private int maxDepth(Node node) {
+		if (node == null)
+			return 0;
+		
+		return 1 + Math.max(maxDepth(node.leftChild), maxDepth(node.rightChild)); 
+	}	
+	private int minDepth(Node node) {
+		if (node == null)
+			return 0;
+		
+		return 1 + Math.min(minDepth(node.leftChild), minDepth(node.rightChild)); 
+	}	
+	/******************************/
+	
 	public void doubleTree() {
 		doubleTree(root);
 	}
@@ -388,17 +435,11 @@ public class BinarySearchTree {
 	}
 	/******************************/
 	
-	public Collection<Integer> addColumns() { 
+	public HashMap<Integer, Integer> addColumns() { 
 		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
 		addColumns(root, 0, hm); 
-		System.out.print(hm.get(-3) + " ");
-		System.out.print(hm.get(-2) + " ");
-		System.out.print(hm.get(-1) + " ");
-		System.out.print(hm.get(0) + " ");
-		System.out.print(hm.get(1) + " ");
-		System.out.print(hm.get(2) + " ");
-		System.out.print(hm.get(3) + " ");
-		return hm.values();
+
+		return hm;
 	}
 	private void addColumns(Node node, int column, HashMap<Integer, Integer> hashMap) {
 		if (node == null)
@@ -415,7 +456,42 @@ public class BinarySearchTree {
 		addColumns(node.rightChild, column + 1, hashMap);	
 	}
 	/******************************/
+	static int currentCount; 	
+	public void findKthLargest(int k) { findKthLargest(root, k); currentCount = 0;}
+	private void findKthLargest(Node node, int k) {
+		if (node == null)
+			return;
+		
+		findKthLargest(node.rightChild, k);
+		
+		if (++currentCount == k) {
+			System.out.print(node.value + " ");
+			return;
+		}
+		
+		findKthLargest(node.leftChild, k);
+	}
+	/******************************/
 	
+	public int sumOfAllGreaterAndEqualTo() { return sumOfAllGreaterAndEqualTo(root, 0); }
+	private int sumOfAllGreaterAndEqualTo(Node node, int sum) {
+		if (node == null)
+			return sum;
+		else if (node.leftChild == null && node.rightChild == null) {
+			node.value += sum;
+			return node.value;
+		}
+		
+		int tmp = sumOfAllGreaterAndEqualTo(node.rightChild, sum);
+		node.value += tmp;
+		tmp = sumOfAllGreaterAndEqualTo(node.leftChild, node.value);
+		return tmp;
+	}
+	/******************************/
+	/******************************/
+	/******************************/
+	/******************************/
+	/******************************/
 	public static void main(String[] args) {
 		//BinarySearchTree bt = new BinarySearchTree();
 		//System.out.println(bt.printNodesInRange());

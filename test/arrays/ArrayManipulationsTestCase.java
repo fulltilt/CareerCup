@@ -1,6 +1,8 @@
 package arrays;
 
 import static org.junit.Assert.*;
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,14 +104,6 @@ public class ArrayManipulationsTestCase {
 	}
 
 	@Test
-	public void testSearch2DArray() {
-		int[][] a1 = new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}};
-
-		assertTrue(arrManip.search2DArray(a1, 7));
-		assertFalse(arrManip.search2DArray(a1, 19));
-	}
-
-	@Test
 	public void testFindReplacedElement() {
 		int[] a1 = new int[1000];
 
@@ -156,5 +150,97 @@ public class ArrayManipulationsTestCase {
 	public void testFindEquilibriumIndex() {
 		int a[] = new int[]{1,3,4,6,7,2,5,9,1,11,9,6,5,8,9,1};
 		assertSame(9, arrManip.findEquilibriumIndex(a));
+	}
+	
+	@Test
+	public void testFindOddCountInteger() {
+		int[] array = new int[]{1,1,4,2,2,3,3,4,4,5,5,0,0};
+		assertSame(4, arrManip.FindOddCountInteger(array));
+	}
+	
+	@Test
+	public void testGenerateThirdArray() {
+		int[] input = new int[]{3,8,1,3,9};
+		int[] index = new int[]{0,1,1,2,2};
+		int[] result = new int[5];
+		
+		arrManip.generateThirdArray(input, index, result);
+		assertEquals(216, result[0]);
+		assertEquals(81, result[1]);
+		assertEquals(81, result[2]);
+		assertEquals(648, result[3]);
+		assertEquals(648, result[4]);
+	}
+
+	@Test
+	public void testSearch2DArray() {
+		int[][] a1 = new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}};
+
+		assertTrue(arrManip.search2DArray(a1, 7));
+		assertFalse(arrManip.search2DArray(a1, 19));
+	}
+
+	@Test
+	public void testCountNegativeElemsIn2DArray() {
+		int[][] a1 = new int[][]{{-12,-11,-10,-9,-8},{-7,-6,-5,-4,-3},{-2,-1,0,1,2},{3,4,5,6,7},{8,9,10,11,12}};
+
+		assertSame(12, arrManip.countNegativeElemsIn2DArray(a1));
+	}
+
+	@Test
+	public void testAreArraysEqual() {
+		int[] arr1 = new int[]{1,2,3,4,5};
+		int[] arr2 = new int[]{1,2,3,4,5};
+		int[] arr3 = new int[]{1,2,3,4,3,2};
+		int[] arr4 = new int[]{0,5,-5};
+		int[] arr5 = new int[]{0};
+
+		assertTrue(arrManip.areArraysEqual(arr1, arr2));
+		assertFalse(arrManip.areArraysEqual(arr1, arr3));
+		assertFalse(arrManip.areArraysEqual(arr4, arr5));		
+	}
+	
+	@Test
+	public void testArraysIntersection() {
+		int[] arr1 = new int[10];
+		int[] arr2 = new int[10];
+		Random intGenerator = new Random();
+		for (int i = 0; i < 10; i++) {
+		  	arr1[i] = intGenerator.nextInt(10) + 1;
+		  	arr2[i] = intGenerator.nextInt(10) + 1;
+		  	System.out.println(arr1[i] + " " + arr2[i]);
+		}		
+		
+		arrManip.arraysIntersections(arr1, arr2);
+	}
+	
+	@Test
+	public void testDoesArraySumExists() {
+		int[] arr = new int[]{1,2,3,4,5};
+		int sum = 9;
+		
+		assertTrue(arrManip.doesArraySumExists(arr, sum));
+		assertFalse(arrManip.doesArraySumExists(arr, 90));
+	}
+	
+	@Test
+	public void testFindBeginningOfRotatedArray() {
+		int[] arr = new int[]{6,7,8,9,10,11,12,13,1,2,3,4,5};
+		assertSame(8, arrManip.findBeginningOfRotatedArray(arr, 0, arr.length - 1));
+	}
+	
+	@Test
+	public void testFindConsecutiveIndex() {
+		int[] arr1 = new int[]{4,1,6,2,8,9,5,3,2,9,8,4,6};
+		int[] arr2 = new int[]{6,1,2,9,8};
+		arrManip.findConsecutiveIndex(arr1, arr2);
+	}
+	
+	@Test
+	public void testCreateLargestInt() {
+		int[] arr = new int[]{2,3,9,78};
+		assertEquals("93278", arrManip.createLargestInt(arr));
+		arr = new int[]{9, 1, 97};
+		assertEquals("9791", arrManip.createLargestInt(arr));
 	}
 }
