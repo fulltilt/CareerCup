@@ -58,7 +58,35 @@ public class BinarySearchTreeTestCase {
 	@Test
 	public void testMirror() {
 		System.out.println("\nmirror()");
-		tree.mirror();
+        BinarySearchTree bst = new BinarySearchTree();
+        bst.insert(5);
+        bst.insert(4);
+        bst.insert(8);
+        bst.insert(2);
+        bst.insert(7);
+        bst.insert(9);
+        bst.insert(10);
+        bst.insert(1);
+        bst.insert(3);
+        bst.mirror();
+        bst.printByLevelZigZag();
+	}
+
+	@Test
+	public void testPrintByLevelZigZag() {
+		System.out.println("\nprint by zigzag()");
+        BinarySearchTree bst = new BinarySearchTree();
+        bst.insert(5);
+        bst.insert(4);
+        bst.insert(8);
+        bst.insert(2);
+        bst.insert(7);
+        bst.insert(9);
+        bst.insert(10);
+        bst.insert(1);
+        bst.insert(3);
+        bst.printByLevel();
+        bst.printByLevelZigZag();
 	}
 	
 	@Test
@@ -208,5 +236,12 @@ public class BinarySearchTreeTestCase {
 		System.out.println("\nBegin testCreateLinkedListByLevel()");
 		tree.createLinkedListByLevel();
 		System.out.println("End testCreateLinkedListByLevel()");
+	}
+	
+	@Test
+	public void testGetKthNode() {
+		assertSame(tree.getKthNode(1).value, 1);
+		assertSame(tree.getKthNode(4).value, 4);
+		assertSame(tree.getKthNode(9).value, 10);
 	}
 }

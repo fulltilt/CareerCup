@@ -1,6 +1,7 @@
 package trees;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.Before;
 
@@ -56,6 +57,39 @@ public class BinaryTreeTestCase {
 	}
 	
 	@Test
+	public void testIsBST2() { // testing 2nd version of isBST
+		BinaryTree bst = new BinaryTree();
+	    bst.setRoot(5);
+	    bst.getRoot().leftChild = new Node(4);
+	    bst.getRoot().leftChild.leftChild = new Node(3);      
+	    bst.getRoot().rightChild = new Node(9);
+	    bst.getRoot().rightChild.leftChild = new Node(8);
+	    bst.getRoot().rightChild.rightChild = new Node(10);
+	    System.out.println(bst.isBST());
+	    assertTrue(bst.isBST());
+	    assertFalse(tree.isBST());
+	}
+	
+	@Test
+	public void testIsSubtree() {
+		BinaryTree bst = new BinaryTree();
+	    bst.setRoot(8);
+	    bst.getRoot().leftChild = new Node(8);
+	    bst.getRoot().leftChild.leftChild = new Node(9);
+	    bst.getRoot().leftChild.rightChild = new Node(2);
+	    bst.getRoot().leftChild.rightChild.leftChild = new Node(4);
+	    bst.getRoot().leftChild.rightChild.rightChild = new Node(7);
+	    bst.getRoot().rightChild = new Node(7);
+	        
+	    BinaryTree bst2 = new BinaryTree();
+	    bst2.setRoot(8);
+	    bst2.getRoot().leftChild = new Node(9);
+	    bst2.getRoot().rightChild = new Node(2);
+	    assertTrue(BinaryTree.isSubTree(bst, bst2));
+	    assertTrue(BinaryTree.isSubTree(bst2, bst));
+	}
+
+	@Test
 	public void testGetDiameter() {
 		assertSame(9, tree.getDiameter(tree.getRoot()));
 		assertSame(7, tree.getDiameter(tree.getRoot().rightChild.rightChild));
@@ -66,5 +100,80 @@ public class BinaryTreeTestCase {
 		assertSame(10, tree.getMaxElement());
 		tree.getRoot().leftChild.leftChild.leftChild = new Node(40);
 		assertSame(40, tree.getMaxElement());
+	}
+	
+	@Test
+	public void testHasPathSum() {
+		System.out.println("\nTesting hasPathSum() and printSumPaths()....");
+        BinaryTree bt = new BinaryTree();
+        bt.setRoot(10);
+        bt.getRoot().leftChild = new Node(5);
+        bt.getRoot().rightChild = new Node(12);        
+        bt.getRoot().leftChild.leftChild = new Node(4);
+        bt.getRoot().leftChild.rightChild = new Node(7);
+        assertTrue(bt.hasPathSum(22));
+        bt.printSumPaths(22);
+        assertFalse(bt.hasPathSum(11));
+        bt.printSumPaths(11);
+	}
+	
+	@Test
+	public void testPrintPaths() {
+		System.out.println("\nTesting printPaths()....");
+        BinaryTree bt = new BinaryTree();
+        bt.setRoot(10);
+        bt.getRoot().leftChild = new Node(5);
+        bt.getRoot().rightChild = new Node(12);        
+        bt.getRoot().leftChild.leftChild = new Node(4);
+        bt.getRoot().leftChild.rightChild = new Node(7);
+        bt.printPaths();
+	}
+	
+	@Test
+	public void testIsSymmetrical() {
+        BinaryTree bst = new BinaryTree();
+        bst.setRoot(8);
+        bst.getRoot().leftChild = new Node(6);
+        bst.getRoot().leftChild.leftChild = new Node(5);
+        bst.getRoot().leftChild.rightChild = new Node(7);
+        bst.getRoot().rightChild = new Node(6);
+        bst.getRoot().rightChild.leftChild = new Node(7);
+        bst.getRoot().rightChild.rightChild = new Node(5);
+        assertTrue(bst.isSymmetrical());
+        
+        BinaryTree bst2 = new BinaryTree();
+        bst2.setRoot(8);
+        bst2.getRoot().leftChild = new Node(6);
+        bst2.getRoot().leftChild.leftChild = new Node(5);
+        bst2.getRoot().leftChild.rightChild = new Node(7);
+        bst2.getRoot().rightChild = new Node(9);
+        bst2.getRoot().rightChild.leftChild = new Node(7);
+        bst2.getRoot().rightChild.rightChild = new Node(5);
+        assertFalse(bst2.isSymmetrical());
+        
+        BinaryTree bst3 = new BinaryTree();
+        bst3.setRoot(8);
+        bst3.getRoot().leftChild = new Node(6);
+        bst3.getRoot().leftChild.leftChild = new Node(5);
+        bst3.getRoot().leftChild.rightChild = new Node(7);
+        bst3.getRoot().rightChild = new Node(6);
+        bst3.getRoot().rightChild.leftChild = new Node(7);        
+        assertFalse(bst3.isSymmetrical());  
+	}
+
+	@Test 
+	public void testGetDepth() {
+		assertSame(tree.getDepth(), 6);
+	}	
+	
+	@Test
+	public void testIsBalanced() {
+		assertFalse(tree.isBST());
+		
+	    BinaryTree bst2 = new BinaryTree();
+	    bst2.setRoot(8);
+	    bst2.getRoot().leftChild = new Node(9);
+	    bst2.getRoot().rightChild = new Node(2);
+	    assertTrue(bst2.isBalanced());
 	}
 }

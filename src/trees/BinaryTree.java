@@ -2,6 +2,8 @@ package trees;
 
 import java.util.*;
 
+import trees.BinarySearchTree.Node;
+
 public class BinaryTree {
 	private Node root = null;	// Root node pointer. Will be null for an empty tree.
 	private int balanceFactor;
@@ -42,6 +44,7 @@ public class BinaryTree {
 	}
 
 	public Node getRoot() { return root; }
+	public void setRoot(int value) { root = new Node(value); }
 	
 	/******************************/
 	public boolean find(int value) { return find(root, value); }
@@ -96,12 +99,42 @@ public class BinaryTree {
 					children.add(n.rightChild);
 			}
 			currentLevel.clear();
-			System.out.println();
-
 			currentLevel.addAll(children);
 			children.clear();
+			System.out.println();
 		}
 	}
+	
+	/******************************/
+	
+    public void printPaths() {
+        int[] path = new int[1000];
+        printPaths(root, path, 0);
+    }
+
+    private void printPaths(Node node, int[] path, int pathLength) {
+        if (node == null)
+            return;
+
+        path[pathLength] = node.value;
+        ++pathLength;
+
+        // check if node is a leaf
+        if (node.leftChild == null && node.rightChild == null)
+            printArray(path, pathLength);
+        else {
+            printPaths(node.leftChild, path, pathLength);
+            printPaths(node.rightChild, path, pathLength);
+        }
+    }
+
+    // used for printPaths
+    private void printArray(int[] path, int pathLength) {
+        for (int i = 0; i < pathLength; i++)
+            System.out.print(path[i] + " ");
+        System.out.println();
+    }
+	
 	/******************************/
 
 	public boolean isBST(Node node) { return isBST(node, Integer.MIN_VALUE, Integer.MAX_VALUE); }
@@ -119,8 +152,76 @@ public class BinaryTree {
 			   // check if right child should be in range (node.data + 1...max) else return false
 		 	   isBST(node.rightChild, node.value + 1, max);
 	}
-	/******************************/
+	
+	/* 2nd version of isBST() */
+    public boolean isBST() {  
+        return isBST(root, Integer.MIN_VALUE);
+    }
+    
+    private boolean isBST(Node node, int previousValue) {
+        if (node == null)
+            return true;
+            
+        return isBST(node.leftChild, previousValue) 
+               && node.value >= previousValue
+               && isBST(node.rightChild, node.value);
+    }
+    
+    /******************************/
+    
+    public void doubleTree() {
+        doubleTree(root);
+    }
 
+    private void doubleTree(Node node) {
+        if (node == null)
+            return;
+
+        Node newNode = new Node(node.value);
+        newNode.leftChild = node.leftChild;
+        node.leftChild = newNode;
+
+        doubleTree(newNode.leftChild);
+        doubleTree(node.rightChild);        // tricky part here is that if we did newNode.rightChild instead, the right children never get doubled
+    }
+    
+	/******************************/
+    
+    /* 52 - verify if a binary tree is symmetrical */
+    public boolean isSymmetrical() {
+        return isSymmetrical(root, root);
+    }
+    
+    private boolean isSymmetrical(Node node1, Node node2) {
+        if (node1 == null && node2 == null)
+            return true;
+            
+        if (node1 == null || node2 == null) // a symmetrical trees nodes are either both null or both not null
+            return false;
+            
+        if (node1.value != node2.value)
+            return false;
+            
+        return isSymmetrical(node1.leftChild, node2.rightChild) 
+               && isSymmetrical(node1.rightChild, node2.leftChild); 
+    }
+    
+    /******************************/
+   
+    /* 85 - get depth */
+    public int getDepth() {
+        return getDepth(root);
+    }
+    
+    private int getDepth(Node node) {
+        if (node == null)
+            return 0;
+            
+        return 1 + Math.max(getDepth(node.leftChild), getDepth(node.rightChild));
+    }
+    
+    /******************************/
+    
 	public double getBalanceFactor() {
 		balanceFactor = 0;
 		getBalanceFactor(root, 1);
@@ -156,9 +257,107 @@ public class BinaryTree {
 		  
 		  return Math.max(node.value, Math.max(getMaxElement(node.leftChild), getMaxElement(node.rightChild)));
 	}
-				  
+
+	/******************************/
+	
+    /* CI50 - is a tree a subtree of another */
+    public static boolean isSubTree(BinaryTree tree1, BinaryTree tree2) {   
+        return isSubTree(tree1.getRoot(), tree2.getRoot());
+    }
+    
+    private static boolean isSubTree(Node root1, Node root2) {
+        boolean result = false;
+        
+        if (root1 != null && root2 != null) {
+            if (root1.value == root2.value)
+                result = doesTree1ContainTree2(root1, root2);
+            if (!result)
+                result = isSubTree(root1.leftChild, root2);
+            if (!result)
+                result = isSubTree(root1.rightChild, root2); 
+        }
+        
+        return result;
+    }
+    
+    private static boolean doesTree1ContainTree2(Node root1, Node root2) {
+        if (root2 == null)  // check the potential subTree first. If we get a null value for the subtree, return true
+            return true;
+            
+        if (root1 == null) // return false because there's no corresponding root1 node
+            return false;
+            
+        if (root1.value != root2.value)
+            return false;
+            
+        return doesTree1ContainTree2(root1.leftChild, root1.leftChild) 
+               && doesTree1ContainTree2(root1.rightChild, root1.rightChild);
+    }
+    
+    /******************************/
+    
+    public boolean hasPathSum(int sum) {
+        return hasPathSum(root, sum);
+    }
+
+    private boolean hasPathSum(Node node, int sum) {
+        if (node == null)
+            return (sum == 0);
+
+        return hasPathSum(node.leftChild, sum - node.value) || hasPathSum(node.rightChild, sum - node.value);
+    }    
+    
+    /* 60 - just like hasPathSum but it prints out all the paths that add up to the expected sum */
+    public void printSumPaths(int expectedSum) {       
+        ArrayList<Node> path = new ArrayList<Node>();
+        int currentSum = 0;
+        printSumPaths(root, expectedSum, currentSum, path);
+    }
+    
+    private void printSumPaths(Node node, int expectedSum, int currentSum, ArrayList<Node> path) {
+        if (node == null)
+            return;
+            
+        currentSum += node.value;
+        path.add(node);
+        
+        if (currentSum == expectedSum) {
+            for (Node n : path)
+                System.out.print(n.value + " ");
+            System.out.println();    
+        }
+        
+        printSumPaths(node.leftChild, expectedSum, currentSum, path);
+        printSumPaths(node.rightChild, expectedSum, currentSum, path); 
+        
+        // before returning back to its parent, remove node from the path
+        path.remove(path.size() - 1);
+    }
+    
+    /******************************/
+    
+    /* 86 - is the tree balanced */
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
+    
+    private boolean isBalanced(Node node) {
+        if (node == null)
+            return true;
+            
+        int leftDepth = getDepth(node.leftChild);
+        int rightDepth = getDepth(node.rightChild);
+        if (Math.abs(leftDepth - rightDepth) > 1)
+            return false;
+            
+        return isBalanced(node.leftChild) && isBalanced(node.rightChild);
+    }
+    
+    /******************************/
+    
 	public static void main(String[] args) {
 		BinaryTree bt = new BinaryTree();
-		System.out.println(bt.getBalanceFactor());
+		//System.out.println(bt.getBalanceFactor());
+		//bt.printByLevel();
 	}
 }

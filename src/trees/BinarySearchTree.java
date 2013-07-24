@@ -133,9 +133,12 @@ public class BinarySearchTree {
 	}
 	/******************************/
 
-	public void mirror() {
+	/* CI51 - return mirror of a tree */
+	public Node mirror() {
+		printByLevel(root);
 		Node newRoot = mirror(root);
 		printByLevel(newRoot);
+		return newRoot;
 	}
 
 	private Node mirror(Node node) {
@@ -173,12 +176,50 @@ public class BinarySearchTree {
 					children.add(n.rightChild);
 			}
 			currentLevel.clear();
-			System.out.println();
-
 			currentLevel.addAll(children);
 			children.clear();
+			System.out.println();
 		}
 	}
+	
+    /* CI59 - print by level zig-zag style */
+    public void printByLevelZigZag() {        
+        printByLevelZigZag(root);
+    }
+
+    private void printByLevelZigZag(Node node) {
+        if (node == null)
+            return;
+            
+        ArrayList<Node> currentLevel = new ArrayList<Node>();    
+        ArrayList<Node> children = new ArrayList<Node>();
+        currentLevel.add(node);
+    
+        int depth = 0;
+        while (!currentLevel.isEmpty()) {
+            if (depth % 2 == 0) {   // for odd depths, print from left to right
+                for (int i = 0; i < currentLevel.size(); i++)
+                    System.out.print(currentLevel.get(i).value + " ");
+            } else {                // for even depths, print from right to left
+                for (int i = currentLevel.size() - 1; i >= 0 ; i--)
+                    System.out.print(currentLevel.get(i).value + " ");
+            }
+          
+            // print out the values of the current level
+            for (Node n : currentLevel) {
+                if (n.leftChild != null)
+                    children.add(n.leftChild);
+                if (n.rightChild != null)
+                    children.add(n.rightChild);
+            }
+            currentLevel.clear();
+            currentLevel.addAll(children);
+            children.clear();
+            System.out.println();
+            ++depth;
+        }
+    }
+    
 	/******************************/
 
 	public void reversePrintByLevel() {
@@ -284,12 +325,13 @@ public class BinarySearchTree {
 		doubleTree(newNode.leftChild);
 		doubleTree(node.rightChild);		// tricky part here is that if we did newNode.rightChild instead, the right children never get doubled
 	}
-	/******************************/
-
+	
+    /******************************/
+    
 	public boolean isTreeEqual(Node otherRoot) {
 		return isTreeEqual(root, otherRoot);
 	}
-
+	
 	private boolean isTreeEqual(Node node, Node otherNode) {
 		if (node == null && otherNode == null)
 			return true;
@@ -488,9 +530,71 @@ public class BinarySearchTree {
 		return tmp;
 	}
 	/******************************/
+	
+    /* CI84 - kth node in a binary search tree in an incremental order of values */
+    public Node getKthNode(int k) {
+        if (k > getSize(root)) 
+            return null;    
+            
+        return getKthNode(root, k); 
+    }
+    
+    private Node getKthNode(Node node, int k) {
+        if (node == null)
+            return null;
+        
+        // since we need the current value of k, we can't do a recursive in-order traversal. Simulate this using a stack
+        // Complicated going through this at first but noticed when node is not null, add to stack and look at left child
+        // but if node is null, pop off stack and node = rightChild but in between check current value of k
+        Stack<Node> stack = new Stack<Node>();  
+        while (stack.size() > 0 || node != null) {
+            if (node != null) {
+                stack.add(node);
+                node = node.leftChild;
+            } else {
+                node = stack.pop();
+                k--;
+                
+                if (k == 0) 
+                    return node;
+                    
+                node = node.rightChild;
+            }
+        }
+        
+        return null;
+    }
+    
 	/******************************/
+    
+    /* 18 - get next node in Binary Tree (C++ pseudocode as this assumes that there is a parent link
+    BinaryTreeNode* GetNext(BinaryTreeNode* pNode) { 
+        if(pNode == NULL) 
+            return NULL; 
+        
+        BinaryTreeNode* pNext = NULL; 
+        if(pNode->m_pRight != NULL) { // when node has a right-child, next node is left-most child on right subtree
+            BinaryTreeNode* pRight = pNode->m_pRight; 
+            while(pRight->m_pLeft != NULL) 
+            pRight = pRight->m_pLeft; 
+            pNext = pRight; 
+        } else if(pNode->m_pParent != NULL) { // when node has no right-subtree, it's next node is it's parent if it's the parents left child. 
+                                              // If a node isn't the left child, keep traversing up until you find the node that is a left child. That
+                                              // node's parent is the next node
+            BinaryTreeNode* pCurrent = pNode; 
+            BinaryTreeNode* pParent = pNode->m_pParent; 
+            while(pParent != NULL && pCurrent == pParent->m_pRight) { 
+                pCurrent = pParent; 
+                pParent = pParent->m_pParent; 
+            } 
+            
+            pNext = pParent; 
+        } 
+        return pNext; 
+    } 
+        
 	/******************************/
-	/******************************/
+	
 	/******************************/
 	public static void main(String[] args) {
 		//BinarySearchTree bt = new BinarySearchTree();
