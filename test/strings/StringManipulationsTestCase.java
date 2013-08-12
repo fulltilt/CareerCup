@@ -110,4 +110,27 @@ public class StringManipulationsTestCase {
 	public void testCompress() {
 	
 	}
+
+	@Test
+	public void testFindFirstSingleChar() {
+		assertEquals(Misc.findFirstSingleChar("google"), 'l');
+	}
+	
+	@Test
+	public void testDeleteDuplicateChars() {
+        char[] array = Misc.deleteDuplicateChars("We are students", "aeiou");
+        System.out.println(array);
+	}
+	
+	@Test
+	public void testDeleteDuplicateCharsExceptFirst() {
+        char[] array = Misc.deleteDuplicateCharsExceptFirst("google");
+        System.out.println(array);
+	}
+	
+	@Test
+	public void testAreAnagrams() {
+	    assertTrue(Misc.areAnagrams("silent", "listen"));
+	    assertFalse(Misc.areAnagrams("howdy", "doody"));	
+	}	
 }

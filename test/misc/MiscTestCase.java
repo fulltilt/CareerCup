@@ -102,29 +102,6 @@ public class MiscTestCase {
 	    assertEquals(Misc.greatestSumOfSubarrays(array), 18);		
 	}
 	
-	@Test
-	public void testFindFirstSingleChar() {
-		assertEquals(Misc.findFirstSingleChar("google"), 'l');
-	}
-	
-	@Test
-	public void testDeleteDuplicateChars() {
-        char[] array = Misc.deleteDuplicateChars("We are students", "aeiou");
-        System.out.println(array);
-	}
-	
-	@Test
-	public void testDeleteDuplicateCharsExceptFirst() {
-        char[] array = Misc.deleteDuplicateCharsExceptFirst("google");
-        System.out.println(array);
-	}
-	
-	@Test
-	public void testAreAnagrams() {
-	    assertTrue(Misc.areAnagrams("silent", "listen"));
-	    assertFalse(Misc.areAnagrams("howdy", "doody"));	
-	}
-	
 	@Test 
 	public void testIsSumOf2Numbers() {
 	    int[] array =  {1, 2, 4, 7, 11, 15};
