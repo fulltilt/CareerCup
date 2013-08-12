@@ -19,7 +19,7 @@ public class Misc {
     
     /***********************/
     
-    public static int fibonacci(int n) {	// non-recursive
+    public static int fibonacci(int n) {    // non-recursive
 /*
  *     System.out.println(fibonacci(0));
        System.out.println(fibonacci(1));
@@ -50,38 +50,38 @@ public class Misc {
     /***********************/
     
     /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate */
-    public static int findDuplicates1(int[] array) {	// assumes a valid array is passed in
-    	if (array == null || array.length < 2)
-    		return Integer.MIN_VALUE;
-    	
-	    int arraySum = 0;
-	    int actualSum = 0;
-	    for (int i = 0; i < array.length; i++) 
-	        arraySum += array[i];
-	    
-	    for (int i = 0; i < array.length - 1; i++)
-	        actualSum += i;
-	    
-	    actualSum = ((array.length - 2) * (array.length - 1)) >> 1;
-	    return arraySum - actualSum;
+    public static int findDuplicates1(int[] array) {    // assumes a valid array is passed in
+        if (array == null || array.length < 2)
+            return Integer.MIN_VALUE;
+        
+        int arraySum = 0;
+        int actualSum = 0;
+        for (int i = 0; i < array.length; i++) 
+            arraySum += array[i];
+        
+        for (int i = 0; i < array.length - 1; i++)
+            actualSum += i;
+        
+        actualSum = ((array.length - 2) * (array.length - 1)) >> 1;
+        return arraySum - actualSum;
     } 
     
     /***********************/
    
     /* CI6 - Duplicates in an Array ranging from 0 to n - 1, multiple duplicates */
     public static int findFirstDuplicate(int[] array) {
-	    HashSet<Integer> hash = new HashSet<Integer>();
-	    for (int i = 0; i < array.length; i++) {
-	        if (array[i] < 0 || array[i] > array.length - 1)
-	            throw new IllegalArgumentException("Number out of bounds!");
-	        if (!hash.contains(array[i]))
-	            hash.add(array[i]);
-	        else {
-	            return array[i];
-	        }
-	    }
-	    
-	    return Integer.MIN_VALUE;
+        HashSet<Integer> hash = new HashSet<Integer>();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] < 0 || array[i] > array.length - 1)
+                throw new IllegalArgumentException("Number out of bounds!");
+            if (!hash.contains(array[i]))
+                hash.add(array[i]);
+            else {
+                return array[i];
+            }
+        }
+        
+        return Integer.MIN_VALUE;
     }
     
     /***********************/
@@ -120,7 +120,7 @@ public class Misc {
             }
         }
         
-    	return result;
+        return result;
     }
     
     /***********************/
@@ -287,8 +287,7 @@ public class Misc {
     
     // CI56 - is corresponding sequence for stack. For example, if the pushing sequence is {1, 2, 3, 4, 5}, 
     // the sequence {4, 5, 3, 2, 1} is a corresponding popping sequence, but {4, 3, 5, 1, 2} is not.
-    public static boolean isCorrespondingSequence(int[] pushingSequence, int[] poppingSequence) {
-        
+    public static boolean isCorrespondingStackSequence(int[] pushingSequence, int[] poppingSequence) {     
         int pushingIndex = 0;
         int poppingIndex = 0;
         Stack<Integer> stack = new Stack<Integer>();
@@ -305,6 +304,29 @@ public class Misc {
         }
         
         return true;
+    }
+    
+    /***********************/
+    
+    /* Sort a stack in ascending order
+     * -algorithm: have one auxiliary stack which will hold the sorted stack. Pop off the top element (temp)
+     *             from the original stack and if the aux stack isn't empty or the aux's top element is greater
+     *             than the top element, keep popping elements from the aux stack and push it onto 
+     *             the original stack. Afterwards, push temp onto the aux stack. That last step happens
+     *             regardless. 
+     */
+    public static Stack<Integer> sortStack(Stack<Integer> stack) {
+        Stack<Integer> aux = new Stack<Integer>();
+        
+        while (!stack.isEmpty()) {
+            int temp = stack.pop(); // take off top element from stack
+            while (!aux.isEmpty() && aux.peek() > temp)
+                stack.push(aux.pop());
+            
+            aux.push(temp);
+        }
+        
+        return aux;
     }
     
     /***********************/

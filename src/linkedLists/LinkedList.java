@@ -11,6 +11,7 @@ public class LinkedList {
 		public int value;
 		Node next = null;
 	}
+		
 	/*
 	 * inserts new int to the head of the List. Needed for this implementation as insert inserts only after a given Node
 	 * note: can implement a Linked List with a single insert fxn that would take in a null value as a signal to add at
@@ -28,6 +29,27 @@ public class LinkedList {
 		++size;
 	}
 
+    /* general purpose insert fxn that inserts at the end of the list by default */
+    public void insert(int value) {
+        if (head == null) {
+            insertAtHead(value);
+            return;
+        }
+        
+        Node newNode = new Node(value);
+        Node currentNode = head;
+        
+        while (true) {
+            if (currentNode.next == null) {
+                currentNode.next = newNode;
+                break;
+            }
+            currentNode = currentNode.next;
+        }
+        
+        ++size;
+    }
+    
 	/*
 	 * insert() that takes in the value of the Node to insert after. Calls private insert() that takes in the Node to insert
 	 * after and the value. Calls getNode to find the Node in question. If Node isn't found, new Node isn't added to List
@@ -187,25 +209,35 @@ public class LinkedList {
 	}
 /*************************************************************/
 
+	/* Determine if a list has a loop
+	   -algorithm: have 2 pointers: 1 that iterates one a time and another that iterates 2 steps at a time. If there is a loop,
+	               the fast pointer will meet up with the slow pointer. If not, each pointer will hit a null value which means
+	               that there isn't a loop
+
+	*/
 	public boolean isCircular() {
-		Node n1 = head;
-		Node n2 = head;
+		Node slow = head;
+		Node fast = head;
 
-		while (n2 != null) {
-			n1 = n1.next;
+		while (fast != null) {
+			slow = slow.next;
 
-			if (n2.next == null)	// so we don't end up dereferencing a null pointer
+			if (fast.next == null)	// so we don't end up dereferencing a null pointer
 				return false;
 
-			n2 = n2.next.next;
+			fast = fast.next.next;
 
-			if (n1 == n2)
+			if (slow == fast)
 				return true;
 		}
 
 		return false;
 	}
 
+	/* Determine the length of the loop
+       -algorithm: (note: called after isCircular() is true). First find out the node where the fast and slow meets. From
+                   there, have another pointer that starts from that node and iterates until it meets back where it began
+	*/
 	public int findCircularListLength() {
 		Node slow = head;
 		Node fast = head;
@@ -236,6 +268,61 @@ public class LinkedList {
 		return lengthToStartOfCycle + lengthOfCycle;
 	}
 
+	/* Find out where the loop starts in the list
+	   -algorithm:  
+	*/
+	public Node getHeadOfLoop() {	
+
+	}
+	
+	/*************************************************************/
+	
+    /* 47 - kth node from tail 
+       -algorithm: have 2 pointers: 1st pointer will iterate k steps from head. Once this is reached, have a 2nd pointer
+                   that starts from the head and have both pointers advance at the same time until the leading node is null.
+				   The trailing node will be k elements from the end
+    */
+	public Node getKthNodeFromTail(int k) {
+	    if (k > size())
+	        throw new IllegalArgumentException("k cannot be greater than the list length!");
+	    if (k == 0)
+	        throw new IllegalArgumentException("k cannot be zero");
+	        
+	    int steps = k - 1;
+	    Node leadingNode = head;
+	    while (steps != 0) {
+	        leadingNode = leadingNode.next;
+	        --steps;
+	    }
+	    
+	    Node trailingNode = head;
+	    while (leadingNode.next != null) {
+	        trailingNode = trailingNode.next;
+	        leadingNode = leadingNode.next;
+	    }
+	    
+	    System.out.println(trailingNode.value);
+	    
+	    return trailingNode;
+	}
+
+	public Node getNthToLastElement(int n) {
+		Node NthElement = head;
+		Node NthElementFromLast = head;
+
+		for (int i = 0; i <= n; i++)	// did '<=' to account for the extra step taken in the next loop to determine if element is null
+			NthElement = NthElement.next;
+
+		while (NthElement != null) {
+			NthElement = NthElement.next;
+			NthElementFromLast = NthElementFromLast.next;
+		}
+
+		return NthElementFromLast;
+	}
+
+    /*************************************************************/
+	
 	public void swapKthElements(int position) {
 		if (isCircular() || position >= size) {
 			System.out.println("LIST IS OF LESSER SIZE!");
@@ -269,20 +356,38 @@ public class LinkedList {
 		node2.value = temp;
 	}
 
-	public Node getNthToLastElement(int n) {
-		Node NthElement = head;
-		Node NthElementFromLast = head;
-
-		for (int i = 0; i <= n; i++)	// did '<=' to account for the extra step taken in the next loop to determine if element is null
-			NthElement = NthElement.next;
-
-		while (NthElement != null) {
-			NthElement = NthElement.next;
-			NthElementFromLast = NthElementFromLast.next;
-		}
-
-		return NthElementFromLast;
-	}
+	/*************************************************************/
+	
+    /* 82 - intersection of 2 lists */
+    public static Node intersectionOf2Lists(LinkedList list, LinkedList list2) {           
+        if (list == null || list2 == null || list.size() == 0 || list2.size() == 0)
+            return null;
+            
+        int list1Length = list.size();
+        int list2Length = list2.size();
+        Node list1Node = list.getHead();
+        Node list2Node = list2.getHead();
+       
+        if (list1Length >= list2Length) {
+            for (int i = 0; i < list1Length - list2Length; i++)
+                list1Node = list1Node.next;
+        } else {
+            for (int i = 0; i < list2Length - list1Length; i++)
+                list2Node = list2Node.next;           
+        }
+       
+        while (list1Node != null) {
+            if (list1Node.value == list2Node.value) 
+                return list1Node;
+            
+            list1Node = list1Node.next;
+            list2Node = list2Node.next;
+        }    
+        
+        return null;
+    }
+    
+    /*************************************************************/
 
 	/*
 	 * used for reversing a List; manipulates the head pointer
@@ -304,6 +409,24 @@ public class LinkedList {
 
 		head = currentNode;		// make sure head points to the correct element
 		// ** because of the above line, it probably explains the weirdness that is happening
+
+/* version 2
+        ListNode<Integer> previousNode = list.getHead();
+        ListNode<Integer> currentNode = previousNode.next;
+        ListNode<Integer> helperNode = currentNode.next;
+        previousNode.next = null; // step we have to do for the initial 2 nodes since the first node's next is null
+        
+        while (helperNode != null) {
+            currentNode.next = previousNode;
+            
+            previousNode = currentNode;
+            currentNode = helperNode;
+            helperNode = currentNode.next;
+        }
+        currentNode.next = previousNode;
+        list.head = currentNode;
+        list.print();		
+ */
 	}
 
 	/*
@@ -327,14 +450,6 @@ public class LinkedList {
 		return currentNode;
 	}
 	
-	public void recursiveReversePrint() { recursiveReversePrint(head); }
-	private void recursiveReversePrint(Node node) {
-		if (node != null) {
-			recursiveReversePrint(node.next);
-			System.out.print(node.value + " ");
-		}
-	}
-
 	public void recursiveReverseList() { recursiveReverseList(null, head); }
 	private void recursiveReverseList(Node current1, Node current2) {
 		if (current2 == null) {
@@ -344,6 +459,14 @@ public class LinkedList {
 
 		recursiveReverseList(current2, current2.next);
 		current2.next = current1;
+	}
+
+	public void recursiveReversePrint() { recursiveReversePrint(head); }
+	private void recursiveReversePrint(Node node) {
+		if (node != null) {
+			recursiveReversePrint(node.next);
+			System.out.print(node.value + " ");
+		}
 	}
 
 	// keep reference to n1 only if you want to get the Node that is in the middle
@@ -474,7 +597,7 @@ public class LinkedList {
 
 		Node currentNode = head;
 		while (currentNode.next != null) {
-			if (currentNode.value == currentNode.next.value)
+			while (currentNode.value == currentNode.next.value)	// using 'while' in case there's more than 2 duplicates in a row
 				currentNode.next = currentNode.next.next;
 
 			currentNode = currentNode.next;
@@ -595,12 +718,14 @@ public class LinkedList {
 		LinkedList list1 = new LinkedList();
 		list1.insertAtHead(1);
 		list1.insertAtHead(2);
-		//list1.insertAtHead(3);
-		//list1.insertAtHead(4);
+		list1.insertAtHead(3);
+		list1.insertAtHead(4);
+		list1.getHead().next.next.next = list1.getHead().next;
+		System.out.println(list1.getHeadOfLoop().value);
 		//list1.insertAtHead(5);
 		//list1.insertAtHead(6);
 
-		list1.findThirds();
+		//list1.findThirds();
 
 	}
 }
