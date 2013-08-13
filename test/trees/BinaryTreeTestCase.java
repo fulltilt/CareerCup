@@ -123,11 +123,6 @@ public class BinaryTreeTestCase {
 	public void testPrintPaths() {
 		System.out.println("\nTesting printPaths()....");
         BinaryTree bt = new BinaryTree();
-        bt.setRoot(10);
-        bt.getRoot().leftChild = new Node(5);
-        bt.getRoot().rightChild = new Node(12);        
-        bt.getRoot().leftChild.leftChild = new Node(4);
-        bt.getRoot().leftChild.rightChild = new Node(7);
         bt.printPaths();
 	}
 	
@@ -201,4 +196,20 @@ public class BinaryTreeTestCase {
 		assertTrue(bst.findNode(bst.getRoot(), n4));
 		assertFalse(bst.findNode(bst.getRoot().leftChild, n3));
 	}
+
+	@Test
+	public void testMirror() {
+		System.out.println("\nmirror()");
+        BinaryTree bst = new BinaryTree();
+        bst.printByLevel();
+        bst.mirror();
+	}
+
+	@Test
+	public void testPrintByLevelZigZag() {
+		System.out.println("\nprint by zigzag()");
+        BinaryTree bst = new BinaryTree();
+        bst.printByLevel();
+        bst.printByLevelZigZag();
+	}	
 }

@@ -3,6 +3,10 @@ package misc;
 import java.util.*;
 
 public class Misc {
+
+    /* Non-recursive binary search on an array
+       -algorithm: 
+    */    
     public static boolean binarySearch(int[] array, int start, int end, int value) {
         if (start > end)
             return false;
@@ -19,6 +23,9 @@ public class Misc {
     
     /***********************/
     
+    /* Non-recursive fxn to find nth fibonacci 
+       -algorithm: 
+    */    
     public static int fibonacci(int n) {    // non-recursive
 /*
  *     System.out.println(fibonacci(0));
@@ -49,7 +56,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate */
+    /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate 
+       -algorithm: 
+    */
     public static int findDuplicates1(int[] array) {    // assumes a valid array is passed in
         if (array == null || array.length < 2)
             return Integer.MIN_VALUE;
@@ -68,7 +77,9 @@ public class Misc {
     
     /***********************/
    
-    /* CI6 - Duplicates in an Array ranging from 0 to n - 1, multiple duplicates */
+    /* CI6 - Duplicates in an Array ranging from 0 to n - 1, multiple duplicates 
+       -algorithm: 
+    */
     public static int findFirstDuplicate(int[] array) {
         HashSet<Integer> hash = new HashSet<Integer>();
         for (int i = 0; i < array.length; i++) {

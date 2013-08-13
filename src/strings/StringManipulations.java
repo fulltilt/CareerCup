@@ -34,6 +34,9 @@ public class StringManipulations {
 	    return str;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public String recursivelyReverseString(StringBuffer buffer, String str, int length) {
 		if (length == 0)
 			return buffer.append("").toString();
@@ -41,6 +44,9 @@ public class StringManipulations {
 			return recursivelyReverseString(buffer.append(str.charAt(length - 1)), str, length - 1).toString();
 	}
 
+    /*
+       -algorithm: 
+    */
 	public boolean isPalindrome(String s) {
 		char[] str = s.toLowerCase().replace(" ", "").toCharArray();	// convert to all lowercase and strip spaces
 	    for(int i = 0; i < str.length / 2; i++) {
@@ -71,6 +77,9 @@ public class StringManipulations {
 		return newString;
 	}
 	
+    /*
+       -algorithm: 
+    */	
 	public char[] compress(char[] str) {
 		if (str.length == 0 || str.length == 1)
 			return str;

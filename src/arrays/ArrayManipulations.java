@@ -3,6 +3,10 @@ package arrays;
 import java.util.HashMap;
 
 public class ArrayManipulations {
+    
+    /*
+       -algorithm: 
+    */
 	public int[] dutchNationalFlag(int[] a) {
 		int lo = 0;
 	    int hi = a.length - 1;
@@ -204,6 +208,9 @@ public class ArrayManipulations {
 		return c;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int[] addArray(int[] arr1, int arr2[]) {
         int counter1 = arr1.length - 1;
         int counter2 = arr2.length - 1;
@@ -226,6 +233,9 @@ public class ArrayManipulations {
        	return arr3;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int findFirstRepeat(int[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[array[i]] > 0)
@@ -250,6 +260,9 @@ public class ArrayManipulations {
 		return (result ^ 3245);
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int[] pushZeroesToEnd(int[] arr) {
 		int position = 0;
 
@@ -266,6 +279,9 @@ public class ArrayManipulations {
 		return arr;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int[] pushZeroesToBeginning(int[] arr) {
 		int i = arr.length - 1, zero = arr.length - 1;
 
@@ -284,6 +300,9 @@ public class ArrayManipulations {
 		return arr;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int findEquilibriumIndex(int[] arr) {
 		int sum = 0, leftSum = 0;
 
@@ -302,6 +321,9 @@ public class ArrayManipulations {
         return -1;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public String[] interleave(String[] strArray) {
 		int n = strArray.length / 2;
 		String temp;
@@ -334,6 +356,9 @@ public class ArrayManipulations {
         return false;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int countNegativeElemsIn2DArray(int[][] a) {
 		int columnLength = a[0].length;
 		int row = 0;
@@ -385,6 +410,9 @@ public class ArrayManipulations {
 		return oddNumber; 
 	}
 	
+    /*
+       -algorithm: 
+    */	
 	public void generateThirdArray(int[] input, int[] index, int[] result) {
 		int product = 1;
 		for (int i = 0; i < input.length; i++)
@@ -394,6 +422,9 @@ public class ArrayManipulations {
 			result[i] = product / input[index[i]];	
 	}
 
+    /*
+       -algorithm: 
+    */
 	public boolean areArraysEqual(int[] arr1, int[] arr2) {
 		// check to see if the # of elements are the same
 		if (arr1.length != arr2.length)
@@ -435,6 +466,9 @@ public class ArrayManipulations {
 		return product;
 	}
 	
+    /*
+       -algorithm: 
+    */	
 	public void arraysIntersections(int[] arr1, int[] arr2) {
 		// setup HashMap for the first array. Create a running count for each value
 		HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
@@ -463,6 +497,9 @@ public class ArrayManipulations {
 		System.out.println();
 	}
 	
+    /*
+       -algorithm: 
+    */	
 	public boolean doesArraySumExists(int[] arr, int sum) {
 		HashMap<Integer, Integer> ht = new HashMap<Integer, Integer>();
 		int tmp = 0, num1 = 0;
@@ -484,6 +521,9 @@ public class ArrayManipulations {
 		return exists;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public int findBeginningOfRotatedArray(int[] arr, int start, int end) {
 		int index = (start + end) / 2; // split the array into 2 halves
 

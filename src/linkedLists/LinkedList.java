@@ -322,7 +322,10 @@ public class LinkedList {
 	}
 
     /*************************************************************/
-	
+
+    /*
+       -algorithm: 
+    */	
 	public void swapKthElements(int position) {
 		if (isCircular() || position >= size) {
 			System.out.println("LIST IS OF LESSER SIZE!");
@@ -358,7 +361,9 @@ public class LinkedList {
 
 	/*************************************************************/
 	
-    /* 82 - intersection of 2 lists */
+    /* CI82 - intersection of 2 lists 
+
+    */
     public static Node intersectionOf2Lists(LinkedList list, LinkedList list2) {           
         if (list == null || list2 == null || list.size() == 0 || list2.size() == 0)
             return null;
@@ -389,9 +394,9 @@ public class LinkedList {
     
     /*************************************************************/
 
-	/*
-	 * used for reversing a List; manipulates the head pointer
-	 */
+	/* Reverse a List
+	   -algorithm: 
+	*/
 	public void reverseList() {
 		Node previousNode = null;
 		Node currentNode = head;
@@ -428,27 +433,6 @@ public class LinkedList {
         list.print();		
  */
 	}
-
-	/*
-	 * used for reversing a List passed to it but doesn't modify the head pointer
-	 */
-	public static Node reverseList(Node node) {
-		Node previousNode = null;
-		Node currentNode = node;
-		Node nextNode = currentNode.next;
-
-		while (nextNode != null) {
-			currentNode.next = previousNode;
-			previousNode = currentNode;
-			currentNode = nextNode;
-			nextNode = nextNode.next;
-
-			if (nextNode == null)		// this step needed on the very last iteration
-				currentNode.next = previousNode;
-		}
-
-		return currentNode;
-	}
 	
 	public void recursiveReverseList() { recursiveReverseList(null, head); }
 	private void recursiveReverseList(Node current1, Node current2) {
@@ -469,7 +453,8 @@ public class LinkedList {
 		}
 	}
 
-	// keep reference to n1 only if you want to get the Node that is in the middle
+	/* keep reference to n1 only if you want to get the Node that is in the middle
+	*/
 	public int getMidpoint() {
 		if (head == null)		// list is empty
 			return -1;
@@ -503,6 +488,9 @@ public class LinkedList {
 
 	}
 
+    /* Sort a linked list use Merge Sort
+       -algorithm: 
+    */
 	public Node mergeSort() { return mergeSort(head); }
 	private Node mergeSort(Node head) {
     	if(head == null || head.next == null)
@@ -537,6 +525,9 @@ public class LinkedList {
 	    return dummyHead.next;
 	}
 
+    /* 
+       -algorithm: 
+    */
 	public Node findConvergenceOfTwoLists(LinkedList otherList) {
 		int list1Length = this.size();
 		int list2Length = otherList.size();
@@ -592,6 +583,9 @@ public class LinkedList {
 		}
 	}
 
+    /* Eliminate duplicates in a List (no external buffer)
+       -algorithm: 
+    */
 	public void eliminateDuplicates() {
 		head = mergeSort();	// sort List
 
@@ -604,6 +598,9 @@ public class LinkedList {
 		}
 	}
 
+    /*
+       -algorithm: 
+    */
 	public static Node mergeAlternating(Node head1, Node head2) {
 		Node head3 = head1;
 
@@ -626,6 +623,9 @@ public class LinkedList {
 		return head3;
 	}
 
+    /*
+       -algorithm: 
+    */
 	public boolean isPalindrome() {
 		Node midNode = this.getMidpoint(head);
 		Node secondHalfNode = midNode.next;

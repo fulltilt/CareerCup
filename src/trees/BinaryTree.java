@@ -47,6 +47,9 @@ public class BinaryTree {
     public void setRoot(int value) { root = new Node(value); }
     
     /******************************/
+
+    /* Find fxn that prints out the current level it's on
+    */
     public boolean find(int value) { return find(root, value); }
     private boolean find(Node node, int value) {
         if (node == null)
@@ -80,6 +83,12 @@ public class BinaryTree {
     }
     /******************************/
 
+    /* Print a tree level-by-level
+       -algorithm: Have 2 lists: one that represents the current level and the other that represents the children of the current
+                   level. Once inside the loop, first put the children into a separate list then clear the current list while printing
+                   out each of the nodes on the current level. Afterwards, clear the currentLevel list and add children to the 
+                   current level. Clear the children list
+    */
     public void printByLevel() { printByLevel(root); }
     private void printByLevel(Node node) {
         if (node == null)
@@ -107,11 +116,13 @@ public class BinaryTree {
     
     /******************************/
     
+    /* Print all the paths from the roots to each leaf node
+       =algorithm: 
+    */
     public void printPaths() {
         int[] path = new int[1000];
         printPaths(root, path, 0);
     }
-
     private void printPaths(Node node, int[] path, int pathLength) {
         if (node == null)
             return;
@@ -137,6 +148,9 @@ public class BinaryTree {
     
     /******************************/
 
+    /* Check if the tree is a binary search tree
+       -algorithm:  
+    */
     public boolean isBST(Node node) { return isBST(node, Integer.MIN_VALUE, Integer.MAX_VALUE); }
     private boolean isBST(Node node, int min, int max) {
         if (node == null)   // if we made it this far, so far, the tree is a BST
@@ -169,10 +183,12 @@ public class BinaryTree {
     
     /******************************/
     
+    /*
+        -algorithm: 
+    */
     public void doubleTree() {
         doubleTree(root);
     }
-
     private void doubleTree(Node node) {
         if (node == null)
             return;
@@ -186,12 +202,35 @@ public class BinaryTree {
     }
     
     /******************************/
-    
-    /* 52 - verify if a binary tree is symmetrical */
+
+    /* CI51 - return mirror of a tree 
+       -algorithm: 
+    */
+    public Node mirror() {
+        Node newRoot = mirror(root);
+        printByLevel(newRoot);
+        return newRoot;
+    }
+
+    private Node mirror(Node node) {
+        if (node == null)
+            return null;
+
+        Node newNode = new Node(node.value);
+        newNode.leftChild = mirror(node.rightChild);
+        newNode.rightChild = mirror(node.leftChild);
+
+        return newNode;
+    }
+
+    /******************************/
+
+    /* CI52 - verify if a binary tree is symmetrical 
+       -algorithm: 
+    */
     public boolean isSymmetrical() {
         return isSymmetrical(root, root);
     }
-    
     private boolean isSymmetrical(Node node1, Node node2) {
         if (node1 == null && node2 == null)
             return true;
@@ -208,11 +247,52 @@ public class BinaryTree {
     
     /******************************/
    
-    /* 85 - get depth */
+    /* CI59 - print by level zig-zag style */
+    public void printByLevelZigZag() {        
+        printByLevelZigZag(root);
+    }
+
+    private void printByLevelZigZag(Node node) {
+        if (node == null)
+            return;
+            
+        ArrayList<Node> currentLevel = new ArrayList<Node>();    
+        ArrayList<Node> children = new ArrayList<Node>();
+        currentLevel.add(node);
+    
+        int depth = 0;
+        while (!currentLevel.isEmpty()) {
+            if (depth % 2 == 0) {   // for odd depths, print from left to right
+                for (int i = 0; i < currentLevel.size(); i++)
+                    System.out.print(currentLevel.get(i).value + " ");
+            } else {                // for even depths, print from right to left
+                for (int i = currentLevel.size() - 1; i >= 0 ; i--)
+                    System.out.print(currentLevel.get(i).value + " ");
+            }
+          
+            // print out the values of the current level
+            for (Node n : currentLevel) {
+                if (n.leftChild != null)
+                    children.add(n.leftChild);
+                if (n.rightChild != null)
+                    children.add(n.rightChild);
+            }
+            currentLevel.clear();
+            currentLevel.addAll(children);
+            children.clear();
+            System.out.println();
+            ++depth;
+        }
+    }
+
+    /******************************/
+
+    /* CI85 - get depth 
+       -algorithm: 
+    */
     public int getDepth() {
         return getDepth(root);
     }
-    
     private int getDepth(Node node) {
         if (node == null)
             return 0;
@@ -222,6 +302,9 @@ public class BinaryTree {
     
     /******************************/
     
+    /* ??
+       -algorithm: 
+    */    
     public double getBalanceFactor() {
         balanceFactor = 0;
         getBalanceFactor(root, 1);
@@ -239,6 +322,9 @@ public class BinaryTree {
         return desc + 1;
     }
     
+    /* Get the the max width of a tree
+       -algorithm: 
+    */
     public int getDiameter(Node node) {
         if (node == null)
             return 0;
@@ -250,6 +336,9 @@ public class BinaryTree {
         return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
     }
     
+    /* 
+       -algorithm: 
+    */     
     public int getMaxElement() { return getMaxElement(root); }
     private int getMaxElement(Node node) {
           if (node == null) 
@@ -260,11 +349,12 @@ public class BinaryTree {
 
     /******************************/
     
-    /* CI50 - is a tree a subtree of another */
+    /* CI50 - is a tree a subtree of another 
+       -algorithm: 
+    */
     public static boolean isSubTree(BinaryTree tree1, BinaryTree tree2) {   
         return isSubTree(tree1.getRoot(), tree2.getRoot());
     }
-    
     private static boolean isSubTree(Node root1, Node root2) {
         boolean result = false;
         
@@ -280,6 +370,9 @@ public class BinaryTree {
         return result;
     }
     
+    /* Determine if a tree is a subtree of another tree
+       -algorithm: 
+    */     
     private static boolean doesTree1ContainTree2(Node root1, Node root2) {
         if (root2 == null)  // check the potential subTree first. If we get a null value for the subtree, return true
             return true;
@@ -345,11 +438,13 @@ public class BinaryTree {
     
     /******************************/
     
-    /* 86 - is the tree balanced */
+    /* CI86 - is the tree balanced 
+       -algorithm: An alternative is to have a getMinDepth and getMaxDepths fxns (using Math.min and Math.max respectively)
+                   and if the absolute difference of the results is <= 1, return true 
+    */
     public boolean isBalanced() {
         return isBalanced(root);
     }
-    
     private boolean isBalanced(Node node) {
         if (node == null)
             return true;

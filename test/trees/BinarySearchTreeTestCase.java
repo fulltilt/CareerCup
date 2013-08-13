@@ -38,12 +38,6 @@ public class BinarySearchTreeTestCase {
     }	
 	
 	@Test
-	public void testPrintPaths() {
-		System.out.println("\nprintPaths()");
-		tree.printPaths();
-	}
-	
-	@Test
 	public void testPrintByLevel() {
 		System.out.println("\nprintByLevel()");
 		tree.printByLevel();
@@ -54,40 +48,6 @@ public class BinarySearchTreeTestCase {
 		System.out.print("\nreversePrintByLevel()");
 		tree.reversePrintByLevel();
 	}
-
-	@Test
-	public void testMirror() {
-		System.out.println("\nmirror()");
-        BinarySearchTree bst = new BinarySearchTree();
-        bst.insert(5);
-        bst.insert(4);
-        bst.insert(8);
-        bst.insert(2);
-        bst.insert(7);
-        bst.insert(9);
-        bst.insert(10);
-        bst.insert(1);
-        bst.insert(3);
-        bst.mirror();
-        bst.printByLevelZigZag();
-	}
-
-	@Test
-	public void testPrintByLevelZigZag() {
-		System.out.println("\nprint by zigzag()");
-        BinarySearchTree bst = new BinarySearchTree();
-        bst.insert(5);
-        bst.insert(4);
-        bst.insert(8);
-        bst.insert(2);
-        bst.insert(7);
-        bst.insert(9);
-        bst.insert(10);
-        bst.insert(1);
-        bst.insert(3);
-        bst.printByLevel();
-        bst.printByLevelZigZag();
-	}
 	
 	@Test
 	public void testSize() {
@@ -97,13 +57,6 @@ public class BinarySearchTreeTestCase {
 	@Test
 	public void testHeight() {
 		assertEquals(4, tree.getHeight());
-	}
-
-	@Test
-	public void testHasPathSum() {
-		assertTrue(tree.hasPathSum(14));
-		assertFalse(tree.hasPathSum(140));
-		assertTrue(tree.hasPathSum(32));
 	}
 	
 	@Test
