@@ -152,7 +152,9 @@ public class StringManipulations {
     
     /***********************/
     
-    /* CI76 - find the first character in a string that only appears once */
+    /* CI76 - find the first character in a string that only appears once 
+       -algorithm: 
+    */
     public static char findFirstSingleChar(String str) {        
         int[] ascii = new int[256]; // make ascii hashtable
         for (int i = 0; i < str.length(); i++) {

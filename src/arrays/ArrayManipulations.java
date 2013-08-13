@@ -40,7 +40,7 @@ public class ArrayManipulations {
     /***********************/
 	
     /* CI10 - merging sorted arrays (following deals with arrays of all types of lengths) 
-     *   
+     * -algorithm:   
      */
     public static int[] mergeSortedArrays(int[] array1, int[] array2) {
         int[] array3 = new int[array1.length + array2.length];
@@ -94,7 +94,9 @@ public class ArrayManipulations {
     
     /***********************/
   
-    /* CI27 - Minimum of rotated array */
+    /* CI27 - Minimum of rotated array 
+       -algorithm: 
+    */
     public static int getMinimumOfRotatedArray(int[] array) {
        //Have two pointers, one at the start and the other at the end. Get the middle element. If it's bigger than 'start', start-middle is in
        // the bigger part of the array so we can discard that. If it's smaller than end, middle-end is in the lower half so discard that end.
@@ -120,7 +122,9 @@ public class ArrayManipulations {
     
     /***********************/
   
-    /* CI28 - get turning point */
+    /* CI28 - get turning point 
+       -algorithm: 
+    */
     public static int getTurningPointIndex(int[] array) {
         /*
          * We set a pointer to the start and end of the array. We get the middle element. If the element is greater than the previous index and less
@@ -181,7 +185,7 @@ public class ArrayManipulations {
     }
     */
     
-	/* assumes that array 'a' is equal to or longer than array 'b'
+	/* note: assumes that array 'a' is equal to or longer than array 'b'
 	*/
 	public int[] mergeTwoSortedArrays(int[] a, int[] b) {
 		int[] c = new int[a.length + b.length];
@@ -246,7 +250,9 @@ public class ArrayManipulations {
 		return -1;
 	}
 
-	/* replaced element is replaced with an integer greater than the size of the array
+	/* Find replaced element where replaced element is greater than the size of the array
+	   -algorithm: 
+	   note: replaced element is replaced with an integer greater than the size of the array
 	*/
 	public int findReplacedElement(int[] arr) {
 		arr[567] = 3245;	// set a random index to be a random # over 1000
@@ -338,7 +344,9 @@ public class ArrayManipulations {
   		return strArray;
 	}
 
-	/* assumes square matrix
+	/* Find element in a 2D array
+	   -algorithm: 
+		note: assumes square matrix
 	*/
 	boolean search2DArray(int[][] a, int key) {
         int m = a.length;		// get row count
@@ -379,7 +387,9 @@ public class ArrayManipulations {
 		return count;
 	}
 	
-	// Given an n X n array with rows sorted and cols sorted, find the number of negative elements in most efficient way
+	/* Given an n X n array with rows sorted and cols sorted, find the number of negative elements in most efficient way
+	   -algorithm: 
+	*/
 	public void findNegativeBits() {
 		int v = -1;      // we want to find the sign of v
 		int sign;   // the result goes here
@@ -537,7 +547,9 @@ public class ArrayManipulations {
 		return 0;		
 	}
 	
-	//doesn't work for duplicate values in array2 since I use a HashSet
+	/* 
+	   note: doesn't work for duplicate values in array2 since I use a HashSet
+	*/
 	public void findConsecutiveIndex(int[] arr1, int[] arr2) {
 		int array2Length = arr2.length;
 		int startIndex = -1, endIndex = -1;
@@ -566,7 +578,10 @@ public class ArrayManipulations {
 		System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);		
 	}
 	
-	// maybe cleaner and more efficient to use a Comparable fxn
+	/* Create largest int from array of ints
+	   -algorithm:  
+		note: maybe cleaner and more efficient to use a Comparable fxn
+	*/
 	public String createLargestInt(int[] arr) {
 		String tempStr1, tempStr2, biggestInt = "";
 		

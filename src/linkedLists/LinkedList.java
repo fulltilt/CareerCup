@@ -362,7 +362,7 @@ public class LinkedList {
 	/*************************************************************/
 	
     /* CI82 - intersection of 2 lists 
-
+       -algorithm: 
     */
     public static Node intersectionOf2Lists(LinkedList list, LinkedList list2) {           
         if (list == null || list2 == null || list.size() == 0 || list2.size() == 0)
@@ -445,6 +445,11 @@ public class LinkedList {
 		current2.next = current1;
 	}
 
+	/*************************************************************/
+
+    /* Recursively print a List in reverse
+       -algorithm: 
+    */
 	public void recursiveReversePrint() { recursiveReversePrint(head); }
 	private void recursiveReversePrint(Node node) {
 		if (node != null) {
@@ -453,7 +458,10 @@ public class LinkedList {
 		}
 	}
 
+	/*************************************************************/
+
 	/* keep reference to n1 only if you want to get the Node that is in the middle
+	   -algorithm: 
 	*/
 	public int getMidpoint() {
 		if (head == null)		// list is empty
@@ -487,6 +495,8 @@ public class LinkedList {
 	    return slow;
 
 	}
+
+	/*************************************************************/
 
     /* Sort a linked list use Merge Sort
        -algorithm: 
@@ -525,6 +535,8 @@ public class LinkedList {
 	    return dummyHead.next;
 	}
 
+	/*************************************************************/
+
     /* 
        -algorithm: 
     */
@@ -559,6 +571,8 @@ public class LinkedList {
 		return null;
 	}
 
+	/*************************************************************/
+
 	public void bubbleSort() {
 		boolean swap = true;
 		Node currentNode;
@@ -583,6 +597,8 @@ public class LinkedList {
 		}
 	}
 
+	/*************************************************************/
+
     /* Eliminate duplicates in a List (no external buffer)
        -algorithm: 
     */
@@ -597,6 +613,8 @@ public class LinkedList {
 			currentNode = currentNode.next;
 		}
 	}
+
+	/*************************************************************/
 
     /*
        -algorithm: 
@@ -623,6 +641,8 @@ public class LinkedList {
 		return head3;
 	}
 
+	/*************************************************************/
+
     /*
        -algorithm: 
     */
@@ -646,6 +666,11 @@ public class LinkedList {
 		return true;
 	}
 
+	/*************************************************************/
+
+    /*
+       -algorithm: 
+    */	
 	public void findThirds() {
 		if (size == 1) {
 			System.out.println("1/3: " + head.value + " 2/3: " + head.value);
@@ -662,6 +687,11 @@ public class LinkedList {
 		System.out.println("1/3: " + pointer1.value + " 2/3: " + pointer2.value);
 	}
 
+	/*************************************************************/
+
+    /*
+       -algorithm: 
+    */	
 	public void swapEveryTwoElements() {
 		Node pointer1 = head;
 		Node pointer2 = head.next;
@@ -680,6 +710,11 @@ public class LinkedList {
 		}
 	}
 	
+	/*************************************************************/
+
+    /*
+       -algorithm: 
+    */		
 	public void evensBeforeOdds() {
 		Node currentNode = head;
 		Node currentEven, currentOdd;

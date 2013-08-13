@@ -97,7 +97,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI7 - check whether # is in matrix or not */
+    /* CI7 - check whether # is in matrix or not 
+       -algorithm: 
+    */
     public static boolean inMatrix(int[][] array, int value) {
         // find the proper row to search
         int row = 0;
@@ -136,7 +138,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI10 - merging sorted arrays (following deals with arrays of all types of lengths) */ 
+    /* CI10 - merging sorted arrays (following deals with arrays of all types of lengths) 
+       -algorithm: 
+    */ 
     public static int[] mergeSortedArrays(int[] array1, int[] array2) {
         int[] array3 = new int[array1.length + array2.length];
         
@@ -189,7 +193,9 @@ public class Misc {
     
     /***********************/
   
-    /* CI27 - Minimum of rotated array */
+    /* CI27 - Minimum of rotated array 
+       -algorithm: 
+    */
     public static int getMinimumOfRotatedArray(int[] array) {
        //Have two pointers, one at the start and the other at the end. Get the middle element. If it's bigger than 'start', start-middle is in
        // the bigger part of the array so we can discard that. If it's smaller than end, middle-end is in the lower half so discard that end.
@@ -215,7 +221,9 @@ public class Misc {
     
     /***********************/
   
-    /* CI28 - get turning point */
+    /* CI28 - get turning point 
+       -algorithm: 
+    */
     public static int getTurningPointIndex(int[] array) {
         /*
          * We set a pointer to the start and end of the array. We get the middle element. If the element is greater than the previous index and less
@@ -246,7 +254,9 @@ public class Misc {
     
     /***********************/
 
-    /* CI40 - Write a power function */
+    /* CI40 - Write a power function 
+       -algorithm: 
+    */
     public static double Power(double base, int exponent) {     
         if (base == 0 && exponent == 0)
             throw new IllegalArgumentException("undefined");
@@ -271,7 +281,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI45 - Evens before odds */
+    /* CI45 - Evens before odds 
+       -algorithm: 
+    */
     public static void evensBeforeOdds(int[] array) {
         // using strategy similar to the partition function for quicksort, swap evens and odds 
         int start = 0;
@@ -296,8 +308,10 @@ public class Misc {
     
     /***********************/
     
-    // CI56 - is corresponding sequence for stack. For example, if the pushing sequence is {1, 2, 3, 4, 5}, 
-    // the sequence {4, 5, 3, 2, 1} is a corresponding popping sequence, but {4, 3, 5, 1, 2} is not.
+    /* CI56 - is corresponding sequence for stack. For example, if the pushing sequence is {1, 2, 3, 4, 5}, 
+        the sequence {4, 5, 3, 2, 1} is a corresponding popping sequence, but {4, 3, 5, 1, 2} is not.
+       -algorithm: 
+    */
     public static boolean isCorrespondingStackSequence(int[] pushingSequence, int[] poppingSequence) {     
         int pushingIndex = 0;
         int poppingIndex = 0;
@@ -344,7 +358,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI71 - finds the intersection of two sorted arrays */
+    /* CI71 - finds the intersection of two sorted arrays 
+       -algorithm: 
+    */
     public static void getIntersection(int[] array1, int[] array2) {        
         for (int i : array1) {
             int start = 0;
@@ -370,7 +386,9 @@ public class Misc {
     
     /***********************/
     
-    /* CI72 - greatest sum of consecutive subarrays */
+    /* CI72 - greatest sum of consecutive subarrays 
+       -algorithm: 
+    */
     public static int greatestSumOfSubarrays(int[] array) {       
         // keep on adding #'s but whenever the sum is less than zero, restart at zero
         int max = 0;
@@ -390,7 +408,9 @@ public class Misc {
     
     /***********************/
     
-    /* 87 - is sum of 2 numbers in an array equal to k */    
+    /* CI87 - is sum of 2 numbers in an array equal to k 
+       -algorithm: 
+    */    
     public static boolean isSumOf2Numbers(int[] array, int k) {
         int start = 0;
         int end = array.length - 1;
@@ -410,7 +430,9 @@ public class Misc {
     
     /***********************/
     
-    /* 88 - check whether it contains three numbers whose sum equals 0 */
+    /* CI88 - check whether it contains three numbers whose sum equals 0 
+       -algorithm:
+    */
     public static boolean isSumOf3NumbersZero(int[] array) {        
         if (array.length < 3)
             throw new IllegalArgumentException("not enough numbers!");
@@ -422,7 +444,10 @@ public class Misc {
         
         return false;
     }
-    
+
+    /*
+       -algorithm:
+    */    
     private static boolean isSumOf2Numbers2(int[] array, int k, int index) {
         int start = 0;
         int end = array.length - 1;
@@ -447,7 +472,9 @@ public class Misc {
     
     /***********************/
  
-    /* 90 - Given a positive value s, print all sequences with continuous numbers (with two numbers at least) whose sum is s */
+    /* CI90 - Given a positive value s, print all sequences with continuous numbers (with two numbers at least) whose sum is s 
+       -algorithm:
+    */
     public static void printContinuousSequence(int s) {        
         int startNumber = 1;
         int sum = startNumber;
