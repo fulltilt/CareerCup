@@ -1,7 +1,10 @@
 package arrays;
 
 import static org.junit.Assert.*;
+
 import java.util.Random;
+
+import misc.Misc;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +36,32 @@ public class ArrayManipulationsTestCase {
 		assertSame(2, result[11]);
 	}
 
+	
+	@Test
+	public void testMergeSortedArray() {
+		int[] array = ArrayManipulations.mergeSortedArrays(new int[]{1,3,5,9,10}, new int[]{2,4,6,7,8});
+		assertEquals(array[0], 1);
+		assertEquals(array[1], 2);
+		assertEquals(array[2], 3);
+		assertEquals(array[3], 4);
+		assertEquals(array[4], 5);
+		assertEquals(array[5], 6);
+		assertEquals(array[6], 7);
+		assertEquals(array[7], 8);
+		assertEquals(array[8], 9);
+		assertEquals(array[9], 10);
+	}
+	
+	@Test
+	public void testGetMinimumOfRotatedArray() {
+		assertEquals(ArrayManipulations.getMinimumOfRotatedArray(new int[]{3, 4, 5, 1, 2}), 1);
+	}
+	
+	@Test
+	public void testGetTurningPointIndex() {
+		assertEquals(ArrayManipulations.getTurningPointIndex(new int[]{1, 2, 3, 4, 5, 10, 9, 8, 7, 6}), 5);
+	}
+	
 	@Test
 	public void testMergeTwoSortedArrays() {
 		int[] x = new int[]{1,3,6,7,8,9,11};
@@ -243,4 +272,14 @@ public class ArrayManipulationsTestCase {
 		arr = new int[]{9, 1, 97};
 		assertEquals("9791", arrManip.createLargestInt(arr));
 	}
+	
+	/*
+	@Test
+	public void testFindElementInRotatedArray() {
+		int[] arr = new int[]{15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14};
+		assertEquals(8, ArrayManipulations.findElementInRotatedArray(arr, 5));
+		assertEquals(4, ArrayManipulations.findElementInRotatedArray(arr, 25));
+		assertEquals(1, ArrayManipulations.findElementInRotatedArray(arr, 16));
+	}
+	*/
 }

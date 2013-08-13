@@ -33,6 +33,150 @@ public class ArrayManipulations {
 	    return a;
 	}
 
+    /***********************/
+	
+    /* CI10 - merging sorted arrays (following deals with arrays of all types of lengths) 
+     *   
+     */
+    public static int[] mergeSortedArrays(int[] array1, int[] array2) {
+        int[] array3 = new int[array1.length + array2.length];
+        
+        int index1 = 0;
+        int index2 = 0;
+        int indexMerged = 0;
+
+        while(index1 < array1.length && index2 < array2.length) { 
+            if(array1[index1] <= array2[index2]) 
+                array3[indexMerged++] = array1[index1++]; 
+            else 
+                array3[indexMerged++] = array2[index2++]; 
+        } 
+         
+        // deal with reminder once one of the arrays is empty
+        while (index1 < array1.length)
+            array3[indexMerged++] = array1[index1++];
+        while (index2 < array2.length)
+            array3[indexMerged++] = array2[index2++];
+        
+        return array3;
+        
+        /* from right to left (good when you have to append to the first array so you don't have
+         * to worry about shifting right all the time
+        int[] array1 = {1,3,5,7,9};
+        int[] array2 = {2,4,6,8,10};
+        int[] array3 = new int[array1.length + array2.length];
+        
+        int index1 = array1.length - 1;
+        int index2 = array2.length - 1;
+        int indexMerged = array3.length - 1;
+
+        while(index1 >= 0 && index2 >= 0) { // important that you use '>=' else you will break out of the while statement with at least 1 element in each array
+            if(array1[index1] >= array2[index2]) 
+                array3[indexMerged--] = array1[index1--]; 
+            else 
+                array3[indexMerged--] = array2[index2--]; 
+        } 
+         
+        // deal with reminder once one of the arrays is empty
+        while (index1 >= 0)
+            array3[indexMerged--] = array1[index1--];
+        while (index2 >= 0)
+            array3[indexMerged--] = array2[index2--];
+            
+        for (int i = 0; i < array3.length; i++)
+            System.out.println(array3[i]);        
+        */
+    }
+    
+    /***********************/
+  
+    /* CI27 - Minimum of rotated array */
+    public static int getMinimumOfRotatedArray(int[] array) {
+       //Have two pointers, one at the start and the other at the end. Get the middle element. If it's bigger than 'start', start-middle is in
+       // the bigger part of the array so we can discard that. If it's smaller than end, middle-end is in the lower half so discard that end.
+       // Keep repeating this process until we both pointers are next to each other.
+       // NOTE: this doesn't work 100% of the time when there are duplicates. If that's the case, we resort to a O(n) sequential search
+       
+       int start = 0;
+       int end = array.length - 1;
+       int middle = (start + end) / 2;
+       
+        while (true) {
+            if (array[middle] > array[start]) {
+                start = middle;
+            } else {
+                end = middle;
+            }
+            
+            if (start + 1 == end)
+                return array[end];
+            middle = (start + end) / 2;
+        }
+    }
+    
+    /***********************/
+  
+    /* CI28 - get turning point */
+    public static int getTurningPointIndex(int[] array) {
+        /*
+         * We set a pointer to the start and end of the array. We get the middle element. If the element is greater than the previous index and less
+         * than the next index, we have the turning point. Else if the element is greater than the previous but smaller than the next, discard everything
+         * to the left of middle. Else if the element is less than the prevous but greater than next, discard everything to the right of middle.
+         * NOTE: elements are unique so it's not like 1,2,3,4,5,4,3,2,1
+         */
+       if (array.length == 0)
+           throw new IllegalArgumentException("Array length is zero!");
+       if (array.length == 1 || array.length == 2)
+           return 0;
+           
+       int start = 0;
+       int end = array.length - 1;
+       int middle = (start + end) / 2;
+       
+       while (true) {
+           if (array[middle - 1] < array[middle] && array[middle] > array[middle + 1])
+               return middle;
+           else if (array[middle - 1] < array[middle] && array[middle] < array[middle + 1]) // we're in ascending part of array
+               start = middle;
+           else // we're in descending part of array
+               end = middle;
+           
+           middle = (start + end) / 2;
+        }
+    }
+    
+    /***********************/
+    
+    /* Find an element in an array that is rotated
+     * -algorithm: use binary search. Get the value in the first and middle and last index of the array.
+     *             If the value is any of these indexes, return true. Else, compare if the value is
+     *             between the values first and middle index or between the values of middle and last index.
+     *             If it is, search in that section and repeat the process 
+     
+    public static int findElementInRotatedArray(int[] array, int value) {
+    	int firstIndex = 0;
+    	int lastIndex = array.length - 1;
+    	int middleIndex = array.length / 2;
+    	
+    	while (true) {
+    		middleIndex = (firstIndex + lastIndex) / 2;
+    		
+        	if (value == array[firstIndex])
+        		return firstIndex;
+        	else if (value == array[lastIndex])
+        		return lastIndex;
+        	else if (value == array[middleIndex])
+            	return middleIndex;
+        	
+    		if (array[firstIndex] < value && value < array[middleIndex]) { // value in 1st half
+    			lastIndex = middleIndex - 1; 
+    		} else if (array[middleIndex] < value && value < array[lastIndex]) {	// value in 2nd half
+    			firstIndex = middleIndex + 1;
+    		}
+    	}
+    }
+    */
+    
 	/* assumes that array 'a' is equal to or longer than array 'b'
 	*/
 	public int[] mergeTwoSortedArrays(int[] a, int[] b) {
