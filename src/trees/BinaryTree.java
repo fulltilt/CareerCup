@@ -296,41 +296,50 @@ public class BinaryTree {
     
     /******************************/
     
+    /* Determines if there exists a path in a tree whose sum of values equals 'sum'
+     * -algorithm: determine if the sum is currently zero. If so, return true. Else recursively
+     *             call itself on each child and subtracting the node's current value from 'sum'.
+     *             The trick to this is to chain results of both children via the '||'
+     */
     public boolean hasPathSum(int sum) {
         return hasPathSum(root, sum);
     }
-
     private boolean hasPathSum(Node node, int sum) {
         if (node == null)
             return (sum == 0);
 
+        // if sum is reached in a child node that isn't a leaf 
+        if (sum == 0)
+            return true;
+        
         return hasPathSum(node.leftChild, sum - node.value) || hasPathSum(node.rightChild, sum - node.value);
     }    
     
-    /* 60 - just like hasPathSum but it prints out all the paths that add up to the expected sum */
+    /* CI60 - just like hasPathSum but it prints out all the paths that add up to the expected sum 
+     * -algorithm: We need a 3rd argument which is an ArrayList of Nodes. The process is just like hasPathSum
+     *             but with 2 additional steps: add the node to the list at the beginning and take it off
+     *             at the end which is important as the ArrayList is shared 
+     */
     public void printSumPaths(int expectedSum) {       
         ArrayList<Node> path = new ArrayList<Node>();
-        int currentSum = 0;
-        printSumPaths(root, expectedSum, currentSum, path);
+        printSumPaths(root, expectedSum, path);
     }
-    
-    private void printSumPaths(Node node, int expectedSum, int currentSum, ArrayList<Node> path) {
+    private void printSumPaths(Node node, int sum, ArrayList<Node> path) {
         if (node == null)
             return;
-            
-        currentSum += node.value;
+        
         path.add(node);
         
-        if (currentSum == expectedSum) {
+        if (sum == 0) {
             for (Node n : path)
                 System.out.print(n.value + " ");
-            System.out.println();    
+            System.out.println();
+            return;
         }
         
-        printSumPaths(node.leftChild, expectedSum, currentSum, path);
-        printSumPaths(node.rightChild, expectedSum, currentSum, path); 
+        printSumPaths(node.leftChild, sum - node.value, path);
+        printSumPaths(node.rightChild, sum - node.value, path);
         
-        // before returning back to its parent, remove node from the path
         path.remove(path.size() - 1);
     }
     

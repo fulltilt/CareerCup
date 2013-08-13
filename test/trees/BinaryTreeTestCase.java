@@ -113,6 +113,8 @@ public class BinaryTreeTestCase {
         bt.getRoot().leftChild.rightChild = new Node(7);
         assertTrue(bt.hasPathSum(22));
         bt.printSumPaths(22);
+        assertTrue(bt.hasPathSum(15));	// test that it stops when the sum is in the middle of the tree
+        bt.printSumPaths(15);
         assertFalse(bt.hasPathSum(11));
         bt.printSumPaths(11);
 	}

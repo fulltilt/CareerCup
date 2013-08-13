@@ -314,6 +314,8 @@ public class Misc {
      *             than the top element, keep popping elements from the aux stack and push it onto 
      *             the original stack. Afterwards, push temp onto the aux stack. That last step happens
      *             regardless. 
+     *             -originally I was thinking of needing a 3rd stack but one must remember that when you pop off the
+     *              top element and setting it to 'temp', 'temp' sort of acts like a stack that can only contain 1 element max
      */
     public static Stack<Integer> sortStack(Stack<Integer> stack) {
         Stack<Integer> aux = new Stack<Integer>();
