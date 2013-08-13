@@ -176,4 +176,27 @@ public class BinaryTreeTestCase {
 	    bst2.getRoot().rightChild = new Node(2);
 	    assertTrue(bst2.isBalanced());
 	}
+	
+	@Test
+	public void testLowestCommonAncestor() {
+		BinaryTree bst = new BinaryTree();
+		Node n1 = bst.getRoot().leftChild.leftChild.rightChild;
+		Node n2 = bst.getRoot().leftChild.rightChild;
+		Node n3 = bst.getRoot().rightChild.rightChild.leftChild.leftChild.leftChild;
+		Node n4 = bst.getRoot().rightChild.rightChild.rightChild.rightChild.rightChild;
+		assertEquals(2, bst.lowestCommonAncestor(n1, n2).value);
+		assertEquals(5, bst.lowestCommonAncestor(n3, n4).value);
+		assertEquals(1, bst.lowestCommonAncestor(n1, n4).value);
+	}
+	
+	@Test
+	public void testFindNode() {
+		BinaryTree bst = new BinaryTree();
+		Node n1 = bst.getRoot().leftChild.leftChild.rightChild;
+		Node n3 = bst.getRoot().rightChild.rightChild.leftChild.leftChild.leftChild;
+		Node n4 = bst.getRoot().rightChild.rightChild.rightChild.rightChild.rightChild;
+		assertTrue(bst.findNode(bst.getRoot(), n1));
+		assertTrue(bst.findNode(bst.getRoot(), n4));
+		assertFalse(bst.findNode(bst.getRoot().leftChild, n3));
+	}
 }
