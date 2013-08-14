@@ -4,43 +4,6 @@ import java.util.HashMap;
 
 public class ArrayManipulations {
     
-    /* You have any array whose values are 0, 1 or 2. Arrange the array in order
-       -algorithm: Have 3 indexes hi, mid an hi. hi and mid start at zero and hi starts at the end. The main index is mid 
-                   and loop through array until the mid index is >= hi index. If 0, swap mid and lo and advance both indices.
-                   If 1, advance mid. If 2, swap mid and hi and decrement hi
-    */
-    public int[] dutchNationalFlag(int[] a) {
-        int lo = 0;
-        int hi = a.length - 1;
-        int mid = 0;
-        int temp;
-
-        while(mid <= hi) {
-            switch(a[mid]) {
-                case 0:
-                    temp = a[lo];
-                    a[lo] = a[mid];
-                    a[mid] = temp;
-                    lo++;
-                    mid++;
-                    break;
-                case 1:
-                    mid++;
-                    break;
-                case 2:
-                    temp = a[hi];
-                    a[hi] = a[mid];
-                    a[mid] = temp;
-                    hi--;
-                    break;
-            }
-        }
-
-        return a;
-    }
-
-    /***********************/
-    
     /* Write a method that when given a list, ensures that all consecutive repeated elements of the list are removed. The order of the elements should remain the same.
 
        simplify(['a','a','a','a','b','c','c','a','a','d','e','e','e','e'])
@@ -193,12 +156,28 @@ public class ArrayManipulations {
                 end = middle;
             }
             
-            if (start + 1 == end)
+            if (start + 1 == end)  // determines if both pointers are next to one another. If so, we found the minimum
                 return array[end];
             middle = (start + end) / 2;
         }
     }
-        
+
+    /* recursive version of above. I see that there is a magic number 5 so this needs refactoring
+       -algorithm: 
+    */
+    public int findBeginningOfRotatedArray(int[] arr, int start, int end) {
+        int index = (start + end) / 2; // split the array into 2 halves
+
+        if (((end - start) < 5) && (arr[start] > arr[index]) && (arr[index] < arr[end]))
+            return index;
+        else if(arr[start] > arr[index]) // if the rotation is in the left half
+            return findBeginningOfRotatedArray(arr, start, index);
+        else if(arr[index] > arr[end])  // if the rotation is in the right half
+            return findBeginningOfRotatedArray(arr, index, end);
+
+        return 0;       
+    }
+
     /***********************/
   
     /* CI28 - get turning point 
@@ -229,9 +208,9 @@ public class ArrayManipulations {
            middle = (start + end) / 2;
         }
     }
-    
+
     /***********************/
-    
+
     /* Find an element in an array that is rotated
      * -algorithm: use binary search. Get the value in the first and middle and last index of the array.
      *             If the value is any of these indexes, return true. Else, compare if the value is
@@ -293,8 +272,10 @@ public class ArrayManipulations {
         return arr3;
     }
 
-    /*
-       -algorithm: 
+    /***********************/
+
+    /* Find the first repeat. This is assuming that the numbers are < the length of the array
+       -algorithm: very clever algorithm that is hard to explain. Walk through the code
     */
     public int findFirstRepeat(int[] array) {
         for (int i = 0; i < array.length; i++) {
@@ -306,9 +287,14 @@ public class ArrayManipulations {
         return -1;
     }
 
-    /* Find replaced element where replaced element is greater than the size of the array
-       -algorithm: 
-       note: replaced element is replaced with an integer greater than the size of the array
+    /***********************/
+
+    /* You have an array that has 1000 elements with each element equals to it's index + 1. A random element has been replaced with 
+       a number that is greater than the size of the array. Find the index of that number
+       -algorithm: XOR each element of the array with its index + 1. XOR a number with itself results in zero so the end result would
+                   be the index in question XOR'd with the number greater than 1000. If you were to XOR that number with the number
+                   greater than 1000, you would get index. 
+                   Note: this is assuming we have access to the value greater than 1000 
     */
     public int findReplacedElement(int[] arr) {
         arr[567] = 3245;    // set a random index to be a random # over 1000
@@ -321,11 +307,13 @@ public class ArrayManipulations {
         // XOR the resulting number with the random # over 1000 to get the index;
         return (result ^ 3245);
     }
-    
+
+    /***********************/
+
     /* Push all zeroes in an array to the end
        -algorithm: logic is similar to the quicksort partition algorithm. The only trick is that you have to do a second check for
-                   slow being less than fast in the while loop.
-    */
+                slow being less than fast in the while loop.
+    */    
     public int[] pushZeroesToEnd(int[] arr) {
         int slow = 0;
         int fast = arr.length - 1;
@@ -347,10 +335,12 @@ public class ArrayManipulations {
 
         return arr;
     }
+
+    /***********************/
     
     /* Push all zeroes in an array to the beginning
        -algorithm: logic is similar to the quicksort partition algorithm. The only trick is that you have to do a second check for
-                   slow being less than fast in the while loop.
+                slow being less than fast in the while loop.
     */    
     public int[] pushZeroesToBeginning(int[] arr) {
         int slow = 0;
@@ -374,73 +364,48 @@ public class ArrayManipulations {
         return arr;
     }
 
-    /*
-       -algorithm: 
-    */
-    public int findEquilibriumIndex(int[] arr) {
-        int sum = 0, leftSum = 0;
-
-        for (int i = 0; i < arr.length; i++)    // get total sum of all elements
-            sum += arr[i];
-
-        for (int i = 0; i < arr.length; i++) {
-            sum -= arr[i];
-
-            if(leftSum == sum)
-                return i;
-
-            leftSum += arr[i];
-        }
-
-        return -1;
-    }
-
-    /*
-       -algorithm: 
-    */
-    public String[] interleave(String[] strArray) {
-        int n = strArray.length / 2;
-        String temp;
-
-        for (int i = 1; i < n; i++) {       // step no.
-            for (int j = 0; j < i; j++) {   // no. of swaps
-                temp = strArray[n - i + 2 * j];
-                strArray[n - i + 2 * j] = strArray[n - i + 2 * j + 1];
-                strArray[n - i + 2 * j + 1] = temp;
-            }
-        }
-        return strArray;
-    }
+    /***********************/
 
     /* Find element in a 2D array
-       -algorithm: 
-        note: assumes square matrix
+       -algorithm: get the size of the rows and columns. Have a while loop while current index which starts at
+                   0 is less than the # of rows and the current column is >= 0. Start from upper-right
+                   corner of the matrix and work way backwards until you hit a column whose value is
+                   >= key. Afterwards, keep advancing down the rows (sticking to the same column) until
+                   you hit a row whose value is >= key. If at any of those spots you hit an index that
+                   equals value, return true else after the past 2 steps, return false.
+        note: assumes square matrix whose columns and rows are sorted; also, we could have gone column by column 
+              and row by row but this algorithm is more efficient
     */
-    boolean search2DArray(int[][] a, int key) {
-        int m = a.length;       // get row count
-        int n = a[0].length;    // get column count
+    boolean search2DArray(int[][] matrix, int key) {
+        int m = matrix.length;       // get row count
+        int n = matrix[0].length;    // get column count
         int k = 0;
-
+        
         while ((k < m) && (n >= 0)) {
-            if (key < a[k][n - 1])
+            if (key < matrix[k][n - 1])
                 n--;
-            else if(key > a[k][n - 1])
+            else if(key > matrix[k][n - 1])
                 k++;
-            else if(key == a[k][n - 1])
+            else if(key == matrix[k][n - 1])
                 return true;
         }
+        
         return false;
     }
 
-    /*
-       -algorithm: 
+    /***********************/
+
+    /* Find the # of negative elements in a sorted array (from negative to positive).
+       -algorithm: Keep iterating through each row while the current rows last index is negative and add to the count the length of the
+                   column. The last row you hit will have at least one positive number. From here, iterate through each column in the
+                   current row until you hit a positive all the while incrementing the count for each negative you encounter
     */
     public int countNegativeElemsIn2DArray(int[][] a) {
         int columnLength = a[0].length;
         int row = 0;
         int count = 0;
         
-        // find the first row that should have at least 1 positive # (assumption is that array is sorted)
+        // find the first row that should have at least 1 positive #
         while (a[row][columnLength - 1] < 0) {
             ++row;
             count += columnLength; 
@@ -455,30 +420,12 @@ public class ArrayManipulations {
         return count;
     }
     
-    /* Given an n X n array with rows sorted and cols sorted, find the number of negative elements in most efficient way
-       -algorithm: 
+    /***********************/
+
+    /* An array of integers, only one integer appears odd times, all others appear even times, find it.
+       -algorithm: if you XOR a number with itself or an even number of times, you get zero. If you XOR each value of the array,
+                   the result will be the one number that appears an odd # of times
     */
-    public void findNegativeBits() {
-        int v = -1;      // we want to find the sign of v
-        int sign;   // the result goes here
-        int result;
-
-        // convert true and false values to 1 and 0 respectively
-        boolean temp = (v < 0);
-        if (temp)
-            result = 1;
-        else
-            result = 0;
-
-        sign = -result;  // if v < 0 then -1, else 0.
-
-        if (sign == -1)
-            System.out.println("negative");
-        else
-            System.out.println("positive");
-    }
-    
-    // An array of integers, only one integer appears odd times, all others appear even times, find it
     public int FindOddCountInteger(int[] array) {
         int oddNumber = 0;
 
@@ -488,6 +435,8 @@ public class ArrayManipulations {
         return oddNumber; 
     }
     
+    /***********************/
+
     /*
        -algorithm: 
     */  
@@ -499,6 +448,8 @@ public class ArrayManipulations {
         for (int i = 0; i < result.length; i++)
             result[i] = product / input[index[i]];  
     }
+
+    /***********************/
 
     /*
        -algorithm: 
@@ -544,6 +495,8 @@ public class ArrayManipulations {
         return product;
     }
     
+    /***********************/
+
     /*
        -algorithm: 
     */  
@@ -575,6 +528,8 @@ public class ArrayManipulations {
         System.out.println();
     }
     
+    /***********************/
+
     /*
        -algorithm: 
     */  
@@ -598,23 +553,9 @@ public class ArrayManipulations {
         
         return exists;
     }
-
-    /*
-       -algorithm: 
-    */
-    public int findBeginningOfRotatedArray(int[] arr, int start, int end) {
-        int index = (start + end) / 2; // split the array into 2 halves
-
-        if (((end - start) < 5) && (arr[start] > arr[index]) && (arr[index] < arr[end]))
-            return index;
-        else if(arr[start] > arr[index]) // if the rotation is in the left half
-            return findBeginningOfRotatedArray(arr, start, index);
-        else if(arr[index] > arr[end])  // if the rotation is in the right half
-            return findBeginningOfRotatedArray(arr, index, end);
-
-        return 0;       
-    }
     
+    /***********************/
+
     /* 
        note: doesn't work for duplicate values in array2 since I use a HashSet
     */
@@ -646,6 +587,8 @@ public class ArrayManipulations {
         System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);      
     }
     
+    /***********************/
+
     /* Create largest int from array of ints
        -algorithm:  
         note: maybe cleaner and more efficient to use a Comparable fxn
@@ -669,7 +612,113 @@ public class ArrayManipulations {
         
         return biggestInt;
     }
+
+    /***********************/
+
+    /* You have any array whose values are 0, 1 or 2. Arrange the array in order
+       -algorithm: Have 3 indexes hi, mid an hi. hi and mid start at zero and hi starts at the end. The main index is mid 
+                   and loop through array until the mid index is >= hi index. If 0, swap mid and lo and advance both indices.
+                   If 1, advance mid. If 2, swap mid and hi and decrement hi
+    */
+    public int[] dutchNationalFlag(int[] a) {
+        int lo = 0;
+        int hi = a.length - 1;
+        int mid = 0;
+        int temp;
+
+        while(mid <= hi) {
+            switch(a[mid]) {
+                case 0:
+                    temp = a[lo];
+                    a[lo] = a[mid];
+                    a[mid] = temp;
+                    lo++;
+                    mid++;
+                    break;
+                case 1:
+                    mid++;
+                    break;
+                case 2:
+                    temp = a[hi];
+                    a[hi] = a[mid];
+                    a[mid] = temp;
+                    hi--;
+                    break;
+            }
+        }
+
+        return a;
+    }
+
+    /***********************/
     
+    /*
+       -algorithm: 
+    */
+    public int findEquilibriumIndex(int[] arr) {
+        int sum = 0, leftSum = 0;
+
+        for (int i = 0; i < arr.length; i++)    // get total sum of all elements
+            sum += arr[i];
+
+        for (int i = 0; i < arr.length; i++) {
+            sum -= arr[i];
+
+            if(leftSum == sum)
+                return i;
+
+            leftSum += arr[i];
+        }
+
+        return -1;
+    }
+
+    /***********************/
+
+    /*
+       -algorithm: 
+    */
+    public String[] interleave(String[] strArray) {
+        int n = strArray.length / 2;
+        String temp;
+
+        for (int i = 1; i < n; i++) {       // step no.
+            for (int j = 0; j < i; j++) {   // no. of swaps
+                temp = strArray[n - i + 2 * j];
+                strArray[n - i + 2 * j] = strArray[n - i + 2 * j + 1];
+                strArray[n - i + 2 * j + 1] = temp;
+            }
+        }
+        return strArray;
+    }
+
+    /***********************/
+
+    /* Given an n X n array with rows sorted and cols sorted, find the number of negative elements in most efficient way
+       -algorithm: 
+    */
+    public void findNegativeBits() {
+        int v = -1;      // we want to find the sign of v
+        int sign;   // the result goes here
+        int result;
+
+        // convert true and false values to 1 and 0 respectively
+        boolean temp = (v < 0);
+        if (temp)
+            result = 1;
+        else
+            result = 0;
+
+        sign = -result;  // if v < 0 then -1, else 0.
+
+        if (sign == -1)
+            System.out.println("negative");
+        else
+            System.out.println("positive");
+    }
+    
+    /***********************/
+
     public static void main(String[] args) {
         //ArrayManipulations arrManip = new ArrayManipulations();
 
