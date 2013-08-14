@@ -1,0 +1,25 @@
+Write a method that when given a list, ensures that all consecutive repeated elements of the list are removed. The order of the elements should remain the same.
+
+simplify(['a','a','a','a','b','c','c','a','a','d','e','e','e','e'])
+returns ['a','b','c','a','d','e']
+
+public void simplify(int[] array) {
+	int slow = 0;
+	int fast = 1;
+	int temp = 0;
+	while (fast < array.length) {
+		if (array[slow] == array[fast]) {
+			temp = array[slow];  
+			++fast;
+		} else {
+			array[++slow] = array[fast];
+			fast = slow + 1;		
+		}	
+	}
+
+	while (slow < array.length) {
+		array[slow++] = ' ';
+	}
+
+	return
+}

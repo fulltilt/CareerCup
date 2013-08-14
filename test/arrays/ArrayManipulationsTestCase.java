@@ -147,11 +147,11 @@ public class ArrayManipulationsTestCase {
 	public void testPushZeroesToEnd() {
 		int[] a1 = new int[]{0, 0, 1, 2, 0, 4, 0, 0 ,8 ,9};
 		int[] result = arrManip.pushZeroesToEnd(a1);
-		assertSame(1, result[0]);
-		assertSame(2, result[1]);
-		assertSame(4, result[2]);
-		assertSame(8, result[3]);
-		assertSame(9, result[4]);
+		assertSame(9, result[0]);
+		assertSame(8, result[1]);
+		assertSame(1, result[2]);
+		assertSame(2, result[3]);
+		assertSame(4, result[4]);
 		assertSame(0, result[5]);
 		assertSame(0, result[6]);
 		assertSame(0, result[7]);
@@ -168,9 +168,9 @@ public class ArrayManipulationsTestCase {
 		assertSame(0, result[2]);
 		assertSame(0, result[3]);
 		assertSame(0, result[4]);
-		assertSame(1, result[5]);
+		assertSame(4, result[5]);
 		assertSame(2, result[6]);
-		assertSame(4, result[7]);
+		assertSame(1, result[7]);
 		assertSame(8, result[8]);
 		assertSame(9, result[9]);
 	}
