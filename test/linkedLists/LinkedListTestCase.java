@@ -354,7 +354,6 @@ public class LinkedListTestCase {
 		list2.insertAtHead(1);
 		list2.insertAtHead(2);
 		list2.insertAtHead(3);
-		list2.insertAtHead(3);
 		list2.insertAtHead(2);
 		list2.insertAtHead(1);
 		assertTrue(list2.isPalindrome());

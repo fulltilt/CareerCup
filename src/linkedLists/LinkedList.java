@@ -486,7 +486,8 @@ public class LinkedList {
 	/*************************************************************/
 
     /* Recursively print a List in reverse
-       -algorithm: 
+       -algorithm: to print in reverse, start printing at the end by recursively calling the fxn
+                   before printing current Node's value. Trick is similar to above
     */
 	public void recursiveReversePrint() { recursiveReversePrint(head); }
 	private void recursiveReversePrint(Node node) {
@@ -498,6 +499,55 @@ public class LinkedList {
 
 	/*************************************************************/
 
+    /* Eliminate duplicates in a List (no external buffer)
+       -algorithm: In order to do this w/o a buffer, we need to sort the List first. From there, 
+                   iterate one-by-one and if the next Node's value is the same, skip over the next
+                   Node. If we did have a buffer (hash table), we can iterate one by one and if the
+                   next Node's value is in the hash table, skip over the next Node. The first
+                   algorithm is O(n log n) without an external buffer(although implementation below
+                   uses merge sort which does use an external buffer) and the latter algorithm is
+                   O(n) but uses an external buffer
+    */
+	public void eliminateDuplicates() {
+		head = mergeSort();	// sort List
+
+		Node currentNode = head;
+		while (currentNode.next != null) {
+			while (currentNode.value == currentNode.next.value)	// using 'while' in case there's more than 2 duplicates in a row
+				currentNode.next = currentNode.next.next;
+
+			currentNode = currentNode.next;
+		}
+	}
+
+	/*************************************************************/
+	
+    /* Determine if a List is a palindrome
+       -algorithm: split the list into two and compare each Node's value to see they are the same
+       note: this works for even and odd length lists
+    */
+	public boolean isPalindrome() {
+		Node midNode = this.getMidpoint(head);
+		Node secondHalfNode = midNode.next;
+		midNode.next = null;		// split List into 2 halves a la MergeSort
+
+		Node secondHalfCurrent = reverseList(secondHalfNode);	// reverse 2nd half of the List
+		
+		// compare the 1st half of the List to the reverse of the 2nd half of the List
+		Node currentNode = head;
+		while (secondHalfCurrent != null)	{ // for odds, middle node will always be in 1st half. By doing this conditional, we don't have to worry about the middle element
+			if (currentNode.value != secondHalfCurrent.value)
+				return false;
+
+			currentNode = currentNode.next;
+			secondHalfCurrent = secondHalfCurrent.next;
+		}
+
+		return true;
+	}
+
+	/*************************************************************/
+	
     /* Sort a linked list use Merge Sort
        -algorithm: 
     */
@@ -563,23 +613,6 @@ public class LinkedList {
 
 	/*************************************************************/
 
-    /* Eliminate duplicates in a List (no external buffer)
-       -algorithm: 
-    */
-	public void eliminateDuplicates() {
-		head = mergeSort();	// sort List
-
-		Node currentNode = head;
-		while (currentNode.next != null) {
-			while (currentNode.value == currentNode.next.value)	// using 'while' in case there's more than 2 duplicates in a row
-				currentNode.next = currentNode.next.next;
-
-			currentNode = currentNode.next;
-		}
-	}
-
-	/*************************************************************/
-
     /*
        -algorithm: 
     */
@@ -603,31 +636,6 @@ public class LinkedList {
 			head1.next = head2;
 
 		return head3;
-	}
-
-	/*************************************************************/
-
-    /*
-       -algorithm: 
-    */
-	public boolean isPalindrome() {
-		Node midNode = this.getMidpoint(head);
-		Node secondHalfNode = midNode.next;
-		midNode.next = null;		// split List into 2 halves a la MergeSort
-
-		Node secondHalfCurrent = reverseList(secondHalfNode);	// reverse 2nd half of the List
-		
-		// compare the 1st half of the List to the reverse of the 2nd half of the List
-		Node currentNode = head;
-		while (secondHalfCurrent != null)	{ // for odds, middle node will always be in 1st half. By doing this conditional, we don't have to worry about the middle element
-			if (currentNode.value != secondHalfCurrent.value)
-				return false;
-
-			currentNode = currentNode.next;
-			secondHalfCurrent = secondHalfCurrent.next;
-		}
-
-		return true;
 	}
 
 	/*************************************************************/
@@ -713,6 +721,7 @@ public class LinkedList {
 	public void convertToDoublyLinkedList() {
 	}
 ****/
+	
 	public static void main(String[] args) {
 		LinkedList list1 = new LinkedList();
 		list1.insertAtHead(1);
