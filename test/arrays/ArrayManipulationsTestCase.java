@@ -3,9 +3,6 @@ package arrays;
 import static org.junit.Assert.*;
 
 import java.util.Random;
-
-import misc.Misc;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -214,8 +211,8 @@ public class ArrayManipulationsTestCase {
         int[][] array = {{1,3,5},
                          {7,9,11},
                          {13,15,17}};
-        assertTrue(Misc.inMatrix(array, 17));
-        assertFalse(Misc.inMatrix(array, 12));
+        assertTrue(ArrayManipulations.inMatrix(array, 17));
+        assertFalse(ArrayManipulations.inMatrix(array, 12));
 	}
 
 	@Test
@@ -236,20 +233,6 @@ public class ArrayManipulationsTestCase {
 		assertTrue(arrManip.areArraysEqual(arr1, arr2));
 		assertFalse(arrManip.areArraysEqual(arr1, arr3));
 		assertFalse(arrManip.areArraysEqual(arr4, arr5));		
-	}
-	
-	@Test
-	public void testArraysIntersection() {
-		int[] arr1 = new int[10];
-		int[] arr2 = new int[10];
-		Random intGenerator = new Random();
-		for (int i = 0; i < 10; i++) {
-		  	arr1[i] = intGenerator.nextInt(10) + 1;
-		  	arr2[i] = intGenerator.nextInt(10) + 1;
-		  	System.out.println(arr1[i] + " " + arr2[i]);
-		}		
-		
-		arrManip.arraysIntersections(arr1, arr2);
 	}
 	
 	@Test
@@ -285,19 +268,19 @@ public class ArrayManipulationsTestCase {
 	@Test 
 	public void testFindDuplicates1() {
 		int[] array = {0,3,1,3,2};
-		assertEquals(Misc.findDuplicates1(array), 3);
+		assertEquals(ArrayManipulations.findDuplicates1(array), 3);
 	}
 
 	@Test 
 	public void testFindFirstDuplicates() {
 		int[] array = {2,3,1,0,2,5,3};
-		assertEquals(Misc.findFirstDuplicate(array), 2);
+		assertEquals(ArrayManipulations.findFirstDuplicate(array), 2);
 	}
 
 	@Test
 	public void testEvensBeforeOdds() {
 		int[] array = new int[]{1, 5, 3, 4, 2};
-		Misc.evensBeforeOdds(array);
+		ArrayManipulations.evensBeforeOdds(array);
 		assertEquals(array[0], 2);
 		assertEquals(array[1], 4);
 		assertEquals(array[2], 3);
@@ -307,37 +290,53 @@ public class ArrayManipulationsTestCase {
 
 	@Test
 	public void testGetIntersection() {
+		System.out.println("testGetIntersection()");
 	    int[] a = {1, 4, 7, 10, 13};
 	    int[] b = {1, 3, 5, 7, 9};
 	    int[] c = {1, 4, 7, 10, 13};
-	    Misc.getIntersection(a, b); System.out.println();
-	    Misc.getIntersection(a, c); System.out.println();
+	    ArrayManipulations.getIntersection(a, b); System.out.println();
+	    ArrayManipulations.getIntersection(a, c); System.out.println();
 	}
 
 	@Test
+	public void testArraysIntersection() {
+		System.out.println("testArraysIntersection()");
+		int[] arr1 = new int[10];
+		int[] arr2 = new int[10];
+		Random intGenerator = new Random();
+		for (int i = 0; i < 10; i++) {
+		  	arr1[i] = intGenerator.nextInt(15) + 1;
+		  	arr2[i] = intGenerator.nextInt(15) + 1;
+		  	System.out.println(arr1[i] + " " + arr2[i]);
+		}		
+		
+		arrManip.arraysIntersections(arr1, arr2);
+	}
+	
+	@Test
 	public void testGreatestSumOfSubarrays() {
 	    int[] array =  {1, -2, 3, 10, -4, 7, 2,-5};
-	    assertEquals(Misc.greatestSumOfSubarrays(array), 18);		
+	    assertEquals(ArrayManipulations.greatestSumOfSubarrays(array), 18);		
 	}
 
 	@Test 
 	public void testIsSumOf2Numbers() {
 	    int[] array =  {1, 2, 4, 7, 11, 15};
-	    assertTrue(Misc.isSumOf2Numbers(array, 15));
-	    assertTrue(Misc.isSumOf2Numbers(array, 5));
-	    assertTrue(Misc.isSumOf2Numbers(array, 3));
-	    assertFalse(Misc.isSumOf2Numbers(array, 14));
+	    assertTrue(ArrayManipulations.isSumOf2Numbers(array, 15));
+	    assertTrue(ArrayManipulations.isSumOf2Numbers(array, 5));
+	    assertTrue(ArrayManipulations.isSumOf2Numbers(array, 3));
+	    assertFalse(ArrayManipulations.isSumOf2Numbers(array, 14));
 	}
 	
 	@Test
 	public void testIsSumOf3NumbersZero() {
-		assertFalse(Misc.isSumOf3NumbersZero(new int[]{1, 2, 4, 7, 11, 15}));
-		assertTrue(Misc.isSumOf3NumbersZero(new int[]{1, 2, 4, -6, 11, 15}));		
+		assertFalse(ArrayManipulations.isSumOf3NumbersZero(new int[]{1, 2, 4, 7, 11, 15}));
+		assertTrue(ArrayManipulations.isSumOf3NumbersZero(new int[]{1, 2, 4, -6, 11, 15}));		
 	}	
 
 	@Test
 	public void testPrintContinuousSequence() {
-	    Misc.printContinuousSequence(15);        	
+	    ArrayManipulations.printContinuousSequence(15);        	
 	}	
 		
 	/*

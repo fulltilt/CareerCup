@@ -1,7 +1,5 @@
 package arrays;
 
-import java.util.HashMap;
-
 public class ArrayManipulations {
     
     /* Write a method that when given a list, ensures that all consecutive repeated elements of the list are removed. The order of the elements should remain the same.
@@ -527,18 +525,18 @@ public class ArrayManipulations {
                    the difference exists in the hash table. If so, return true
     */  
     public boolean doesArraySumExists(int[] arr, int sum) {
-        HashMap<Integer, Integer> ht = new HashMap<Integer, Integer>();
+        boolean[] hashTable = new boolean[256];
         int tmp = 0, num1 = 0;
         boolean exists = false;
 
         for (int i = 0; i < arr.length; i++) {
-            ht.put(arr[i], arr[i]);
+            hashTable[i] = true;
         }
 
         for (int i = 0; i < arr.length; i++) {
             num1 = arr[i];
             tmp = sum - num1;
-            if((ht.get(tmp) != null) && (num1 != tmp)) {
+            if((hashTable[tmp] == true) && (num1 != tmp)) {
                 exists = true;
                 break;
             }
@@ -546,6 +544,8 @@ public class ArrayManipulations {
         
         return exists;
     }
+    
+    /***********************/
     
     /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate 
        -algorithm: 
@@ -562,22 +562,23 @@ public class ArrayManipulations {
         for (int i = 0; i < array.length - 1; i++)
             actualSum += i;
         
-        actualSum = ((array.length - 2) * (array.length - 1)) >> 1;
+        actualSum = ((array.length - 2) * (array.length - 1)) >> 1; // ((n - 2)(n - 1)) / 2
         return arraySum - actualSum;
     } 
     
     /***********************/
    
     /* CI6 - Duplicates in an Array ranging from 0 to n - 1, multiple duplicates 
-       -algorithm: 
+       -algorithm: iterate through array and for each element, set its respective bucket is true. If
+                   you find that the bucket is already true, we found the first duplicate
     */
     public static int findFirstDuplicate(int[] array) {
-        HashSet<Integer> hash = new HashSet<Integer>();
+        boolean[] hashTable = new boolean[256];
         for (int i = 0; i < array.length; i++) {
             if (array[i] < 0 || array[i] > array.length - 1)
                 throw new IllegalArgumentException("Number out of bounds!");
-            if (!hash.contains(array[i]))
-                hash.add(array[i]);
+            if (hashTable[array[i]] == false)
+                hashTable[array[i]] = true;
             else {
                 return array[i];
             }
@@ -615,7 +616,8 @@ public class ArrayManipulations {
     /***********************/
     
     /* CI71 - finds the intersection of two sorted arrays 
-       -algorithm: 
+       -algorithm: iterate through first array and for each element, do a binary search in second array
+       -note: O(n log n) but no extra space needed
     */
     public static void getIntersection(int[] array1, int[] array2) {        
         for (int i : array1) {
@@ -639,8 +641,30 @@ public class ArrayManipulations {
             
         }
     }
-    
-    /***********************/
+  
+    /* Find what elements intersect between two arrays
+    -algorithm: iterate through one of the arrays and enter each element into an int hash table
+                and increment for each instance. Iterate through the second array and if the bucket
+                is greater than 0, print out the value and then decrement the bucket
+                note: O(n) but requires extra space
+     */  
+     public void arraysIntersections(int[] arr1, int[] arr2) {
+         // setup HashMap for the first array. Create a running count for each value
+        int[] hashTable = new int[256];
+         for (int i = 0; i < arr1.length; i++)
+             ++hashTable[arr1[i]];
+         
+         // check for intersection
+         System.out.println("Checking for interesecting elements...");
+         for (int i = 0; i < arr2.length; i++) {
+             if (hashTable[arr2[i]] > 0) {
+                 System.out.print(arr2[i] + " ");
+                 --hashTable[arr2[i]];
+             }
+         }       
+     }
+     
+     /***********************/    
     
     /* CI72 - greatest sum of consecutive subarrays 
        -algorithm: 
@@ -913,39 +937,6 @@ public class ArrayManipulations {
         }
 
         System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);      
-    }
-    
-    /***********************/
-
-    /* ???
-       -algorithm: 
-    */  
-    public void arraysIntersections(int[] arr1, int[] arr2) {
-        // setup HashMap for the first array. Create a running count for each value
-        HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
-        for (int i = 0; i < arr1.length; i++) {
-            if (!hashMap.containsKey(arr1[i]))
-                hashMap.put(arr1[i], 1);
-            else {
-                int total = hashMap.get(arr1[i]);
-                hashMap.put(arr1[i], ++total);
-            }
-        }
-        
-        // check for intersection
-        System.out.println("Checking for interesecting elements...");
-        for (int i = 0; i < arr2.length; i++) {
-            if (hashMap.containsKey(arr2[i])) {
-                int total = hashMap.get(arr2[i]) - 1; // subtract 1 from the value of the key
-                System.out.print(arr2[i] + " ");
-
-                if (total == 0)
-                    hashMap.remove(arr2[i]);
-                else
-                    hashMap.put(arr2[i], total);
-            }
-        }       
-        System.out.println();
     }
     
     /***********************/
