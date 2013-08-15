@@ -393,7 +393,46 @@ public class ArrayManipulations {
         return false;
     }
 
-    /***********************/
+    /* CI7 - check whether # is in matrix or not 
+       -algorithm: 
+    */
+    public static boolean inMatrix(int[][] array, int value) {
+        // find the proper row to search
+        int row = 0;
+        boolean result = false;
+        for (row = 0; row < array.length; row++) { // for multidimensional arrays, length is the # of rows
+            int rowLength = array[row].length;
+            if (array[row][rowLength - 1] >= value) {
+                // use binary search to find value (assumption is that the rows are in order)
+                
+                // using built-in binary search
+                //int index = Arrays.binarySearch(array[row], searchValue);
+                //boolean result = index > -1 ? true : false;
+                
+                // manual binary search
+                int start = 0;
+                int end = rowLength - 1;
+                
+                while (start <= end) {
+                    int middle = (start + end) / 2;
+                    int temp = array[row][middle];
+                    if (value == temp) {
+                        result = true;
+                        break;
+                    }
+                    
+                    if (value < temp) 
+                        end = middle - 1;
+                    else
+                        start = middle + 1;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    /***********************/     
 
     /* Find the # of negative elements in a sorted array (from negative to positive).
        -algorithm: Keep iterating through each row while the current rows last index is negative and add to the count the length of the
@@ -508,7 +547,212 @@ public class ArrayManipulations {
         return exists;
     }
     
+    /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate 
+       -algorithm: 
+    */
+    public static int findDuplicates1(int[] array) {    // assumes a valid array is passed in
+        if (array == null || array.length < 2)
+            return Integer.MIN_VALUE;
+        
+        int arraySum = 0;
+        int actualSum = 0;
+        for (int i = 0; i < array.length; i++) 
+            arraySum += array[i];
+        
+        for (int i = 0; i < array.length - 1; i++)
+            actualSum += i;
+        
+        actualSum = ((array.length - 2) * (array.length - 1)) >> 1;
+        return arraySum - actualSum;
+    } 
+    
     /***********************/
+   
+    /* CI6 - Duplicates in an Array ranging from 0 to n - 1, multiple duplicates 
+       -algorithm: 
+    */
+    public static int findFirstDuplicate(int[] array) {
+        HashSet<Integer> hash = new HashSet<Integer>();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] < 0 || array[i] > array.length - 1)
+                throw new IllegalArgumentException("Number out of bounds!");
+            if (!hash.contains(array[i]))
+                hash.add(array[i]);
+            else {
+                return array[i];
+            }
+        }
+        
+        return Integer.MIN_VALUE;
+    }
+    
+    /***********************/ 
+    
+    /* CI45 - Place even numbers before odd numbers. Order of numbers doesn't matter 
+       -algorithm: Using strategy similar to the partition function for quicksort, swap evens and odds 
+    */
+    public static void evensBeforeOdds(int[] array) {
+        int start = 0;
+        int end = array.length - 1;
+        
+        while (true) {
+            while (array[start] % 2 == 0)
+                ++start;
+                
+            while (array[end] % 2 == 1)
+                --end;
+                
+            if (end > start) {    // check in the middle to determine when to break out of the loop
+                int temp = array[end];
+                array[end] = array[start];
+                array[start] = temp;
+            } else {
+                break;
+            }
+        }
+    }
+    
+    /***********************/
+    
+    /* CI71 - finds the intersection of two sorted arrays 
+       -algorithm: 
+    */
+    public static void getIntersection(int[] array1, int[] array2) {        
+        for (int i : array1) {
+            int start = 0;
+            int end = array2.length - 1;
+            
+            // manual binary search
+            while (start <= end) {
+                int middle = (start + end) / 2;
+                int currentValue = array2[middle];
+                if (currentValue == i) {
+                    System.out.print(i + " ");
+                    break;
+                }
+                    
+                if (i > currentValue)
+                    start = middle + 1;
+                else
+                    end = middle - 1;
+            }
+            
+        }
+    }
+    
+    /***********************/
+    
+    /* CI72 - greatest sum of consecutive subarrays 
+       -algorithm: 
+    */
+    public static int greatestSumOfSubarrays(int[] array) {       
+        // keep on adding #'s but whenever the sum is less than zero, restart at zero
+        int max = 0;
+        int currentSum = 0;
+        
+        for (int i : array) {
+            currentSum += i;
+            if (currentSum > max)
+                max = currentSum;
+                
+            if (currentSum < 0)
+                currentSum = 0;
+        }
+        
+        return max;
+    }
+    
+    /***********************/
+    
+    /* CI87 - is sum of 2 numbers in an array equal to k 
+       -algorithm: 
+    */    
+    public static boolean isSumOf2Numbers(int[] array, int k) {
+        int start = 0;
+        int end = array.length - 1;
+        
+        while (start < end) {
+            int sum = array[start] + array[end];
+            if (sum == k)
+                return true;
+            else if (sum > k)
+                --end;
+            else
+                ++start;
+        }
+        
+        return false;
+    }
+    
+    /***********************/
+    
+    /* CI88 - check whether it contains three numbers whose sum equals 0 
+       -algorithm:
+    */
+    public static boolean isSumOf3NumbersZero(int[] array) {        
+        if (array.length < 3)
+            throw new IllegalArgumentException("not enough numbers!");
+            
+        for (int i = 0; i < array.length; i++) {
+            if (isSumOf2Numbers2(array, -array[i], i))
+                return true;
+        }
+        
+        return false;
+    }
+
+    /*
+       -algorithm:
+    */    
+    private static boolean isSumOf2Numbers2(int[] array, int k, int index) {
+        int start = 0;
+        int end = array.length - 1;
+        
+        while (start < end) {
+            int sum = array[start] + array[end];
+            if (sum == k)
+                return true;
+            else if (sum > k) {
+                --end;
+                if (end == index)
+                    --end;
+            } else {
+                ++start;
+                if (start == index)
+                    ++start;
+            }
+        }
+        
+        return false;
+    }       
+    
+    /***********************/
+ 
+    /* CI90 - Given a positive value s, print all sequences with continuous numbers (with two numbers at least) whose sum is s 
+       -algorithm:
+    */
+    public static void printContinuousSequence(int s) {        
+        int startNumber = 1;
+        int sum = startNumber;
+        int currentNumber = startNumber + 1;;
+        while (startNumber < s) {
+            sum += currentNumber;
+            if (sum < s) {
+                ++currentNumber;
+            } else if (sum > s) {
+                ++startNumber;
+                sum = startNumber;
+                currentNumber = startNumber + 1;
+            } else {
+                System.out.println(startNumber + "~" + currentNumber);
+                ++startNumber;
+                sum = startNumber;
+                currentNumber = startNumber + 1;
+            }
+        }
+    }
+    
+    /***********************/    
 
     /* Create largest int from array of ints (THIS IS LIKELY WRONG)
        -algorithm:  

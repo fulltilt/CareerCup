@@ -210,6 +210,15 @@ public class ArrayManipulationsTestCase {
 	}
 
 	@Test
+	public void testInMatrix() {
+        int[][] array = {{1,3,5},
+                         {7,9,11},
+                         {13,15,17}};
+        assertTrue(Misc.inMatrix(array, 17));
+        assertFalse(Misc.inMatrix(array, 12));
+	}
+
+	@Test
 	public void testCountNegativeElemsIn2DArray() {
 		int[][] a1 = new int[][]{{-12,-11,-10,-9,-8},{-7,-6,-5,-4,-3},{-2,-1,0,1,2},{3,4,5,6,7},{8,9,10,11,12}};
 
@@ -273,6 +282,64 @@ public class ArrayManipulationsTestCase {
 		assertEquals("9791", arrManip.createLargestInt(arr));
 	}
 	
+	@Test 
+	public void testFindDuplicates1() {
+		int[] array = {0,3,1,3,2};
+		assertEquals(Misc.findDuplicates1(array), 3);
+	}
+
+	@Test 
+	public void testFindFirstDuplicates() {
+		int[] array = {2,3,1,0,2,5,3};
+		assertEquals(Misc.findFirstDuplicate(array), 2);
+	}
+
+	@Test
+	public void testEvensBeforeOdds() {
+		int[] array = new int[]{1, 5, 3, 4, 2};
+		Misc.evensBeforeOdds(array);
+		assertEquals(array[0], 2);
+		assertEquals(array[1], 4);
+		assertEquals(array[2], 3);
+		assertEquals(array[3], 5);
+		assertEquals(array[4], 1);
+	}
+
+	@Test
+	public void testGetIntersection() {
+	    int[] a = {1, 4, 7, 10, 13};
+	    int[] b = {1, 3, 5, 7, 9};
+	    int[] c = {1, 4, 7, 10, 13};
+	    Misc.getIntersection(a, b); System.out.println();
+	    Misc.getIntersection(a, c); System.out.println();
+	}
+
+	@Test
+	public void testGreatestSumOfSubarrays() {
+	    int[] array =  {1, -2, 3, 10, -4, 7, 2,-5};
+	    assertEquals(Misc.greatestSumOfSubarrays(array), 18);		
+	}
+
+	@Test 
+	public void testIsSumOf2Numbers() {
+	    int[] array =  {1, 2, 4, 7, 11, 15};
+	    assertTrue(Misc.isSumOf2Numbers(array, 15));
+	    assertTrue(Misc.isSumOf2Numbers(array, 5));
+	    assertTrue(Misc.isSumOf2Numbers(array, 3));
+	    assertFalse(Misc.isSumOf2Numbers(array, 14));
+	}
+	
+	@Test
+	public void testIsSumOf3NumbersZero() {
+		assertFalse(Misc.isSumOf3NumbersZero(new int[]{1, 2, 4, 7, 11, 15}));
+		assertTrue(Misc.isSumOf3NumbersZero(new int[]{1, 2, 4, -6, 11, 15}));		
+	}	
+
+	@Test
+	public void testPrintContinuousSequence() {
+	    Misc.printContinuousSequence(15);        	
+	}	
+		
 	/*
 	@Test
 	public void testFindElementInRotatedArray() {
