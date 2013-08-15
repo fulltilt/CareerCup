@@ -519,33 +519,6 @@ public class ArrayManipulations {
     }
     
     /***********************/
-
-    /* Find if there exists 2 integers in an array (can't be the same index) that equals a value
-       -algorithm: put all ints into a hash table. Iterate through array again and subtract each number from value and check if
-                   the difference exists in the hash table. If so, return true
-    */  
-    public boolean doesArraySumExists(int[] arr, int sum) {
-        boolean[] hashTable = new boolean[256];
-        int tmp = 0, num1 = 0;
-        boolean exists = false;
-
-        for (int i = 0; i < arr.length; i++) {
-            hashTable[i] = true;
-        }
-
-        for (int i = 0; i < arr.length; i++) {
-            num1 = arr[i];
-            tmp = sum - num1;
-            if((hashTable[tmp] == true) && (num1 != tmp)) {
-                exists = true;
-                break;
-            }
-        }       
-        
-        return exists;
-    }
-    
-    /***********************/
     
     /* CI5 - Duplicates in an Array ranging from 0 to n - 2, one duplicate 
        -algorithm: 
@@ -667,10 +640,12 @@ public class ArrayManipulations {
      /***********************/    
     
     /* CI72 - greatest sum of consecutive subarrays 
-       -algorithm: 
+       -algorithm: keep on adding #'s but whenever the sum is less than zero, restart at zero. The logic
+                   being that if you are in the negative, if you start all over, you'll be at zero
+                   which is always greater than any negative value. Do this all while keeping track
+                   of the max sum
     */
     public static int greatestSumOfSubarrays(int[] array) {       
-        // keep on adding #'s but whenever the sum is less than zero, restart at zero
         int max = 0;
         int currentSum = 0;
         
@@ -689,7 +664,13 @@ public class ArrayManipulations {
     /***********************/
     
     /* CI87 - is sum of 2 numbers in an array equal to k 
-       -algorithm: 
+       -algorithm: First the array should be sorted. Next, add the first and last indices. If it's 
+                   greater than k, keep decrementing the last index since each index should be less
+                   than the current last. Keep repeating until we get a value <= k. If the sum was 
+                   less than k, we should keep incrementing the start index until we get a value 
+                   >= k as each index will be greater than the last. Keep repeating this process
+                   until we found 2 values that equal k or start >= end.
+                   note: O(n) and doesn't need any extra space
     */    
     public static boolean isSumOf2Numbers(int[] array, int k) {
         int start = 0;
@@ -707,11 +688,40 @@ public class ArrayManipulations {
         
         return false;
     }
+  
+    /* Find if there exists 2 integers in an array (can't be the same index) that equals a value
+    -algorithm: put all ints into a hash table. Iterate through array again and subtract each number from value and check if
+                the difference exists in the hash table. If so, return true
+                O(n) but needs extra space unlike the solution above
+     */  
+     public boolean doesArraySumExists(int[] arr, int sum) {
+         boolean[] hashTable = new boolean[256];
+         int tmp = 0, num1 = 0;
+         boolean exists = false;
     
-    /***********************/
+         for (int i = 0; i < arr.length; i++) {
+            hashTable[i] = true;
+         }
     
-    /* CI88 - check whether it contains three numbers whose sum equals 0 
-       -algorithm:
+         for (int i = 0; i < arr.length; i++) {
+             num1 = arr[i];
+             tmp = sum - num1;
+             if((hashTable[tmp] == true) && (num1 != tmp)) {
+                 exists = true;
+                 break;
+             }
+         }       
+         
+         return exists;
+     }
+ 
+     /***********************/
+    
+    /* CI88 - check whether array contains three numbers whose sum equals 0 
+       -algorithm: logic is similar to above but with tweaks. We pass in the array and k will be the
+                   negative value of the current index. We also pass a new third parameter which is
+                   the index in question so the modified isSumof2Numbers skips that index when finding
+                   two values that equals the negative of the current index
     */
     public static boolean isSumOf3NumbersZero(int[] array) {        
         if (array.length < 3)
@@ -724,10 +734,7 @@ public class ArrayManipulations {
         
         return false;
     }
-
-    /*
-       -algorithm:
-    */    
+    // exactly like isSumOf2Numbers but takes into account an index that is skipped from the search
     private static boolean isSumOf2Numbers2(int[] array, int k, int index) {
         int start = 0;
         int end = array.length - 1;
@@ -752,13 +759,20 @@ public class ArrayManipulations {
     
     /***********************/
  
-    /* CI90 - Given a positive value s, print all sequences with continuous numbers (with two numbers at least) whose sum is s 
-       -algorithm:
+    /* CI90 - Given a positive value s, print all sequences with continuous numbers (with two numbers at least) 
+     *        whose sum is s. The numbers are less than s. 
+       -algorithm: Since we need at least 2 numbers, we only have to iterate through half of the numbers 
+                   (since (s / 2) + ((s / 2) + 1) is always greater than s). Have two pointers: one that points
+                   to the start of the potential list and a second pointer that starts right after start.
+                   Keep iterating and comparing the cumulative sums to s. While it's less than s, keep incrementing
+                   the fast #. If it's greater than s, increment start and set fast to be start + 1. Else,
+                   we have a range so print start and fast and increment start by 1, fast to start + 1 and
+                   set the cumulative sum to be equal to start  
     */
     public static void printContinuousSequence(int s) {        
         int startNumber = 1;
         int sum = startNumber;
-        int currentNumber = startNumber + 1;;
+        int currentNumber = startNumber + 1;
         while (startNumber < s) {
             sum += currentNumber;
             if (sum < s) {
