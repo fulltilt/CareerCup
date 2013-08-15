@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Misc {
 
-    /* Non-recursive binary search on an array
+    /* Recursive binary search on an array
        -algorithm: 
     */    
     public static boolean binarySearch(int[] array, int start, int end, int value) {
@@ -24,19 +24,12 @@ public class Misc {
     /***********************/
     
     /* Non-recursive fxn to find nth fibonacci 
-       -algorithm: 
+       -algorithm: Fibonacci revolves on the values of the previous 2 #'s so create two variables that refer to them. The very
+                   first 2 numbers in the sequence is 0 and 1 so set those variables to each value respectively. In a for loop that
+                   starts at 1, the next number in the sequence is the sum of the previous 2 variables. Once this is done, set the 
+                   second to last variable to be the last variable and set the last variable to be the sum
     */    
-    public static int fibonacci(int n) {    // non-recursive
-/*
- *     System.out.println(fibonacci(0));
-       System.out.println(fibonacci(1));
-       System.out.println(fibonacci(2));
-       System.out.println(fibonacci(3));
-       System.out.println(fibonacci(4));
-       System.out.println(fibonacci(5));
-       System.out.println(fibonacci(6));
-       System.out.println(fibonacci(7));
- */        
+    public static int fibonacci(int n) {    // non-recursive        
         if (n == 0)
             return 0;
         if (n == 1)
@@ -136,123 +129,7 @@ public class Misc {
         return result;
     }
     
-    /***********************/
-    
-    /* CI10 - merging sorted arrays (following deals with arrays of all types of lengths) 
-       -algorithm: 
-    */ 
-    public static int[] mergeSortedArrays(int[] array1, int[] array2) {
-        int[] array3 = new int[array1.length + array2.length];
-        
-        int index1 = 0;
-        int index2 = 0;
-        int indexMerged = 0;
-
-        while(index1 < array1.length && index2 < array2.length) { 
-            if(array1[index1] <= array2[index2]) 
-                array3[indexMerged++] = array1[index1++]; 
-            else 
-                array3[indexMerged++] = array2[index2++]; 
-        } 
-         
-        // deal with reminder once one of the arrays is empty
-        while (index1 < array1.length)
-            array3[indexMerged++] = array1[index1++];
-        while (index2 < array2.length)
-            array3[indexMerged++] = array2[index2++];
-        
-        return array3;
-        
-        /* from right to left (good when you have to append to the first array so you don't have
-         * to worry about shifting right all the time
-        int[] array1 = {1,3,5,7,9};
-        int[] array2 = {2,4,6,8,10};
-        int[] array3 = new int[array1.length + array2.length];
-        
-        int index1 = array1.length - 1;
-        int index2 = array2.length - 1;
-        int indexMerged = array3.length - 1;
-
-        while(index1 >= 0 && index2 >= 0) { 
-            if(array1[index1] >= array2[index2]) 
-                array3[indexMerged--] = array1[index1--]; 
-            else 
-                array3[indexMerged--] = array2[index2--]; 
-        } 
-         
-        // deal with reminder once one of the arrays is empty
-        while (index1 >= 0)
-            array3[indexMerged--] = array1[index1--];
-        while (index2 >= 0)
-            array3[indexMerged--] = array2[index2--];
-            
-        for (int i = 0; i < array3.length; i++)
-            System.out.println(array3[i]);        
-        */    
-    }
-    
-    /***********************/
-  
-    /* CI27 - Minimum of rotated array 
-       -algorithm: 
-    */
-    public static int getMinimumOfRotatedArray(int[] array) {
-       //Have two pointers, one at the start and the other at the end. Get the middle element. If it's bigger than 'start', start-middle is in
-       // the bigger part of the array so we can discard that. If it's smaller than end, middle-end is in the lower half so discard that end.
-       // Keep repeating this process until we both pointers are next to each other.
-       // NOTE: this doesn't work 100% of the time when there are duplicates. If that's the case, we resort to a O(n) sequential search
-       
-       int start = 0;
-       int end = array.length - 1;
-       int middle = (start + end) / 2;
-       
-        while (true) {
-            if (array[middle] > array[start]) {
-                start = middle;
-            } else {
-                end = middle;
-            }
-            
-            if (start + 1 == end)
-                return array[end];
-            middle = (start + end) / 2;
-        }
-    }
-    
-    /***********************/
-  
-    /* CI28 - get turning point 
-       -algorithm: 
-    */
-    public static int getTurningPointIndex(int[] array) {
-        /*
-         * We set a pointer to the start and end of the array. We get the middle element. If the element is greater than the previous index and less
-         * than the next index, we have the turning point. Else if the element is greater than the previous but smaller than the next, discard everything
-         * to the left of middle. Else if the element is less than the prevous but greater than next, discard everything to the right of middle.
-         * NOTE: elements are unique so it's not like 1,2,3,4,5,4,3,2,1
-         */
-       if (array.length == 0)
-           throw new IllegalArgumentException("Array length is zero!");
-       if (array.length == 1 || array.length == 2)
-           return 0;
-           
-       int start = 0;
-       int end = array.length - 1;
-       int middle = (start + end) / 2;
-       
-       while (true) {
-           if (array[middle - 1] < array[middle] && array[middle] > array[middle + 1])
-               return middle;
-           else if (array[middle - 1] < array[middle] && array[middle] < array[middle + 1]) // we're in ascending part of array
-               start = middle;
-           else // we're in descending part of array
-               end = middle;
-           
-           middle = (start + end) / 2;
-        }
-    }
-    
-    /***********************/
+    /***********************/  
 
     /* CI40 - Write a power function 
        -algorithm: 

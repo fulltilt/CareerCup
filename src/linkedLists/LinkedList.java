@@ -209,6 +209,45 @@ public class LinkedList {
 	}
 /*************************************************************/
 
+	/* Get index of the middle Node
+	   -algorithm: have 2 pointers: one that moves one step at a time and the other that moves 2 steps
+	               at a time. Both move at the same time. Once the faster node's next node or next.next node
+	               is null, wherever the slow node is currently is the middle Node
+	*/
+	public int getMidpoint() {
+		if (head == null)		// list is empty
+			return -1;
+
+		Node slow, fast;
+		slow = fast = head;
+		int position = 0;
+
+		while (fast.next != null && fast.next.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+
+			++position;
+		}
+
+		return position;
+	}
+
+	public Node getMidpoint(Node head) {
+		if (head == null)		// list is empty
+			return null;
+
+		Node slow, fast;
+		slow = fast = head;
+
+	    while(fast.next != null && fast.next.next != null) {
+	        slow = slow.next;
+	        fast = fast.next.next;
+	    }
+	    return slow;
+	}
+
+	/*************************************************************/
+	
 	/* Determine if a list has a loop
 	   -algorithm: have 2 pointers: 1 that iterates one a time and another that iterates 2 steps at a time. If there is a loop,
 	               the fast pointer will meet up with the slow pointer. If not, each pointer will hit a null value which means
@@ -272,7 +311,7 @@ public class LinkedList {
 	   -algorithm:  
 	*/
 	public Node getHeadOfLoop() {	
-
+		return null;
 	}
 	
 	/*************************************************************/
@@ -281,6 +320,7 @@ public class LinkedList {
        -algorithm: have 2 pointers: 1st pointer will iterate k steps from head. Once this is reached, have a 2nd pointer
                    that starts from the head and have both pointers advance at the same time until the leading node is null.
 				   The trailing node will be k elements from the end
+		Note: when k == 1, what should return is the tail. k cannot be zero
     */
 	public Node getKthNodeFromTail(int k) {
 	    if (k > size())
@@ -288,7 +328,7 @@ public class LinkedList {
 	    if (k == 0)
 	        throw new IllegalArgumentException("k cannot be zero");
 	        
-	    int steps = k - 1;
+	    int steps = k - 1;	// the 'minus one' is to account for k not being zero indexed
 	    Node leadingNode = head;
 	    while (steps != 0) {
 	        leadingNode = leadingNode.next;
@@ -301,11 +341,10 @@ public class LinkedList {
 	        leadingNode = leadingNode.next;
 	    }
 	    
-	    System.out.println(trailingNode.value);
-	    
 	    return trailingNode;
 	}
 
+	// similar to above but uses a for loop when advancing the first pointer (apparently this version IS zero-indexed
 	public Node getNthToLastElement(int n) {
 		Node NthElement = head;
 		Node NthElementFromLast = head;
@@ -323,46 +362,40 @@ public class LinkedList {
 
     /*************************************************************/
 
-    /*
-       -algorithm: 
+    /* Swaps the kth elements from the beginning and the end
+       -algorithm: call kthElementNodeFromTail to get the kth-to-last Node and iterate k - 1 steps to get
+                   the kthElementFromStart. Swap values
+       note: just like kthElementFromTheEnd, indices are NOT zero-indexed 
+       note: a good but annoying exercise would be to swap the actual Node's as you would have to 
+             keep track of the previous Node's, have to handle the condition when the Node is head/tail,
+             Node's end up being the same
     */	
-	public void swapKthElements(int position) {
-		if (isCircular() || position >= size) {
-			System.out.println("LIST IS OF LESSER SIZE!");
-			return;
-		}
+	public void swapKthElementsFromBeginningAndEnd(int position) {
+		if (position > size) 
+			throw new IllegalArgumentException("k cannot be greater than the size of the List!");
+		
+		Node kthElementFromStart = head;
+		
+		// get the kth element from the start
+		for (int i = 1; i < position; i++)  // start i at 1 since k is not zero-indexed
+			kthElementFromStart = kthElementFromStart.next;
+		
+		// get the kth element from the end
+		Node kthElementFromEnd = getKthNodeFromTail(position);
 
-		Node node1 = head;
-		Node node2 = head;
-		Node helper = head;
-
-		for (int i = 0; i < position; i++) {
-			node1 = node1.next;
-			helper = helper.next;
-		}
-
-		// iterate helper pointer until it's null and keep a count
-		int distanceFromNode1ToEnd = 0;
-		while (helper != null) {
-			helper = helper.next;
-			++distanceFromNode1ToEnd;
-		}
-		--distanceFromNode1ToEnd;	// this accounts for when the loop goes one extra step for the null value
-									// note: might be able to take this line out by making the while conditional: (helper.next != null)
-
-		// iterate node2 to the position that is 'position' elements from end
-		for (int i = 0; i < distanceFromNode1ToEnd; i++)
-			node2 = node2.next;
-
-		int temp = node1.value;
-		node1.value = node2.value;
-		node2.value = temp;
+		// not: use this if we're allowed to swap only the values and not the Node's themselves
+		int temp = kthElementFromEnd.value;
+		kthElementFromEnd.value = kthElementFromStart.value;
+		kthElementFromStart.value = temp;
 	}
 
 	/*************************************************************/
 	
     /* CI82 - intersection of 2 lists 
-       -algorithm: 
+       -algorithm: Get the each List's respective lengths (O(n + m)). Subtract the shorter List's length
+                   from the longer List's length and iterate the longer List by the difference. Now we
+                   can iterate both List's in lockstep and once we found the intersection once both
+                   of the current List's Nodes are equal to one another
     */
     public static Node intersectionOf2Lists(LinkedList list, LinkedList list2) {           
         if (list == null || list2 == null || list.size() == 0 || list2.size() == 0)
@@ -373,6 +406,7 @@ public class LinkedList {
         Node list1Node = list.getHead();
         Node list2Node = list2.getHead();
        
+        // advance the longer List by the difference of the lengths so the each List's length will technically be the same
         if (list1Length >= list2Length) {
             for (int i = 0; i < list1Length - list2Length; i++)
                 list1Node = list1Node.next;
@@ -395,54 +429,58 @@ public class LinkedList {
     /*************************************************************/
 
 	/* Reverse a List
-	   -algorithm: 
+	   -algorithm: have 2 pointers: one that points to the previous pointer (initially set to null) and
+	               a current pointer (initially set to head). Iterate through the list a set currents next
+	               to previous. Update each respective pointer. Do this until current is null. You will
+	               need a temporary pointer to current's next since you will be updating this to previous.
+	               After the loop, the previous node points to the new head so set head to this
 	*/
 	public void reverseList() {
-		Node previousNode = null;
-		Node currentNode = head;
-		Node nextNode = head.next;
-
-		while (nextNode != null) {
-			currentNode.next = previousNode;
-			previousNode = currentNode;
-			currentNode = nextNode;
-			nextNode = nextNode.next;
-
-			if (nextNode == null)		// this step needed on the very last iteration
-				currentNode.next = previousNode;
+		Node previous = null;
+		Node current = head;
+		
+		while (current != null) {
+			Node temp = current.next;
+			current.next = previous;
+			previous = current;
+			current = temp;
 		}
-
-		head = currentNode;		// make sure head points to the correct element
-		// ** because of the above line, it probably explains the weirdness that is happening
-
-/* version 2
-        ListNode<Integer> previousNode = list.getHead();
-        ListNode<Integer> currentNode = previousNode.next;
-        ListNode<Integer> helperNode = currentNode.next;
-        previousNode.next = null; // step we have to do for the initial 2 nodes since the first node's next is null
-        
-        while (helperNode != null) {
-            currentNode.next = previousNode;
-            
-            previousNode = currentNode;
-            currentNode = helperNode;
-            helperNode = currentNode.next;
-        }
-        currentNode.next = previousNode;
-        list.head = currentNode;
-        list.print();		
- */
+		
+		head = previous;
 	}
 	
+	/* Reverse a List passed to it starting at the Node given. This can reverse in the middle of the List which
+	 * effectively splits the List. Because of this the head pointer isn't taken into account
+	 * -algorithm: same as reverseList() above
+	 */
+	public static Node reverseList(Node node) {
+		Node previousNode = null;
+		Node currentNode = node;
+		
+		while (currentNode != null) {
+			Node temp = currentNode.next;
+			currentNode.next = previousNode;
+			previousNode = currentNode;
+			currentNode = temp;
+		}
+		
+		return previousNode;
+	}
+		
+	/* Recursively reverse a List
+	 * -algorithm: the trick is to start from the end of the list by recursively calling the fxn 
+	 *             before setting the currentNode's next to the previous Node. This allows us to
+	 *             avoid creating a temporary variable as above
+	 */
 	public void recursiveReverseList() { recursiveReverseList(null, head); }
-	private void recursiveReverseList(Node current1, Node current2) {
-		if (current2 == null) {
-			head = current1;
+	private void recursiveReverseList(Node previousNode, Node currentNode) {
+		if (currentNode == null) {
+			head = previousNode;
 			return;
 		}
 
-		recursiveReverseList(current2, current2.next);
-		current2.next = current1;
+		recursiveReverseList(currentNode, currentNode.next);
+		currentNode.next = previousNode;
 	}
 
 	/*************************************************************/
@@ -456,44 +494,6 @@ public class LinkedList {
 			recursiveReversePrint(node.next);
 			System.out.print(node.value + " ");
 		}
-	}
-
-	/*************************************************************/
-
-	/* keep reference to n1 only if you want to get the Node that is in the middle
-	   -algorithm: 
-	*/
-	public int getMidpoint() {
-		if (head == null)		// list is empty
-			return -1;
-
-		Node slow, fast;
-		slow = fast = head;
-		int position = 0;
-
-		while (fast.next != null && fast.next.next != null) {
-			slow = slow.next;
-			fast = fast.next.next;
-
-			++position;
-		}
-
-		return position;
-	}
-
-	public Node getMidpoint(Node head) {
-		if (head == null)		// list is empty
-			return head;
-
-		Node slow, fast;
-		slow = fast = head;
-
-	    while(fast.next != null && fast.next.next != null) {
-	        slow = slow.next;
-	        fast = fast.next.next;
-	    }
-	    return slow;
-
 	}
 
 	/*************************************************************/
@@ -533,42 +533,6 @@ public class LinkedList {
 	    }
 	    curr.next = (a == null) ? b : a;
 	    return dummyHead.next;
-	}
-
-	/*************************************************************/
-
-    /* 
-       -algorithm: 
-    */
-	public Node findConvergenceOfTwoLists(LinkedList otherList) {
-		int list1Length = this.size();
-		int list2Length = otherList.size();
-		Node longerListNode, shorterListNode;
-		int positionsToIterate = 0;
-
-		// find how many positions to iterate the longer List to match up to the shorter List
-		if (list1Length >= list2Length) {
-			longerListNode = head;
-			shorterListNode = otherList.getNodeByIndex(0);
-			positionsToIterate = list1Length - list2Length;
-		} else {
-			longerListNode = otherList.getNodeByIndex(0);
-			shorterListNode = head;
-			positionsToIterate = list2Length - list1Length;
-		}
-
-		for (int i = 0; i < positionsToIterate; i++)	// position longer List to match shorter List
-			longerListNode = longerListNode.next;
-
-		while (longerListNode != null) {
-			if (longerListNode == shorterListNode)
-				return longerListNode;
-
-			longerListNode = longerListNode.next;
-			shorterListNode = shorterListNode.next;
-		}
-
-		return null;
 	}
 
 	/*************************************************************/

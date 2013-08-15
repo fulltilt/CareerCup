@@ -439,20 +439,6 @@ public class ArrayManipulations {
 
     /*
        -algorithm: 
-    */  
-    public void generateThirdArray(int[] input, int[] index, int[] result) {
-        int product = 1;
-        for (int i = 0; i < input.length; i++)
-            product *= input[i];
-
-        for (int i = 0; i < result.length; i++)
-            result[i] = product / input[index[i]];  
-    }
-
-    /***********************/
-
-    /*
-       -algorithm: 
     */
     public boolean areArraysEqual(int[] arr1, int[] arr2) {
         // check to see if the # of elements are the same
@@ -497,41 +483,9 @@ public class ArrayManipulations {
     
     /***********************/
 
-    /*
-       -algorithm: 
-    */  
-    public void arraysIntersections(int[] arr1, int[] arr2) {
-        // setup HashMap for the first array. Create a running count for each value
-        HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
-        for (int i = 0; i < arr1.length; i++) {
-            if (!hashMap.containsKey(arr1[i]))
-                hashMap.put(arr1[i], 1);
-            else {
-                int total = hashMap.get(arr1[i]);
-                hashMap.put(arr1[i], ++total);
-            }
-        }
-        
-        // check for intersection
-        System.out.println("Checking for interesecting elements...");
-        for (int i = 0; i < arr2.length; i++) {
-            if (hashMap.containsKey(arr2[i])) {
-                int total = hashMap.get(arr2[i]) - 1; // subtract 1 from the value of the key
-                System.out.print(arr2[i] + " ");
-
-                if (total == 0)
-                    hashMap.remove(arr2[i]);
-                else
-                    hashMap.put(arr2[i], total);
-            }
-        }       
-        System.out.println();
-    }
-    
-    /***********************/
-
-    /*
-       -algorithm: 
+    /* Find if there exists 2 integers in an array (can't be the same index) that equals a value
+       -algorithm: put all ints into a hash table. Iterate through array again and subtract each number from value and check if
+                   the difference exists in the hash table. If so, return true
     */  
     public boolean doesArraySumExists(int[] arr, int sum) {
         HashMap<Integer, Integer> ht = new HashMap<Integer, Integer>();
@@ -556,40 +510,7 @@ public class ArrayManipulations {
     
     /***********************/
 
-    /* 
-       note: doesn't work for duplicate values in array2 since I use a HashSet
-    */
-    public void findConsecutiveIndex(int[] arr1, int[] arr2) {
-        int array2Length = arr2.length;
-        int startIndex = -1, endIndex = -1;
-        int XORValue = 0;
-
-        // put arr2 into a HashSet (because of this, duplicates in array2 wouldn't work for this algorithm) and find the XOR'd value
-        java.util.HashSet<Integer> hashSet = new java.util.HashSet<Integer>();
-        for (int i : arr2) {
-            hashSet.add(i);
-            XORValue ^= i;
-        }
-
-//note: it seems I may have hardcoded array indices. Will have to change that if that is the case
-        for (int i = 0; i < arr1.length; i++) {
-            if (hashSet.contains(arr1[i])) {
-                if (i + array2Length < arr1.length) {
-                    if (((arr1[i] ^ arr1[i + 1] ^ arr1[i + 2] ^ arr1[i + 3] ^ arr1[i + 4]) ^ XORValue) == 0) {
-                        startIndex = i;
-                        endIndex = i + 4;
-                        break;
-                    }
-                }
-            }
-        }
-
-        System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);      
-    }
-    
-    /***********************/
-
-    /* Create largest int from array of ints
+    /* Create largest int from array of ints (THIS IS LIKELY WRONG)
        -algorithm:  
         note: maybe cleaner and more efficient to use a Comparable fxn
     */
@@ -652,7 +573,7 @@ public class ArrayManipulations {
 
     /***********************/
     
-    /*
+    /* ???
        -algorithm: 
     */
     public int findEquilibriumIndex(int[] arr) {
@@ -675,7 +596,7 @@ public class ArrayManipulations {
 
     /***********************/
 
-    /*
+    /* ???
        -algorithm: 
     */
     public String[] interleave(String[] strArray) {
@@ -717,6 +638,86 @@ public class ArrayManipulations {
             System.out.println("positive");
     }
     
+    /***********************/
+
+    /* ???
+       note: doesn't work for duplicate values in array2 since I use a HashSet
+    */
+    public void findConsecutiveIndex(int[] arr1, int[] arr2) {
+        int array2Length = arr2.length;
+        int startIndex = -1, endIndex = -1;
+        int XORValue = 0;
+
+        // put arr2 into a HashSet (because of this, duplicates in array2 wouldn't work for this algorithm) and find the XOR'd value
+        java.util.HashSet<Integer> hashSet = new java.util.HashSet<Integer>();
+        for (int i : arr2) {
+            hashSet.add(i);
+            XORValue ^= i;
+        }
+
+//note: it seems I may have hardcoded array indices. Will have to change that if that is the case
+        for (int i = 0; i < arr1.length; i++) {
+            if (hashSet.contains(arr1[i])) {
+                if (i + array2Length < arr1.length) {
+                    if (((arr1[i] ^ arr1[i + 1] ^ arr1[i + 2] ^ arr1[i + 3] ^ arr1[i + 4]) ^ XORValue) == 0) {
+                        startIndex = i;
+                        endIndex = i + 4;
+                        break;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Start index: " + startIndex + "\nEnd index: " + endIndex);      
+    }
+    
+    /***********************/
+
+    /* ???
+       -algorithm: 
+    */  
+    public void arraysIntersections(int[] arr1, int[] arr2) {
+        // setup HashMap for the first array. Create a running count for each value
+        HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
+        for (int i = 0; i < arr1.length; i++) {
+            if (!hashMap.containsKey(arr1[i]))
+                hashMap.put(arr1[i], 1);
+            else {
+                int total = hashMap.get(arr1[i]);
+                hashMap.put(arr1[i], ++total);
+            }
+        }
+        
+        // check for intersection
+        System.out.println("Checking for interesecting elements...");
+        for (int i = 0; i < arr2.length; i++) {
+            if (hashMap.containsKey(arr2[i])) {
+                int total = hashMap.get(arr2[i]) - 1; // subtract 1 from the value of the key
+                System.out.print(arr2[i] + " ");
+
+                if (total == 0)
+                    hashMap.remove(arr2[i]);
+                else
+                    hashMap.put(arr2[i], total);
+            }
+        }       
+        System.out.println();
+    }
+    
+    /***********************/
+
+    /* ???
+       -algorithm: 
+    */  
+    public void generateThirdArray(int[] input, int[] index, int[] result) {
+        int product = 1;
+        for (int i = 0; i < input.length; i++)
+            product *= input[i];
+
+        for (int i = 0; i < result.length; i++)
+            result[i] = product / input[index[i]];  
+    }
+
     /***********************/
 
     public static void main(String[] args) {

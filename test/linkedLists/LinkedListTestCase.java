@@ -17,6 +17,19 @@ public class LinkedListTestCase {
 		list = new LinkedList();
 	}
 
+	public void setUpList1() {
+		list = new LinkedList();
+		list.insertAtHead(5);
+		list.insertAtHead(8);
+		list.insertAtHead(8);
+		list.insertAtHead(6);
+		list.insertAtHead(3);
+		list.insertAtHead(1);
+		list.insertAtHead(2);
+		list.insertAtHead(2);
+		list.insertAtHead(9);
+	}
+	
 	@Test
 	public void testInsertIntoEmptyList() {
 		assertEquals(0, list.size());
@@ -157,17 +170,6 @@ public class LinkedListTestCase {
 		assertSame(6, list.getNodeByIndex(5).value);
 	}
 /*************************************************************/
-		public void setUpList1() {
-		list.insertAtHead(5);
-		list.insertAtHead(8);
-		list.insertAtHead(8);
-		list.insertAtHead(6);
-		list.insertAtHead(3);
-		list.insertAtHead(1);
-		list.insertAtHead(2);
-		list.insertAtHead(2);
-		list.insertAtHead(9);
-	}
 
 	@Test
 	public void testReversePrint() {
@@ -197,13 +199,14 @@ public class LinkedListTestCase {
 		assertSame(9, list.findCircularListLength());
 	}
 
-	@Test
-	public void testSwapKthElements() {
-		setUpList1();
+	@Test(expected=IllegalArgumentException.class)
+	public void testSwapKthElementsFromBeginningAndEnd() {
+		setUpList1(); // 9 2 2 1 3 6 8 8 5
 
-		list.swapKthElements(3);
-		assertSame(6, list.getNodeByIndex(3).value);
-		assertSame(1, list.getNodeByIndex(5).value);
+		list.swapKthElementsFromBeginningAndEnd(3);  // 9 2 8 1 3 6 2 8 5
+		assertSame(8, list.getNodeByIndex(2).value);
+		assertSame(2, list.getNodeByIndex(6).value);
+		list.swapKthElementsFromBeginningAndEnd(90); // should throw Exception
 	}
 
 	@Test
@@ -228,7 +231,7 @@ public class LinkedListTestCase {
 		assertSame(2, list.getNodeByIndex(7).value);
 		assertSame(9, list.getNodeByIndex(8).value);
 	}
-
+	
 	@Test
 	public void testRecursiveReverseList() {
 		setUpList1();
@@ -258,20 +261,6 @@ public class LinkedListTestCase {
 		assertSame(-1, newList.getMidpoint());
 		newList.insertAtHead(1);
 		assertSame(0, newList.getMidpoint());
-	}
-
-	@Test
-	public void testFindConvergenceOfTwoLists() {
-		setUpList1();
-		
-		LinkedList list2 = new LinkedList();
-		list2.insertAtHead(1);
-		list2.getNodeByIndex(0).next = list.getNodeByIndex(5);
-		list2.setSize();	// need to update the size of list2
-		
-		Node node = list.findConvergenceOfTwoLists(list2);
-
-		assertSame(6, node.value);
 	}
 
 	@Test
@@ -417,6 +406,46 @@ public class LinkedListTestCase {
 		assertSame(6, list1.getNodeByIndex(4).value);
 		assertSame(5, list1.getNodeByIndex(5).value);		
 		assertSame(7, list1.getNodeByIndex(6).value);
+	}
+	
+	@Test
+	public void testGetHeadOfLoop() {
+		LinkedList list1 = new LinkedList();
+		list1.insertAtHead(1);
+		list1.insertAtHead(2);
+		list1.insertAtHead(3);
+		list1.insertAtHead(4);
+		list1.getHead().next.next.next = list1.getHead().next;
+//assertEquals(list1.getHeadOfLoop().value, 2);		
+	}
+	
+	@Test
+	public void testGetKthNodeFromTail() {
+		setUpList1();
+		assertEquals(list.getKthNodeFromTail(9).value, 9);
+		assertEquals(list.getKthNodeFromTail(5).value, 3);
+		assertEquals(list.getKthNodeFromTail(1).value, 5);	
+	}
+	
+	@Test
+	public void testIntersectionOf2Lists() {
+		LinkedList list = new LinkedList();
+        list.insert(1);
+        list.insert(2);
+        list.insert(3);
+        list.insert(6);
+        list.insert(7);
+
+        LinkedList list2 = new LinkedList();
+        list2.insert(4);
+        list2.insert(5);
+        list2.insert(6);
+        list2.insert(7);
+        
+        LinkedList list3 = null; //new LinkedList();
+
+        assertEquals(LinkedList.intersectionOf2Lists(list, list2).value, 6);
+        assertEquals(LinkedList.intersectionOf2Lists(list, list3), null);
 	}
 	
 	@Test
