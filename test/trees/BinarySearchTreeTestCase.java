@@ -45,7 +45,7 @@ public class BinarySearchTreeTestCase {
 	
 	@Test
 	public void testReversePrintByLevel() {
-		System.out.print("\nreversePrintByLevel()");
+		System.out.println("\nreversePrintByLevel()");
 		tree.reversePrintByLevel();
 	}
 	
@@ -74,6 +74,10 @@ public class BinarySearchTreeTestCase {
         
         assertTrue(tree.isTreeEqual(tree2.getRoot()));
 	}	
+	
+	//@Test void testLowestCommonAncestor() {
+		//assertEquals(lowestCommonAncestor)
+	//}
 	
 	@Test
 	public void testPrintNodesInRange() {

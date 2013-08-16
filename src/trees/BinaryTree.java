@@ -439,8 +439,8 @@ public class BinaryTree {
     /******************************/
     
     /* CI86 - is the tree balanced 
-       -algorithm: An alternative is to have a getMinDepth and getMaxDepths fxns (using Math.min and Math.max respectively)
-                   and if the absolute difference of the results is <= 1, return true 
+       -algorithm: get the depth for the left and right child. If the difference is > 1, return false. Recursively go down
+                   the tree for each node and check. (In BinarySearchTree.java, there the algorithm used there may be more efficient)
     */
     public boolean isBalanced() {
         return isBalanced(root);

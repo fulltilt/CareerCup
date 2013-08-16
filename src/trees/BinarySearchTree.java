@@ -34,7 +34,6 @@ public class BinarySearchTree {
       		return(find(node.rightChild, value));
   	}
 
-
 	/**
    		Inserts the given value into the binary tree.
    		Uses a recursive helper.
@@ -68,6 +67,39 @@ public class BinarySearchTree {
 
 	/******************************/
 
+	public int getSize() {
+		return getSize(root);
+	}
+	private int getSize(Node node) {
+		if (node == null)
+			return 0;
+
+		return 1 + getSize(node.leftChild) + getSize(node.rightChild);
+	}
+
+	/******************************/
+
+	public int getHeight() {
+		return getHeight(root);
+	}
+	private int getHeight(Node node) {
+		if (node == null)
+			return 0;
+
+		return 1 + Math.max(getHeight(node.leftChild), getHeight(node.rightChild));
+	}
+    
+	/******************************/
+
+	/* Print a tree by level
+	 * -algorithm: depth-first search on a tree. We need two lists: one for the current level and another
+	 *             for the current levels Node's children. Initially, the current level will have root. We
+	 *             then proceed into a while loop that iterates until the current level is empty. In the loop,
+	 *             iterate through each Node and print it's value while adding it's children to the children
+	 *             List. Once done, clear the current level and add the children to the list and then clear
+	 *             the children list. At the lowest level, since there will be no children, the current
+	 *             level will be empty and loop is exited. This algorithm is used in a lot of tree problems
+	 */
 	public void printByLevel() {
 		printByLevel(root);
 	}
@@ -97,34 +129,11 @@ public class BinarySearchTree {
 	}
 
 	/******************************/
-
-	public int getSize() {
-		return getSize(root);
-	}
-	private int getSize(Node node) {
-		if (node == null)
-			return 0;
-
-		return 1 + getSize(node.leftChild) + getSize(node.rightChild);
-	}
-
-	/******************************/
-
-	public int getHeight() {
-		return getHeight(root);
-	}
-	private int getHeight(Node node) {
-		if (node == null)
-			return 0;
-
-		return 1 + Math.max(getHeight(node.leftChild), getHeight(node.rightChild));
-	}
-    
-	/******************************/
-
-	/* Prints by level but from the bottom on up
-	   -algorithm: 
-	*/
+	
+	/* Print level by level but with children first and lastly root
+	 * -algorithm: algorithm is the same but only adjustment is to have a stack of Linked Lists so when
+	 *             it comes time to print, we just have to pop off the a List and print it out
+	 */
 	public void reversePrintByLevel() {
 		reversePrintByLevel(root);
 	}
@@ -134,40 +143,40 @@ public class BinarySearchTree {
 
 		LinkedList<Node> currentLevel = new LinkedList<Node>();
 		LinkedList<Node> children = new LinkedList<Node>();
-		Stack<Node> stack = new Stack<Node>();
+		Stack<LinkedList<Node>> stack = new Stack<LinkedList<Node>>();	// used to print in reverse
 		currentLevel.add(node);
 
 		while (!currentLevel.isEmpty()) {
+			// next 3 lines makes a copy of the current line and pushes it onto a Stack
+			LinkedList<Node> levelCopy = new LinkedList<Node>();
+			levelCopy.addAll(currentLevel);
+			stack.push(levelCopy);
+			
 			for (Node n : currentLevel) {
-				stack.push(n);	// push values onto a stack
-
-				if (n.rightChild != null)
-					children.add(n.rightChild);
 				if (n.leftChild != null)
 					children.add(n.leftChild);
+				if (n.rightChild != null)
+					children.add(n.rightChild);
 			}
 			currentLevel.clear();
 			currentLevel.addAll(children);
 			children.clear();
-
-			stack.push(null);	// null value to specify a newline when we eventually print
 		}
-
-		while (!stack.isEmpty()) {		// print levels in reverse
-			Node tempNode = stack.pop();
-
-			if (tempNode == null)
-				System.out.println();
-			else
-				System.out.print(tempNode.value + " ");
+		
+		// print out level by level in reverse
+		while (!stack.isEmpty()) {
+			LinkedList<Node> temp = stack.pop();
+			for (Node n : temp)
+				System.out.print(n.value + " ");
+			System.out.println();
 		}
-		System.out.println();
 	}
+	
 	/******************************/
 
-	/* Make each level of a tree into a linked list
-	   -algorithm: 
-	 note: after creating this, found this can be used to print level by level but requires storage
+	/* Create a Linked List for each level in a tree
+	 * -algorithm: just like print level-by-level logic but create a new List on each level and add
+	 *             the children accordingly 
 	*/
 	public void createLinkedListByLevel() { createLinkedListByLevel(root); }
 	private void createLinkedListByLevel(Node node) {
@@ -198,11 +207,33 @@ public class BinarySearchTree {
 			System.out.println();
 		}
 	}
-	
-    /******************************/
+
+	/******************************/
     
-    /*
-       -algorithm: 
+	/* Check to see if a tree is balanced
+	 * -algorithm: Have a getMinDepth and getMaxDepths fxns (using Math.min and Math.max respectively)
+                   and if the absolute difference of the results is <= 1, return true
+	*/
+	public boolean isBalanced() { return (maxDepth(root) - minDepth(root)) <= 1; }
+	private int maxDepth(Node node) {
+		if (node == null)
+			return 0;
+		
+		return 1 + Math.max(maxDepth(node.leftChild), maxDepth(node.rightChild)); 
+	}	
+	private int minDepth(Node node) {
+		if (node == null)
+			return 0;
+		
+		return 1 + Math.min(minDepth(node.leftChild), minDepth(node.rightChild)); 
+	}	
+	
+	/******************************/
+	    
+    /* Check to see if two trees are equal
+       -algorithm: recurse through both trees in any order but each Node has to be equal to one 
+                   another so if it's not null, both values should be the same and if one is null, the
+                   other should be null as well else return false
     */
 	public boolean isTreeEqual(Node otherRoot) {
 		return isTreeEqual(root, otherRoot);
@@ -219,7 +250,6 @@ public class BinarySearchTree {
 
 		return false;
 	}
-
 	// this fxn is a bad idea but is used to test isTreeEqual()
 	public Node getRoot() {
 		return root;
@@ -227,19 +257,21 @@ public class BinarySearchTree {
 
 	/******************************/
 
-    /*
-       -algorithm: 
+    /* Find the lowest common ancestor
+       -algorithm: using a property of binary search trees, we keep traversing down each tree. If 
+                   both nodes values are both on the left side, go left. If both nodes are on the
+                   right side, go right. The first node where one node's value is on the left while
+                   the others is on the right is the lowest common ancestor
     */
-	public Node lca(Node node1, Node node2) { return lca(root, node1, node2); }
-	private Node lca(Node root, Node one, Node two) {
-	    // Check if one and two are in the root tree.
-	    while (root != null) {
-	        if (root.value < one.value && root.value < two.value)
-	            root = root.rightChild;
-	        else if (root.value > one.value && root.value > two.value)
-	            root = root.leftChild;
+	public Node lowestCommonAncestor(Node node1, Node node2) { return lowestCommonAncestor(root, node1, node2); }
+	private Node lowestCommonAncestor(Node currentNode, Node one, Node two) {
+	    while (currentNode != null) {
+	        if (currentNode.value < one.value && currentNode.value < two.value)
+	            currentNode = currentNode.rightChild;
+	        else if (currentNode.value > one.value && currentNode.value > two.value)
+	            currentNode = currentNode.leftChild;
 	        else
-	            return root;
+	            return currentNode;
 	    }
 
 	    return null;
@@ -247,8 +279,8 @@ public class BinarySearchTree {
 
 	/******************************/
 	
-    /*
-       -algorithm: 
+    /* Print Nodes whose values are in a given range
+       -algorithm: recurse through each Node in any order and if its value is within the range, print it
     */	
 	public void printNodesInRange(int min, int max) { printNodesInRange(root, min, max); }
 	private void printNodesInRange(Node node, int min, int max) {
@@ -332,7 +364,7 @@ public class BinarySearchTree {
 
 	/******************************/
 	
-    /*
+    /* Revers a Node's child pointers to point to its parent
        -algorithm: 
     */	
 	public void reversePointers() { reversePointers(root, null); }
