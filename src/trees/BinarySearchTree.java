@@ -174,6 +174,48 @@ public class BinarySearchTree {
 	
 	/******************************/
 
+    /* CI59 - print by level zig-zag style 
+     * =algorithm: same as print-by-level have a variable that keeps track of the current depth.
+     *             If it's odd, print in normal order. If it's even, print in reverse order. 
+     */
+    public void printByLevelZigZag() {        
+        printByLevelZigZag(root);
+    }
+    private void printByLevelZigZag(Node node) {
+        if (node == null)
+            return;
+            
+        ArrayList<Node> currentLevel = new ArrayList<Node>();    
+        ArrayList<Node> children = new ArrayList<Node>();
+        currentLevel.add(node);
+    
+        int depth = 0;
+        while (!currentLevel.isEmpty()) {
+            if (depth % 2 == 0) {   // for odd depths, print from left to right
+                for (int i = 0; i < currentLevel.size(); i++)
+                    System.out.print(currentLevel.get(i).value + " ");
+            } else {                // for even depths, print from right to left
+                for (int i = currentLevel.size() - 1; i >= 0 ; i--)
+                    System.out.print(currentLevel.get(i).value + " ");
+            }
+          
+            // print out the values of the current level
+            for (Node n : currentLevel) {
+                if (n.leftChild != null)
+                    children.add(n.leftChild);
+                if (n.rightChild != null)
+                    children.add(n.rightChild);
+            }
+            currentLevel.clear();
+            currentLevel.addAll(children);
+            children.clear();
+            System.out.println();
+            ++depth;
+        }
+    }
+
+    /******************************/
+    
 	/* Create a Linked List for each level in a tree
 	 * -algorithm: just like print level-by-level logic but create a new List on each level and add
 	 *             the children accordingly 
@@ -295,77 +337,12 @@ public class BinarySearchTree {
 
 	/******************************/
 	
-    /*
-       -algorithm: 
-    */	
-	public Node trimTreeInRange(int min, int max) { 
-		return trimTreeInRange(root, min, max); 
-	}
-	private Node trimTreeInRange(Node node, int min, int max) {
-		if (node == null)
-			return null;
-		
-		if (node.value > max) 
-			return trimTreeInRange(node.leftChild, min, max);
-		else if (node.value < min) 
-			return trimTreeInRange(node.rightChild, min, max);
-		else {
-			   node.leftChild = trimTreeInRange(node.leftChild, min, max);
-			   node.rightChild = trimTreeInRange(node.rightChild, min, max);
-		} 
-		  
-		return node;
-	}
-
-	/******************************/
-	
-    /*
-       -algorithm: 
-    */	
-	public linkedLists.LinkedList convertToLinkedList() { 
-		linkedLists.LinkedList newList = new linkedLists.LinkedList();
-		convertToLinkedList(root, newList);
-
-		return newList;
-	}
-	private void convertToLinkedList(Node node, linkedLists.LinkedList newList) {  
-		if (node == null)
-			return; 
-		
-		convertToLinkedList(node.rightChild, newList);	// by switching the order, we don't have to reverse the List
-		newList.insertAtHead(node.value);
-		convertToLinkedList(node.leftChild, newList);
-	}
-
-	/******************************/
-
-    /*
-       -algorithm: 
-    */
-	public DoublyLinkedList convertToDoublyLinkedList() { 
-		DoublyLinkedList newList = new DoublyLinkedList();
-		convertToDoublyLinkedList(root, null, newList);
-		
-		return newList;
-	}
-	private void convertToDoublyLinkedList(Node node, DoublyLinkedList.Node previousNode, DoublyLinkedList newList) {  
-		if (node == null)
-			return; 
-		
-		convertToDoublyLinkedList(node.rightChild, previousNode, newList);
-		
-		newList.insertAtHead(node.value);
-		newList.getHead().previous = previousNode;
-		if (previousNode != null)
-			previousNode.next = newList.getHead();
-		
-		convertToDoublyLinkedList(node.leftChild, previousNode, newList);
-	}
-
-	/******************************/
-	
-    /* Revers a Node's child pointers to point to its parent
-       -algorithm: 
+    /* Reverse a Node's child pointers to point to its parent
+       -algorithm: Create two pointers to the current Node's children and then set both the Node's pointers
+                   to it's parent which is passed in as a second argument. From here, make a separate
+                   recursive call to each of the former children using the two pointers in the beginning
+       -note: since root is now a leaf and since every leaf is now a root element, I don't know what
+              the best way is to test this 
     */	
 	public void reversePointers() { reversePointers(root, null); }
 	private void reversePointers(Node currentNode, Node parent) {
@@ -384,9 +361,11 @@ public class BinarySearchTree {
 	
 	/******************************/
 	
-    /*
-       -algorithm: 
-    */	
+ /* Set each nodes value to be the sum of all the children below it
+    -algorithm: recurse down the tree as usual but the trick is to recurse on the children which
+                is connected via the '+' operator and then to return the sum of the children plus
+                the current Node's value
+ */	
 	public void valueToSumOfChildrenValues() { valueToSumOfChildrenValues(root); }
 	private int valueToSumOfChildrenValues(Node node) {
 		if (node == null)
@@ -399,9 +378,13 @@ public class BinarySearchTree {
 	}
 	
 	/******************************/
-	
-    /*
-       -algorithm: 
+
+    /* Check to see if a tree is symmetric (values do not have to be the same)
+       -algorithm: Fxn takes two arguments: each Node's children starting from the roots children. Most
+                   of the work done in the base case. First, if both Node's are null, return true.
+                   The trick is the second conditional where you check if one is null but the other
+                   is not, then return false. Else return on the recursion of this fxn connected
+                   via the '&&' operator
     */	
 	public boolean isTreeSymmetric() {return isTreeSymmetric (root.leftChild, root.rightChild); }
 	private boolean isTreeSymmetric(Node left, Node right) {
@@ -415,74 +398,7 @@ public class BinarySearchTree {
 	}
 
 	/******************************/
-	
-    /*
-       -algorithm: 
-    */	
-	public HashMap<Integer, Integer> addColumns() { 
-		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
-		addColumns(root, 0, hm); 
-
-		return hm;
-	}
-	private void addColumns(Node node, int column, HashMap<Integer, Integer> hashMap) {
-		if (node == null)
-			return;
 		
-		if (!hashMap.containsKey(column))
-			hashMap.put(column, node.value);
-		else {
-			int tempValue = (int) hashMap.get(column);
-			hashMap.put(column, tempValue + node.value);
-		}
-		// one turn to the left corresponds to n-1 and one turn to the right corresponds to n+1
-		addColumns(node.leftChild, column - 1, hashMap);
-		addColumns(node.rightChild, column + 1, hashMap);	
-	}
-
-	/******************************/
-	
-    /*
-       -algorithm: 
-    */	
-	static int currentCount; 	
-	public void findKthLargest(int k) { findKthLargest(root, k); currentCount = 0;}
-	private void findKthLargest(Node node, int k) {
-		if (node == null)
-			return;
-		
-		findKthLargest(node.rightChild, k);
-		
-		if (++currentCount == k) {
-			System.out.print(node.value + " ");
-			return;
-		}
-		
-		findKthLargest(node.leftChild, k);
-	}
-
-	/******************************/
-	
-    /*
-       -algorithm: 
-    */	
-	public int sumOfAllGreaterAndEqualTo() { return sumOfAllGreaterAndEqualTo(root, 0); }
-	private int sumOfAllGreaterAndEqualTo(Node node, int sum) {
-		if (node == null)
-			return sum;
-		else if (node.leftChild == null && node.rightChild == null) {
-			node.value += sum;
-			return node.value;
-		}
-		
-		int tmp = sumOfAllGreaterAndEqualTo(node.rightChild, sum);
-		node.value += tmp;
-		tmp = sumOfAllGreaterAndEqualTo(node.leftChild, node.value);
-		return tmp;
-	}
-
-	/******************************/
-	
     /* CI84 - kth node in a binary search tree in an incremental order of values 
        -algorithm: 
     */
@@ -519,7 +435,122 @@ public class BinarySearchTree {
     }
     
 	/******************************/
-    
+
+    /*
+       -algorithm: 
+    */	
+	public linkedLists.LinkedList convertToLinkedList() { 
+		linkedLists.LinkedList newList = new linkedLists.LinkedList();
+		convertToLinkedList(root, newList);
+
+		return newList;
+	}
+	private void convertToLinkedList(Node node, linkedLists.LinkedList newList) {  
+		if (node == null)
+			return; 
+		
+		convertToLinkedList(node.rightChild, newList);	// by switching the order, we don't have to reverse the List
+		newList.insertAtHead(node.value);
+		convertToLinkedList(node.leftChild, newList);
+	}
+
+	/******************************/
+
+	/*
+	   -algorithm: 
+	*/
+	public DoublyLinkedList convertToDoublyLinkedList() { 
+		DoublyLinkedList newList = new DoublyLinkedList();
+		convertToDoublyLinkedList(root, null, newList);
+		
+		return newList;
+	}
+	private void convertToDoublyLinkedList(Node node, DoublyLinkedList.Node previousNode, DoublyLinkedList newList) {  
+		if (node == null)
+			return; 
+		
+		convertToDoublyLinkedList(node.rightChild, previousNode, newList);
+		
+		newList.insertAtHead(node.value);
+		newList.getHead().previous = previousNode;
+		if (previousNode != null)
+			previousNode.next = newList.getHead();
+		
+		convertToDoublyLinkedList(node.leftChild, previousNode, newList);
+	}
+
+	/******************************/
+	
+    /*
+       -algorithm: 
+    */	
+	public HashMap<Integer, Integer> addColumns() { 
+		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+		addColumns(root, 0, hm); 
+
+		return hm;
+	}
+	private void addColumns(Node node, int column, HashMap<Integer, Integer> hashMap) {
+		if (node == null)
+			return;
+		
+		if (!hashMap.containsKey(column))
+			hashMap.put(column, node.value);
+		else {
+			int tempValue = (int) hashMap.get(column);
+			hashMap.put(column, tempValue + node.value);
+		}
+		// one turn to the left corresponds to n-1 and one turn to the right corresponds to n+1
+		addColumns(node.leftChild, column - 1, hashMap);
+		addColumns(node.rightChild, column + 1, hashMap);	
+	}
+
+	/******************************/
+	
+    /* ???
+       -algorithm: 
+    */	
+	public int sumOfAllGreaterAndEqualTo() { return sumOfAllGreaterAndEqualTo(root, 0); }
+	private int sumOfAllGreaterAndEqualTo(Node node, int sum) {
+		if (node == null)
+			return sum;
+		else if (node.leftChild == null && node.rightChild == null) {
+			node.value += sum;
+			return node.value;
+		}
+		
+		int tmp = sumOfAllGreaterAndEqualTo(node.rightChild, sum);
+		node.value += tmp;
+		tmp = sumOfAllGreaterAndEqualTo(node.leftChild, node.value);
+		return tmp;
+	}
+
+	/******************************/
+	
+    /* ???
+       -algorithm: 
+    */	
+	public Node trimTreeInRange(int min, int max) { 
+		return trimTreeInRange(root, min, max); 
+	}
+	private Node trimTreeInRange(Node node, int min, int max) {
+		if (node == null)
+			return null;
+		
+		if (node.value > max) 
+			return trimTreeInRange(node.leftChild, min, max);
+		else if (node.value < min) 
+			return trimTreeInRange(node.rightChild, min, max);
+		else {
+			   node.leftChild = trimTreeInRange(node.leftChild, min, max);
+			   node.rightChild = trimTreeInRange(node.rightChild, min, max);
+		} 
+		  
+		return node;
+	}
+
+	/******************************/
+	
     /* 18 - get next node in Binary Tree (C++ pseudocode as this assumes that there is a parent link
     BinaryTreeNode* GetNext(BinaryTreeNode* pNode) { 
         if(pNode == NULL) 

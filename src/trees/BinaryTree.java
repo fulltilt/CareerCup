@@ -2,8 +2,6 @@ package trees;
 
 import java.util.*;
 
-import trees.BinarySearchTree.Node;
-
 public class BinaryTree {
     private Node root = null;   // Root node pointer. Will be null for an empty tree.
     private int balanceFactor;
@@ -81,6 +79,7 @@ public class BinaryTree {
         System.out.println("Value " + value + " was unable to be found");
         return false;
     }
+    
     /******************************/
 
     /* Print a tree level-by-level
@@ -227,6 +226,8 @@ public class BinaryTree {
 
     /* CI52 - verify if a binary tree is symmetrical 
        -algorithm: 
+       -note: similar algorithm in BinarySearchTree.java but this has the added step to see that both
+              values are the same (i.e. that they are exact mirrors of on another.
     */
     public boolean isSymmetrical() {
         return isSymmetrical(root, root);
@@ -245,46 +246,6 @@ public class BinaryTree {
                && isSymmetrical(node1.rightChild, node2.leftChild); 
     }
     
-    /******************************/
-   
-    /* CI59 - print by level zig-zag style */
-    public void printByLevelZigZag() {        
-        printByLevelZigZag(root);
-    }
-
-    private void printByLevelZigZag(Node node) {
-        if (node == null)
-            return;
-            
-        ArrayList<Node> currentLevel = new ArrayList<Node>();    
-        ArrayList<Node> children = new ArrayList<Node>();
-        currentLevel.add(node);
-    
-        int depth = 0;
-        while (!currentLevel.isEmpty()) {
-            if (depth % 2 == 0) {   // for odd depths, print from left to right
-                for (int i = 0; i < currentLevel.size(); i++)
-                    System.out.print(currentLevel.get(i).value + " ");
-            } else {                // for even depths, print from right to left
-                for (int i = currentLevel.size() - 1; i >= 0 ; i--)
-                    System.out.print(currentLevel.get(i).value + " ");
-            }
-          
-            // print out the values of the current level
-            for (Node n : currentLevel) {
-                if (n.leftChild != null)
-                    children.add(n.leftChild);
-                if (n.rightChild != null)
-                    children.add(n.rightChild);
-            }
-            currentLevel.clear();
-            currentLevel.addAll(children);
-            children.clear();
-            System.out.println();
-            ++depth;
-        }
-    }
-
     /******************************/
 
     /* CI85 - get depth 
@@ -497,7 +458,7 @@ public class BinaryTree {
     /******************************/
     
     public static void main(String[] args) {
-        BinaryTree bt = new BinaryTree();
+        //BinaryTree bt = new BinaryTree();
         //System.out.println(bt.getBalanceFactor());
         //bt.printByLevel();
     }

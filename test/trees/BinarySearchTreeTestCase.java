@@ -50,6 +50,14 @@ public class BinarySearchTreeTestCase {
 	}
 	
 	@Test
+	public void testPrintByLevelZigZag() {
+		System.out.println("\nPrint by zigzag()");
+        //BinarySearchTree bst = new BinarySearchTree();
+        tree.printByLevel();
+        tree.printByLevelZigZag();
+	}	
+	
+	@Test
 	public void testSize() {
 		assertEquals(9, tree.getSize());
 	}
@@ -128,9 +136,10 @@ public class BinarySearchTreeTestCase {
 	
 	@Test
 	public void testValueToSumOfChildrenValues() {
-		
+		System.out.println("\nBeginning testValueToSumOfChildrenValues()...");
+		tree.printByLevel();
 		tree.valueToSumOfChildrenValues();
-		tree.print();
+		tree.printByLevel();
 		System.out.println("End testValueToSumOfChildrenValues()");		
 	}
 	
@@ -158,15 +167,6 @@ public class BinarySearchTreeTestCase {
 		assertSame(8, hm.get(1));
 		assertSame(9, hm.get(2));
 		assertSame(10, hm.get(3));		
-	}
-	
-	@Test
-	public void testFindKthLargest() {
-		System.out.println("\nBegin findKthLargest(): Output should be: 10 7 1");
-		tree.findKthLargest(1);
-		tree.findKthLargest(4);
-		tree.findKthLargest(9);
-		System.out.println("\nEnd findKthLargest()");
 	}
 	
 	@Test 

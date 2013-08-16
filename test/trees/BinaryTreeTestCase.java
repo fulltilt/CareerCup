@@ -204,12 +204,4 @@ public class BinaryTreeTestCase {
         bst.printByLevel();
         bst.mirror();
 	}
-
-	@Test
-	public void testPrintByLevelZigZag() {
-		System.out.println("\nprint by zigzag()");
-        BinaryTree bst = new BinaryTree();
-        bst.printByLevel();
-        bst.printByLevelZigZag();
-	}	
 }
