@@ -1,7 +1,5 @@
 package strings;
 
-import java.util.*;
-
 public class StringManipulations {
 	/*
 	 * Longest Common Subsequence
@@ -20,6 +18,8 @@ public class StringManipulations {
 	        return (x.length() > y.length()) ? x : y;
 	    }
 	}
+
+	/***********************/
 
 	/* reverse a C-style string. 
 	   -algorithm:  iterate through 1/2 of the length of the string and swap each equal but opposite indexes of the string. This algorithm
@@ -44,6 +44,8 @@ public class StringManipulations {
 			return recursivelyReverseString(buffer.append(str.charAt(length - 1)), str, length - 1).toString();
 	}
 
+	/***********************/
+
     /*
        -algorithm: 
     */
@@ -55,6 +57,8 @@ public class StringManipulations {
 	   }
 	   return true;
 	}
+
+	/***********************/
 
 	/* replace every occurrence of s1 with s2 in String str (s1 is assumed to be only a letter)
 	 */
@@ -77,33 +81,7 @@ public class StringManipulations {
 		return newString;
 	}
 	
-    /*
-       -algorithm: 
-    */	
-	public char[] compress(char[] str) {
-		if (str.length == 0 || str.length == 1)
-			return str;
-		
-		int currentData = 0, index = 0;
-		char currentChar = str[0];
-		
-		while (currentData < str.length) {
-			int count = 0;
-			while ((currentData < str.length) && (str[currentData] == currentChar)) {
-				++count;
-				++currentData;
-			}
-			if (count > 1)
-				str[++index] = (char) count;
-			else
-				str[++index] = str[currentData];
-		}
-
-		//System.out.println("count: " + count + " j: " + j + " currentChar: " + currentChar);
-		
-		return str;
-	}
-	
+	/***********************/	
 	
     /* CI78 - delete characters contained in the second string from the first string 
        -algorithm: put chars in 2nd string into a hash table and set each respective char entry to 'true'
@@ -112,7 +90,7 @@ public class StringManipulations {
                    char at the trailing index to be equal to the current char which effectively overwrites any duplicates 
                    characters
     */
-    public static String deleteDuplicateChars(String str1, String str2) {
+    public static char[] deleteDuplicateChars(String str1, String str2) {
         char[] char1 = str1.toCharArray();
         char[] char2 = str2.toCharArray();        
         
@@ -120,35 +98,15 @@ public class StringManipulations {
         for (char c : char2)
             ascii[c] = true;
             
-        int trailing = 0;    
+        int trailingIndex = 0;    
         for (int i = 0; i < char1.length; i++) {
             if (ascii[char1[i]] == false) {
-                char1[trailing++] = char1[i];
+                char1[trailingIndex++] = char1[i];
             }
         }
             
-        return new String(char1, 0, trailingIndex);
+        return new String(char1, 0, trailingIndex).toCharArray();
     } 
-
-    // similiar fxn as above but doesn't inefficient shifting after encountering a duplicate
-	public char[] removeDuplicateChars(String s1, String s2) {
-		s1 += " ";		// need the space else the last character will be repeated
-		
-		HashSet<Character> hs = new HashSet<Character>();	// create HashSet for s2
-		for (int i = 0; i < s2.length(); i++)
-			hs.add(s2.charAt(i));
-		
-		char[] charArr = s1.toCharArray();		// compare chars in s1 to HashSet
-		for (int i = 0; i < charArr.length; i++) {
-			if (hs.contains(charArr[i])) {	// if current char is in HashSet, shift all elements to immediate right to the left one time
-				for (int j = i; j < charArr.length - 1; j++)
-					charArr[j] = charArr[j + 1];
-				--i;	// need this because if we shift all characters 1 to the left, we'd skip the first shifted character on the next iteration
-			}
-		}		
-		
-		return charArr;
-	}    
     
     /***********************/
     
@@ -195,7 +153,7 @@ public class StringManipulations {
             }
         }
         
-        return new String(char1, 0, trailingIndex);
+        return new String(array, 0, trailingIndex);
     }  
 
     /***********************/
@@ -226,12 +184,14 @@ public class StringManipulations {
         return true;
     }
 
+    /***********************/
+
     /* Assume you have a method isSubstring which checks if one word is a substring of 
        another Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using 
        only one call to isSubstring (i e , “waterbottle” is a rotation of “erbottlewat”)
        -algorithm: first check if the lengths are both equal else return false. Next, append
                    one of the strings to itself and check to see if the other string is a substring of the other
-    */
+    
     public static boolean isRotation(String str1, String str2) {
         if (str1.length() != str2.length() && str1.length() != 0)
             return false;
@@ -239,15 +199,39 @@ public class StringManipulations {
         String temp = str2 + str2;
         return isSubstring(temp, str1);
     }
+	*/
+    
+    /***********************/
 
+    /* Compress an array so duplicates that are next to each other are compressed to a single character
+     * i.e. ['a','a','a','a','b','c','c','a','a','d','e','e','e','e'] compresses to ['a','b','c','a','d','e']
+       -algorithm: 
+       -note: the size of the array doesn't change and we can't do an: array = new String(array, 0, slow).toCharArray()
+        since we can't change what 'array' references to in a fxn as per Java rules
+    */	
+    public static void compress(char[] array) {
+        int slow = 0;
+        int fast = 1;
+        while (fast < array.length) {
+            if (array[slow] == array[fast] || array[fast] == ' ') {
+                array[fast] = ' ';
+                ++fast;
+            } else {
+                array[++slow] = array[fast];
+                array[fast] = ' ';
+                fast = slow + 1;       
+            }   
+        }
+    }
+    
 	public static void main(String[] args) {
 		StringManipulations strManip = new StringManipulations();
 
-		String s1 = "A quick brown fox jumped over a bridge on a box a";
+		// s1 = "A quick brown fox jumped over a bridge on a box a";
 		//String s2 = "AAAABBBCXYZEEEEPPPPPKKABC";
 		//String s2 = "So many dynamos".toLowerCase().replace(" ", "");	// convert to all lowercase and strip spaces
 		//char[] result = strManip.compress(s2.toCharArray());
-		System.out.println(strManip.replaceSubstring(s1.toLowerCase(), "a", "the"));
+		//System.out.println(strManip.replaceSubstring(s1.toLowerCase(), "a", "the"));
 		
 	}
 }

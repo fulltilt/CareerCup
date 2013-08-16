@@ -60,11 +60,11 @@ public class StringManipulationsTestCase {
 	}
 	
 	@Test
-	public void testRemoveDuplicateChars() {
+	public void testDeleteDuplicateChars() {
 		String s1 = "The human torch was denied a bank loan";
 		String s2 = "aeiou";
 
-		char[] result = strManip.removeDuplicateChars(s1, s2);
+		char[] result = StringManipulations.deleteDuplicateChars(s1, s2);
 		assertSame('T', result[0]);
 		assertSame('h', result[1]);
 		assertSame(' ', result[2]);
@@ -108,29 +108,13 @@ public class StringManipulationsTestCase {
 	
 	@Test
 	public void testCompress() {
-	
+		char[] test = new char[]{'a','a','a','a','b','c','c','a','a','d','e','e','e','e'};
+		StringManipulations.compress(test); // should result in ['a','b','c','a','d','e']
+		assertEquals('a', test[0]);
+		assertEquals('b', test[1]);
+		assertEquals('c', test[2]);
+		assertEquals('a', test[3]);
+		assertEquals('d', test[4]);
+		assertEquals('e', test[5]);
 	}
-
-	@Test
-	public void testFindFirstSingleChar() {
-		assertEquals(Misc.findFirstSingleChar("google"), 'l');
-	}
-	
-	@Test
-	public void testDeleteDuplicateChars() {
-        char[] array = Misc.deleteDuplicateChars("We are students", "aeiou");
-        System.out.println(array);
-	}
-	
-	@Test
-	public void testDeleteDuplicateCharsExceptFirst() {
-        char[] array = Misc.deleteDuplicateCharsExceptFirst("google");
-        System.out.println(array);
-	}
-	
-	@Test
-	public void testAreAnagrams() {
-	    assertTrue(Misc.areAnagrams("silent", "listen"));
-	    assertFalse(Misc.areAnagrams("howdy", "doody"));	
-	}	
 }

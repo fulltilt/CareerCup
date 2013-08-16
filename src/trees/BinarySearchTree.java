@@ -399,8 +399,14 @@ public class BinarySearchTree {
 
 	/******************************/
 		
-    /* CI84 - kth node in a binary search tree in an incremental order of values 
-       -algorithm: 
+    /* CI84 - Get kth node in a binary search tree in an incremental order of values 
+       -algorithm: Since we need the current value of k, we can't do a recursive in-order traversal. 
+                   Simulate this using a stack. Complicated going through this at first but noticed 
+                   when node is not null, add to stack and look at left child but if node is null, 
+                   pop off stack and node = rightChild. The trick is in between to check current value of k 
+                   -an alternative algorithm is to pass a List as an argument and add to the list 
+                   at each Node visit. Once the size is equal to k, return Node
+       -note: index returned is NOT zero-indexed
     */
     public Node getKthNode(int k) {
         if (k > getSize(root)) 
@@ -412,17 +418,14 @@ public class BinarySearchTree {
         if (node == null)
             return null;
         
-        // since we need the current value of k, we can't do a recursive in-order traversal. Simulate this using a stack
-        // Complicated going through this at first but noticed when node is not null, add to stack and look at left child
-        // but if node is null, pop off stack and node = rightChild but in between check current value of k
         Stack<Node> stack = new Stack<Node>();  
         while (stack.size() > 0 || node != null) {
             if (node != null) {
                 stack.add(node);
                 node = node.leftChild;
             } else {
-                node = stack.pop();
-                k--;
+                node = stack.pop(); // these 2 lines deals with the in-order operation, 
+                k--;                // like printing in an in-order traversal
                 
                 if (k == 0) 
                     return node;
@@ -436,28 +439,29 @@ public class BinarySearchTree {
     
 	/******************************/
 
-    /*
-       -algorithm: 
+    /* Convert a binary tree to a Linked List
+       -algorithm: a simple in-order traversal but we pass a List as an argument. Traverse
+                   the left child, then add Node to the List and lastly traverse the right child
     */	
-	public linkedLists.LinkedList convertToLinkedList() { 
-		linkedLists.LinkedList newList = new linkedLists.LinkedList();
+	public LinkedList<Node> convertToLinkedList() { 
+		LinkedList<Node> newList = new LinkedList<Node>();
 		convertToLinkedList(root, newList);
 
 		return newList;
 	}
-	private void convertToLinkedList(Node node, linkedLists.LinkedList newList) {  
+	private void convertToLinkedList(Node node, LinkedList<Node> newList) {  
 		if (node == null)
 			return; 
 		
-		convertToLinkedList(node.rightChild, newList);	// by switching the order, we don't have to reverse the List
-		newList.insertAtHead(node.value);
 		convertToLinkedList(node.leftChild, newList);
+		newList.addLast(node); // same as just using add() but is more clear that we're adding to the end of the List
+		convertToLinkedList(node.rightChild, newList);
 	}
 
 	/******************************/
 
-	/*
-	   -algorithm: 
+	/* Convert a binary tree into a Doubly Linked List
+	   -algorithm: same as above but pass a third argument which is a reference to the previous Node
 	*/
 	public DoublyLinkedList convertToDoublyLinkedList() { 
 		DoublyLinkedList newList = new DoublyLinkedList();

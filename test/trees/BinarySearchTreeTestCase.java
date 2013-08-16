@@ -104,17 +104,17 @@ public class BinarySearchTreeTestCase {
 
 	@Test
 	public void testConvertToLinkedList() {
-		linkedLists.LinkedList newList = tree.convertToLinkedList();
+		java.util.LinkedList<Node> newList = tree.convertToLinkedList();
 
-		assertSame(1, newList.getNodeByIndex(0).value);
-		assertSame(2, newList.getNodeByIndex(1).value);
-		assertSame(3, newList.getNodeByIndex(2).value);
-		assertSame(4, newList.getNodeByIndex(3).value);
-		assertSame(5, newList.getNodeByIndex(4).value);
-		assertSame(7, newList.getNodeByIndex(5).value);
-		assertSame(8, newList.getNodeByIndex(6).value);
-		assertSame(9, newList.getNodeByIndex(7).value);
-		assertSame(10, newList.getNodeByIndex(8).value);
+		assertSame(1, newList.get(0).value);
+		assertSame(2, newList.get(1).value);
+		assertSame(3, newList.get(2).value);
+		assertSame(4, newList.get(3).value);
+		assertSame(5, newList.get(4).value);
+		assertSame(7, newList.get(5).value);
+		assertSame(8, newList.get(6).value);
+		assertSame(9, newList.get(7).value);
+		assertSame(10, newList.get(8).value);
 	}
 	
 	@Test

@@ -46,7 +46,23 @@ public class BinaryTree {
     
     /******************************/
 
+     /* Get the maximum element of a binary tree
+        -algorithm: since this isn't a binary search tree where the rightmost element is always the max,
+                    recurse in order doing a Math.max on the children and then Math.max with the resul
+                    and current Node
+     */     
+     public int getMaxElement() { return getMaxElement(root); }
+     private int getMaxElement(Node node) {
+           if (node == null) 
+               return Integer.MIN_VALUE;
+           
+           return Math.max(node.value, Math.max(getMaxElement(node.leftChild), getMaxElement(node.rightChild)));
+     }
+     
+     /******************************/
+     
     /* Find fxn that prints out the current level it's on
+     * -algorithm: uses print-by-level logic but stops once the value is found and returns the current level
     */
     public boolean find(int value) { return find(root, value); }
     private boolean find(Node node, int value) {
@@ -210,7 +226,6 @@ public class BinaryTree {
         printByLevel(newRoot);
         return newRoot;
     }
-
     private Node mirror(Node node) {
         if (node == null)
             return null;
@@ -261,53 +276,6 @@ public class BinaryTree {
         return 1 + Math.max(getDepth(node.leftChild), getDepth(node.rightChild));
     }
     
-    /******************************/
-    
-    /* ??
-       -algorithm: 
-    */    
-    public double getBalanceFactor() {
-        balanceFactor = 0;
-        getBalanceFactor(root, 1);
-        
-        return balanceFactor;
-    }
-    private int getBalanceFactor(Node node, int level) {
-        if (node == null)
-            return 0;
-        
-        int desc = getBalanceFactor(node.leftChild, level + 1) + 
-                   getBalanceFactor(node.rightChild, level + 1);
-        balanceFactor += desc * 1.0 / level;
-           
-        return desc + 1;
-    }
-    
-    /* Get the the max width of a tree
-       -algorithm: 
-    */
-    public int getDiameter(Node node) {
-        if (node == null)
-            return 0;
-
-        int leftDiameter  = getDiameter(node.leftChild);
-        int rightDiameter = getDiameter(node.rightChild);
-        int rootDiameter  = getHeight(node.leftChild) + getHeight(node.rightChild) + 1;
-
-        return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
-    }
-    
-    /* 
-       -algorithm: 
-    */     
-    public int getMaxElement() { return getMaxElement(root); }
-    private int getMaxElement(Node node) {
-          if (node == null) 
-              return Integer.MIN_VALUE;
-          
-          return Math.max(node.value, Math.max(getMaxElement(node.leftChild), getMaxElement(node.rightChild)));
-    }
-
     /******************************/
     
     /* CI50 - is a tree a subtree of another 
@@ -455,6 +423,42 @@ public class BinaryTree {
         
         return findNode(root.leftChild, node) || findNode(root.rightChild, node);
     }
+    /******************************/
+    
+    /* ??
+       -algorithm: 
+    */    
+    public double getBalanceFactor() {
+        balanceFactor = 0;
+        getBalanceFactor(root, 1);
+        
+        return balanceFactor;
+    }
+    private int getBalanceFactor(Node node, int level) {
+        if (node == null)
+            return 0;
+        
+        int desc = getBalanceFactor(node.leftChild, level + 1) + 
+                   getBalanceFactor(node.rightChild, level + 1);
+        balanceFactor += desc * 1.0 / level;
+           
+        return desc + 1;
+    }
+    
+    /* Get the the max width of a tree
+       -algorithm: 
+    */
+    public int getDiameter(Node node) {
+        if (node == null)
+            return 0;
+
+        int leftDiameter  = getDiameter(node.leftChild);
+        int rightDiameter = getDiameter(node.rightChild);
+        int rootDiameter  = getHeight(node.leftChild) + getHeight(node.rightChild) + 1;
+
+        return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
+    }
+
     /******************************/
     
     public static void main(String[] args) {
