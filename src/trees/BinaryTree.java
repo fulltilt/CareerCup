@@ -44,8 +44,35 @@ public class BinaryTree {
     public Node getRoot() { return root; }
     public void setRoot(int value) { root = new Node(value); }
     
+    // note: this is a preorder traversal to check if doubleTree() works
+    public void print() { print(root); }
+    private void print(Node node) {
+        if (node == null)
+            return;
+        
+        System.out.print(node.value + " ");
+        print(node.leftChild);
+        print(node.rightChild);
+    }
+    
     /******************************/
 
+    /* CI85 - get depth 
+       -algorithm: recurse through the tree getting the max of left and right children. Don't
+                   forget the '+1'
+     */
+     public int getDepth() {
+         return getDepth(root);
+     }
+     private int getDepth(Node node) {
+         if (node == null)
+             return 0;
+             
+         return 1 + Math.max(getDepth(node.leftChild), getDepth(node.rightChild));
+     }
+     
+     /******************************/
+     
      /* Get the maximum element of a binary tree
         -algorithm: since this isn't a binary search tree where the rightmost element is always the max,
                     recurse in order doing a Math.max on the children and then Math.max with the resul
@@ -152,16 +179,18 @@ public class BinaryTree {
         if (node == null) 
             return;
         
-        path[pathLength] = node.value;
+        path[pathLength] = node.value;  // add node value to the path and increment pathLength
         ++pathLength;
         
+        // if Node is a leaf, print out the path and return
         if (node.leftChild == null && node.rightChild == null) {
             for (int i = 0; i < pathLength; i++)
                 System.out.print(path[i] + " ");
             System.out.println();
             return;
         }
-        
+
+        // Node is not a leaf so recurse through children
         printPaths(node.leftChild, path, pathLength);
         printPaths(node.rightChild, path, pathLength);
     }
@@ -169,22 +198,21 @@ public class BinaryTree {
     /******************************/
 
     /* Check if the tree is a binary search tree
-       -algorithm:  
+       -algorithm: Binary search trees go by a certain ordering so have two values, min and max passed in.
+                   If the current Node is within the range, keep recursing to the children but
+                   the max for the left child will be the current Node's value and the min of the right
+                   child will be the current Node's value. If the Node isn't in the range, return false
+                   -note: don't know about the '=' in the if conditional will properly handle duplicates
     */
     public boolean isBST(Node node) { return isBST(node, Integer.MIN_VALUE, Integer.MAX_VALUE); }
-    private boolean isBST(Node node, int min, int max) {
-        if (node == null)   // if we made it this far, so far, the tree is a BST
+    public boolean isBST(Node node, int min, int max) {
+        if (node == null)
             return true;
-
-        // if the Node's data falls outside the range, return false
-        if (node.value < min || node.value > max)
+        
+        if (min <= node.value && node.value <= max)
+            return isBST(node.leftChild, min, node.value) && isBST(node.rightChild, node.value, max);
+        else  
             return false;
-
-        // check if the left child is within range (min...node.data) else return false
-        return isBST(node.leftChild, min, node.value) &&
-
-               // check if right child should be in range (node.data + 1...max) else return false
-               isBST(node.rightChild, node.value + 1, max);
     }
     
     /* 2nd version of isBST() */
@@ -203,28 +231,46 @@ public class BinaryTree {
     
     /******************************/
     
-    /*
-        -algorithm: 
+    /* Double each Node respectively. 
+       -algorithm: The first instance of the Node will just have a link to it's duplicate 
+                   which has the respective links to the children. If the Node is a left
+                   child, Node's duplicate will be a left child and the same if the Node 
+                   is a right child. The root Node's duplicate can either be a left or right
+                   child
     */
     public void doubleTree() {
-        doubleTree(root);
+        doubleTree(root, false);
     }
-    private void doubleTree(Node node) {
+    private void doubleTree(Node node, boolean isLeftChild) {
         if (node == null)
             return;
 
+        // create a new Node and set its children to be that of the current Node
         Node newNode = new Node(node.value);
         newNode.leftChild = node.leftChild;
-        node.leftChild = newNode;
+        newNode.rightChild = node.rightChild;
+        
+        // ensure that the left or right-childedness stays the same
+        if (isLeftChild) {
+            node.leftChild = newNode;
+            node.rightChild = null;
+        } else {
+            node.rightChild = newNode;
+            node.leftChild = null;
+        }
 
-        doubleTree(newNode.leftChild);
-        doubleTree(node.rightChild);        // tricky part here is that if we did newNode.rightChild instead, the right children never get doubled
+        doubleTree(newNode.leftChild, true);
+        doubleTree(newNode.rightChild, false);
     }
     
     /******************************/
 
     /* CI51 - return mirror of a tree 
-       -algorithm: 
+       -algorithm: fxn takes in two arguments which will be the root Node for each respective
+                   tree. Recurse through the original tree but set it up so that the new Node's
+                   left child will be equal to the original Node's right child and vice versa
+                   -note: looking at how this was originally done, this version modifies the 
+                    original tree
     */
     public Node mirror() {
         Node newRoot = mirror(root);
@@ -256,7 +302,8 @@ public class BinaryTree {
         if (node1 == null && node2 == null)
             return true;
             
-        if (node1 == null || node2 == null) // a symmetrical trees nodes are either both null or both not null
+        // if we got this far, and is true, it means that one Node is null while the other is not 
+        if (node1 == null || node2 == null) 
             return false;
             
         if (node1.value != node2.value)
@@ -267,24 +314,12 @@ public class BinaryTree {
     }
     
     /******************************/
-
-    /* CI85 - get depth 
-       -algorithm: 
-    */
-    public int getDepth() {
-        return getDepth(root);
-    }
-    private int getDepth(Node node) {
-        if (node == null)
-            return 0;
-            
-        return 1 + Math.max(getDepth(node.leftChild), getDepth(node.rightChild));
-    }
-    
-    /******************************/
     
     /* CI50 - is a tree a subtree of another 
-       -algorithm: 
+       -algorithm: Do a traversal through every Node in the original tree. If the current
+                   Node's root is equal to the second Tree's root, check to see if the 2nd
+                   tree is a subtree by traversing each tree in step and checking that the 
+                   values are equal via doesTree1ContainTree2()   
     */
     public static boolean isSubTree(BinaryTree tree1, BinaryTree tree2) {   
         return isSubTree(tree1.getRoot(), tree2.getRoot());
@@ -305,7 +340,11 @@ public class BinaryTree {
     }
     
     /* Determine if a tree is a subtree of another tree
-       -algorithm: 
+       -algorithm: iterate through both trees in lockstep. If we get as far as a Node in the 2nd tree is null 
+                   (even if the first trees Node isn't), it means so far so good and return true. Else, if
+                   the second Node isn't null but the first one is, we have a mismatch so return false. 
+                   Also return false if the values don't match. Lastly, recursively call this fxn for
+                   the left and right children of each Node 
     */     
     private static boolean doesTree1ContainTree2(Node root1, Node root2) {
         if (root2 == null)  // check the potential subTree first. If we get a null value for the subtree, return true
@@ -345,7 +384,8 @@ public class BinaryTree {
     /* CI60 - just like hasPathSum but it prints out all the paths that add up to the expected sum 
      * -algorithm: We need a 3rd argument which is an ArrayList of Nodes. The process is just like hasPathSum
      *             but with 2 additional steps: add the node to the list at the beginning and take it off
-     *             at the end which is important as the ArrayList is shared 
+     *             at the end which is important as the ArrayList is shared
+     *             -note: could we have used an array just like printPaths()? 
      */
     public void printSumPaths(int expectedSum) {       
         ArrayList<Node> path = new ArrayList<Node>();
@@ -470,5 +510,10 @@ public class BinaryTree {
         //BinaryTree bt = new BinaryTree();
         //System.out.println(bt.getBalanceFactor());
         //bt.printByLevel();
+        BinaryTree bt = new BinaryTree();
+        bt.print();
+        System.out.println();
+        bt.doubleTree();
+        bt.print();
     }
 }
