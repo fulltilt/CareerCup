@@ -390,7 +390,7 @@ public class BinarySearchTree {
 	private boolean isTreeSymmetric(Node left, Node right) {
 		if (left == null && right == null)
 			return true;
-		else if (left == null || right == null)
+		else if (left == null || right == null) // if we got this far, and is true, it means that one Node is null while the other is not
 			return false;
 
 		return isTreeSymmetric(left.leftChild, right.rightChild) && 

@@ -132,33 +132,38 @@ public class BinaryTree {
     /******************************/
     
     /* Print all the paths from the roots to each leaf node
-       =algorithm: 
+       -algorithm: Have any array of adequate length to accommodate a path and pass in a
+                   variable which keeps track of the path length (since we can't use the
+                   array's length as it's of fixed size). Once we get current Node to be null,
+                   print out the path. Since pathLength is a primitive, we don't have to worry
+                   about other calls to printPaths to affect each other. Also, it works out that
+                   the path array will print out a path at a time and once it goes up the call
+                   stack, any old values will be properly overwritten and this is all determined
+                   by the local pathLength variable.
+                   -notes: it would be cleaner if we could print when the node is null but we can't do 
+                    that as it means it would be called for a null left AND null right child which we don't
+                    want so we have to determine if the current Node is a leaf before printing  
     */
     public void printPaths() {
         int[] path = new int[1000];
         printPaths(root, path, 0);
     }
-    private void printPaths(Node node, int[] path, int pathLength) {
-        if (node == null)
+    public void printPaths(Node node, int[] path, int pathLength) {
+        if (node == null) 
             return;
-
+        
         path[pathLength] = node.value;
         ++pathLength;
-
-        // check if node is a leaf
-        if (node.leftChild == null && node.rightChild == null)
-            printArray(path, pathLength);
-        else {
-            printPaths(node.leftChild, path, pathLength);
-            printPaths(node.rightChild, path, pathLength);
+        
+        if (node.leftChild == null && node.rightChild == null) {
+            for (int i = 0; i < pathLength; i++)
+                System.out.print(path[i] + " ");
+            System.out.println();
+            return;
         }
-    }
-
-    // used for printPaths
-    private void printArray(int[] path, int pathLength) {
-        for (int i = 0; i < pathLength; i++)
-            System.out.print(path[i] + " ");
-        System.out.println();
+        
+        printPaths(node.leftChild, path, pathLength);
+        printPaths(node.rightChild, path, pathLength);
     }
     
     /******************************/
