@@ -126,6 +126,35 @@ public class Misc {
     
     /***********************/
 
+    /* Get permutations of a String
+     * -algorithm: 
+     */
+    public static ArrayList<String> getPermutations(String str) {
+        ArrayList<String> permutations = new ArrayList<String>();
+        if (str == null) 
+            return null;
+        else if (str.length() == 0) {   // base case 
+            permutations.add("");   // don't know why but I need this line, else it doesn't work
+            return permutations;
+        }
+
+        char first = str.charAt(0); // get the first character
+        String remainder = str.substring(1); // remove the first character
+        ArrayList<String> words = getPermutations(remainder);
+        for (String word : words) {
+            for (int j = 0; j <= word.length(); j++) {
+                permutations.add(insertCharAt(word, first, j));
+            }
+        }
+        
+        return permutations;
+    }
+    // used to insert first character into every position of a String
+    public static String insertCharAt(String word, char c, int i) {
+        String start = word.substring(0, i);
+        String end = word.substring(i);
+        return start + c + end;
+    }
     
     /***********************/
 }
