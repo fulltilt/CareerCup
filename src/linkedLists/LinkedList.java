@@ -273,45 +273,40 @@ public class LinkedList {
 		return false;
 	}
 
-	/* Determine the length of the loop
-       -algorithm: (note: called after isCircular() is true). First find out the node where the fast and slow meets. From
-                   there, have another pointer that starts from that node and iterates until it meets back where it began
+	/* Find out where the loop starts in the list
+	   -algorithm: http://umairsaeed.com/2011/06/23/finding-the-start-of-a-loop-in-a-circular-linked-list/
+	               Still don't have my head around why it works but to find the head of the loop, find out where the fast and slow
+	               pointer meet and have one of the pointers point to the head of the list. Iterate each one a Node at a time and
+	               wherever they meet is the head of the loop 
 	*/
-	public int findCircularListLength() {
+	public Node getHeadOfLoop() {
 		Node slow = head;
 		Node fast = head;
-		int lengthToStartOfCycle = 0;
-
-		while (fast != null) {
+		
+		// check that there's a loop
+		if (!isCircular())
+			return null;
+		
+		// find out where the Node's meet
+		while (true) {
 			slow = slow.next;
-
-			if (fast.next == null)
-				break;
-
-			fast = fast.next.next;
-
-			++lengthToStartOfCycle;
-
+			
+			if (fast.next != null)
+				fast = fast.next.next;
+			
 			if (slow == fast)
 				break;
 		}
-
-		Node startOfCycle = slow;
-		Node currentNode = slow.next;
-		int lengthOfCycle = 0;	// should this be 1?
-		while (currentNode != startOfCycle) {
-			currentNode = currentNode.next;
-			++lengthOfCycle;
+		
+		// set one of the Node's to head. Iterate each one and wherever they meet is the head
+		slow = head;
+		while (true) {
+			slow = slow.next;
+			fast = fast.next;
+			
+			if (slow == fast)
+				return slow;
 		}
-
-		return lengthToStartOfCycle + lengthOfCycle;
-	}
-
-	/* Find out where the loop starts in the list
-	   -algorithm:  
-	*/
-	public Node getHeadOfLoop() {	
-		return null;
 	}
 	
 	/*************************************************************/

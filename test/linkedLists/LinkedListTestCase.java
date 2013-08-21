@@ -191,14 +191,6 @@ public class LinkedListTestCase {
 		assertTrue(list.isCircular());
 	}
 
-	@Test
-	public void testFindCircularListLength() {
-		setUpList1();
-
-		list.getNode(5).next = list.getNode(3);	// make list circular
-		assertSame(9, list.findCircularListLength());
-	}
-
 	@Test(expected=IllegalArgumentException.class)
 	public void testSwapKthElementsFromBeginningAndEnd() {
 		setUpList1(); // 9 2 2 1 3 6 8 8 5
@@ -410,12 +402,16 @@ public class LinkedListTestCase {
 	@Test
 	public void testGetHeadOfLoop() {
 		LinkedList list1 = new LinkedList();
-		list1.insertAtHead(1);
-		list1.insertAtHead(2);
-		list1.insertAtHead(3);
-		list1.insertAtHead(4);
-		list1.getHead().next.next.next = list1.getHead().next;
-//assertEquals(list1.getHeadOfLoop().value, 2);		
+		list1.insert(1);
+		list1.insert(2);
+		list1.insert(3);
+		list1.insert(4);
+		list1.insert(5);
+		list1.insert(6);
+		list1.insert(7);
+		list1.insert(8);
+		list1.getHead().next.next.next.next.next.next.next.next = list1.getHead().next.next;
+		assertEquals(3, list1.getHeadOfLoop().value);		
 	}
 	
 	@Test
