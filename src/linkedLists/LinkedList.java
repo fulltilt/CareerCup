@@ -429,6 +429,7 @@ public class LinkedList {
 	               to previous. Update each respective pointer. Do this until current is null. You will
 	               need a temporary pointer to current's next since you will be updating this to previous.
 	               After the loop, the previous node points to the new head so set head to this
+	               Note: try doing this with stacks as I believe the solution below may have problems with lists of length < 3
 	*/
 	public void reverseList() {
 		Node previous = null;
